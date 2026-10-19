@@ -27,10 +27,9 @@ export function BloomPlayer({
   mode,
   onGrown,
   onGlowComplete,
-  skipLabel,
   children,
 }: BloomPlayerProps) {
-  const { progress, stage, play, skip } = useBloomProgress(onGrown);
+  const { progress, stage, play } = useBloomProgress(onGrown);
 
   // Layout effect: đặt lại tiến trình về 0 trước khi trình duyệt vẽ, khỏi chớp một khung hoa đã nở khi bắt đầu gieo lần nữa
   useLayoutEffect(() => {
@@ -56,11 +55,6 @@ export function BloomPlayer({
         showSeed={!bare}
       />
       {children}
-      {/* {mode === "growing" && (
-        <button type="button" className="player__skip" onClick={skip}>
-          {skipLabel}
-        </button>
-      )} */}
     </div>
   );
 }
