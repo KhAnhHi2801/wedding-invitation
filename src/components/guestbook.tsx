@@ -6,6 +6,7 @@ import { FlowerMiniPreview } from "../features/flower-bloom/FlowerMiniPreview"
 import { getEventParts } from "../lib/event-date"
 import { entryFor } from "../lib/flower-entries"
 import { createGuestbook } from "../lib/guestbook-book.js"
+import { gardenOverlay } from "../lib/garden-overlay"
 import { getWeddingEvent } from "../lib/wedding-event"
 import { useWishes } from "../lib/wishes-store"
 import { inkColor } from "../lib/wish-style"
@@ -72,8 +73,8 @@ export default function Guestbook() {
       flowerSvg,
       inkColor,
       messageMax: MESSAGE_MAX,
-      // Nút "Gửi lời chúc" ở trang cuối: quay lại khu vườn để gieo hoa
-      onWrite: () => document.getElementById("garden")?.scrollIntoView({ block: "start" }),
+      // Nút "Gửi lời chúc" ở trang cuối: mở lớp phủ gieo hoa ngay tại chỗ
+      onWrite: gardenOverlay.open,
     })
     bookRef.current = book
 

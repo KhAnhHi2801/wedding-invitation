@@ -4,18 +4,23 @@
  * Màu đầu tiên là mặc định. Tên hiển thị của từng màu nằm ở `garden.inkNames` trong wedding-config.ts.
  */
 export interface Ink {
-  key: string
-  color: string
+  key: string;
+  color: string;
 }
 
 export const INKS: readonly Ink[] = [
-  { key: "brown", color: "#3b2a22" },
-  { key: "navy", color: "#1f3a5f" },
-  { key: "forest", color: "#2f5d3a" },
-  { key: "wine", color: "#8a2a3b" },
-  { key: "plum", color: "#5b3a7a" },
-  { key: "teal", color: "#14606b" },
-]
+  { key: "brown", color: "#49332F" }, // Nâu cacao
+  { key: "navy", color: "#294365" }, // Xanh navy
+  { key: "forest", color: "#355B45" }, // Xanh lá thông
+  { key: "wine", color: "#913746" }, // Đỏ vang
+  { key: "plum", color: "#694477" }, // Tím mận
+  { key: "teal", color: "#17666A" }, // Xanh teal
+  { key: "earth", color: "#80513D" }, // Nâu đất
+  { key: "rose", color: "#A34E65" }, // Hồng mận trầm
+  { key: "charcoal", color: "#48464A" }, // Xám than
+  { key: "olive", color: "#62663A" }, // Xanh olive đậm
+];
 
 /** Màu chữ của khóa đã lưu; undefined nếu lời chúc cũ không có hoặc khóa lạ (dùng màu mặc định của sổ). */
-export const inkColor = (key: string): string | undefined => INKS.find((ink) => ink.key === key)?.color
+export const inkColor = (key: string): string | undefined =>
+  INKS.find((ink) => ink.key === key)?.color;

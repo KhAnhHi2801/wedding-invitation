@@ -1,4 +1,4 @@
-import React, { memo, type CSSProperties } from 'react';
+import React, { memo, type AnimationEvent, type CSSProperties } from 'react';
 import type { FlowerDefinition, GrowthStage } from '../../types/flower';
 import {
   BabyBreathRenderer,
@@ -24,8 +24,14 @@ interface BotanicalFlowerEngineProps {
   stage: GrowthStage;
   /** Tiến trình liên tục 0 đến 1 (hạt, nảy mầm, thân, nụ, nở) */
   progress: number;
+  /** Bật quầng sáng hoàn tất sau khi hoạt ảnh nở kết thúc, không bật ở hoa xem trước */
+  bloomed?: boolean;
+  /** Gọi khi hiệu ứng quầng sáng hoàn tất */
+  onGlowComplete?: () => void;
   /** Máy yếu: bỏ hạt phấn và chuyển động đung đưa */
   lite?: boolean;
+  /** Tắt hạt trong chậu (lúc hạt còn đang rơi từ trên xuống) */
+  showSeed?: boolean;
 }
 
 const POLLEN = [
@@ -44,7 +50,7 @@ const POLLEN = [
  * - Quầng sáng là gradient tĩnh, không dùng filter blur.
  * - Không có will-change cố định.
  */
-export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(({ flower, stage, progress, lite = false }) => {
+export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(({ flower, stage, progress, bloomed = false, onGlowComplete, lite = false, showSeed = true }) => {
   const props = { stage, progress, def: flower };
 
   const renderSpeciesContent = () => {
@@ -87,7 +93,7 @@ export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(
   const isCompleted = progress >= 0.96;
   const isBloom = progress >= 0.55;
   const isGerminating = progress > 0.02 && progress < 0.22;
-  const isSeed = progress <= 0.08;
+  const isSeed = progress <= 0.08 && showSeed;
 
   const glow = {
     '--glow-a': flower.id === 'baby-breath' ? 'rgba(255, 255, 255, 0.95)' : flower.palette.primary,
@@ -95,13 +101,39 @@ export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(
   } as CSSProperties;
 
   return (
-    <div className="bloom" style={glow}>
-      <div className="bloom__glow" />
+    <div className={`bloom${bloomed ? ' bloom--complete' : ''}`} style={glow}>
+      <div
+        className="bloom__glow"
+        onAnimationEnd={(event: AnimationEvent<HTMLDivElement>) => {
+          if (
+            event.target === event.currentTarget &&
+            event.animationName === 'bloom-glow'
+          ) {
+            onGlowComplete?.();
+          }
+        }}
+      />
+
+      {/* Chậu, phần sau: miệng chậu và mặt đất. Nằm dưới lớp hoa để thân hoa mọc ra từ đất */}
+      <svg viewBox="0 0 400 560" className="bloom__layer" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <radialGradient id="potSoilGrad" cx="50%" cy="35%" r="70%">
+            <stop offset="0%" stopColor="#7A5C45" />
+            <stop offset="100%" stopColor="#4A3426" />
+          </radialGradient>
+        </defs>
+        <ellipse cx="200" cy="553" rx="88" ry="6" fill="#3B2A22" opacity="0.14" />
+        <ellipse cx="200" cy="436" rx="78" ry="11" fill="#EADCC8" stroke="#CDB594" strokeWidth="1.2" />
+        <ellipse cx="200" cy="437" rx="68" ry="8.5" fill="url(#potSoilGrad)" />
+        <ellipse cx="178" cy="438" rx="3" ry="1.4" fill="#5B4331" opacity="0.8" />
+        <ellipse cx="222" cy="439" rx="3.5" ry="1.5" fill="#33241A" opacity="0.7" />
+        <ellipse cx="203" cy="441" rx="2" ry="1" fill="#A98B6F" opacity="0.5" />
+      </svg>
 
       {/* Lớp hoa: chỉ lớp này đung đưa khi đã nở xong */}
       <div className={isCompleted && !lite ? 'bloom__sway' : 'bloom__still'}>
         <svg
-          viewBox="0 0 400 500"
+          viewBox="0 0 400 560"
           className="bloom__layer"
           preserveAspectRatio="xMidYMid meet"
           role="img"
@@ -151,45 +183,40 @@ export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(
       </div>
 
       {/* Lớp đất, hạt, mầm: nằm trên cùng và không đung đưa */}
-      <svg viewBox="0 0 400 500" className="bloom__layer bloom__ground" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <svg viewBox="0 0 400 560" className="bloom__layer bloom__ground" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
-          <linearGradient id="soilLayerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#8E755D" />
-            <stop offset="30%" stopColor="#735A45" />
-            <stop offset="100%" stopColor="#4B392B" />
-          </linearGradient>
-
-          <linearGradient id="soilSurfaceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#A88F76" />
-            <stop offset="50%" stopColor="#BD9E81" />
-            <stop offset="100%" stopColor="#9C8269" />
+          <linearGradient id="potBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#E2D2BC" />
+            <stop offset="35%" stopColor="#FBF5EC" />
+            <stop offset="100%" stopColor="#D9C6AC" />
           </linearGradient>
         </defs>
 
-        <g id="soil-and-ground">
-          <path d="M 50 435 Q 200 428 350 435 L 350 495 L 50 495 Z" fill="url(#soilLayerGrad)" />
-          <path d="M 45 435 Q 120 422 200 424 Q 280 422 355 435 Q 280 442 200 440 Q 120 442 45 435 Z" fill="url(#soilSurfaceGrad)" />
-
-          <ellipse cx="140" cy="442" rx="4" ry="2" fill="#584333" opacity="0.7" />
-          <ellipse cx="260" cy="444" rx="5" ry="2.5" fill="#584333" opacity="0.6" />
-          <ellipse cx="180" cy="448" rx="3" ry="1.5" fill="#423022" opacity="0.8" />
-          <ellipse cx="225" cy="445" rx="3.5" ry="1.8" fill="#423022" opacity="0.8" />
-          <ellipse cx="110" cy="438" rx="2" ry="1" fill="#D7C1AA" opacity="0.5" />
-          <ellipse cx="290" cy="439" rx="2.5" ry="1.2" fill="#D7C1AA" opacity="0.5" />
-
-          {/* Rễ phía dưới đất khi nảy mầm và lớn lên */}
-          {progress > 0.04 && (
-            <g stroke="#D4BA9E" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity={Math.min(0.8, progress * 2)}>
-              <path d="M 200 436 C 200 450, 192 465, 185 480" />
-              <path d="M 200 440 C 205 455, 215 470, 225 485" />
-              <path d="M 195 452 C 185 460, 175 465, 170 472" strokeWidth="0.8" />
-              <path d="M 208 456 C 218 462, 228 466, 235 474" strokeWidth="0.8" />
-            </g>
-          )}
+        <g id="pot-front">
+          {/* Thân chậu gốm kem cao, thon dần xuống chân; mép trên là đường cong gờ phía trước */}
+          <path
+            d="M 122 436 Q 200 458 278 436 L 264 524 C 262 541 252 550 236 551 L 164 551 C 148 550 138 541 136 524 Z"
+            fill="url(#potBodyGrad)"
+            stroke="#CDB594"
+            strokeWidth="1.2"
+          />
+          <path d="M 122 436 Q 200 458 278 436" fill="none" stroke="#FFFFFF" strokeWidth="1.4" opacity="0.7" />
+          {/* Dải vàng và đường đỏ rượu mảnh quanh thân chậu, nhắc lại viền vàng của sổ lưu bút */}
+          <path d="M 128 470 Q 200 491 272 470" fill="none" stroke="#C9A24A" strokeWidth="2.2" strokeLinecap="round" />
+          <path d="M 129 477 Q 200 498 271 477" fill="none" stroke="#8B2F30" strokeWidth="1" strokeLinecap="round" opacity="0.75" />
+          {/* Trái tim nhỏ giữa thân chậu */}
+          <path
+            d="M 200 523 C 187 514 185 505 191 502 C 195 500 199 502 200 506 C 201 502 205 500 209 502 C 215 505 213 514 200 523 Z"
+            fill="#8B2F30"
+            opacity="0.85"
+          />
+          {/* Ánh sáng nhẹ bên trái thân chậu */}
+          <path d="M 146 453 Q 151 493 158 535" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" opacity="0.35" />
+        </g>
 
           {/* Hạt nằm trong đất: nhịp đập đặt ở thẻ g bên trong để không đè lên transform định vị bằng thuộc tính */}
           {isSeed && (
-            <g transform="translate(200, 428)">
+            <g transform="translate(200, 432)">
               <g className="bloom__seed">
                 <ellipse cx="0" cy="0" rx="7" ry="9.5" fill="#4E3626" stroke="#6B4B35" strokeWidth="1.2" transform="rotate(-15)" />
                 <path d="M -1 -7 C 2 -2, 2 3, 0 7" stroke="#8A674D" strokeWidth="1" fill="none" />
@@ -234,7 +261,6 @@ export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(
               })()}
             </g>
           )}
-        </g>
       </svg>
     </div>
   );

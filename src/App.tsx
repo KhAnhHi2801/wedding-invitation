@@ -6,7 +6,7 @@ import { EnvelopeIntro } from "./components/envelope-intro"
 import { EventInfo } from "./components/event-info"
 import { FloatingActions } from "./components/floating-actions"
 import { Gallery } from "./components/gallery"
-import { GardenSection } from "./components/garden-section"
+import { GardenOverlayHost } from "./components/garden-overlay-host"
 import { Gift } from "./components/gift"
 import { GuestbookSection } from "./components/guestbook-section"
 import { MapCard } from "./components/map-card"
@@ -59,12 +59,12 @@ export default function App() {
         <Gallery />
         <Rsvp onOpen={openRsvp} />
         <Gift />
-        <GardenSection />
         <GuestbookSection />
         <ThankYou />
       </main>
       {opened && <FloatingActions onOpenRsvp={openRsvp} />}
       <RsvpModal open={rsvpOpen} onClose={() => setRsvpOpen(false)} />
+      <GardenOverlayHost />
     </ToastProvider>
   )
 }

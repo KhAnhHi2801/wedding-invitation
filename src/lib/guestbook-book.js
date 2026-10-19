@@ -274,6 +274,7 @@ export function createGuestbook({ host, texts, wedding, flowerSvg, inkColor, mes
   let currentPage = 0
   let newKey = ""
   let pageOfNew = -1
+  let flipToNew = false // đã có lệnh đưa sổ tới lời chúc mới nhưng sổ chưa dựng (đang ngoài màn hình)
   let shut = false // sách đang đóng bằng nắp bìa
   let cropped = false // điện thoại dọc: sách dựng 2 trang nhưng chỉ lộ nửa phải
   let reopenTimer = 0
@@ -624,13 +625,20 @@ export function createGuestbook({ host, texts, wedding, flowerSvg, inkColor, mes
     /** Section vào (hoặc rời) màn hình: chỉ dựng sổ khi đang nhìn thấy */
     setActive(value) {
       active = value
-      if (active && dirty) build()
+      if (active && dirty) {
+        build()
+        if (flipToNew) {
+          flipToNew = false
+          if (pageOfNew > 0 && flip) setTimeout(() => flip?.flip(pageOfNew), 350)
+        }
+      }
     },
     /** Đưa sổ tới trang có lời chúc vừa gửi và làm nổi bật nó (sổ đang đóng thì mở ra không animation) */
     reveal(wish) {
       newKey = `${wish.name}|${wish.message}`
       if (!active) {
         dirty = true
+        flipToNew = true
         return
       }
       if (shut) {

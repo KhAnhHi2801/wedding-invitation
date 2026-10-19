@@ -80,7 +80,7 @@ export function useBloomProgress(onDone: () => void): BloomControls {
 
     const loop = (now: number) => {
       const value = Math.min(1, (now - startedAt) / duration)
-      if (value >= 1) {
+      if (value >= 0.95) {
         finish()
         return
       }

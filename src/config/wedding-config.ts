@@ -83,13 +83,11 @@ export interface RsvpFormText {
 }
 
 export interface GardenText {
-  eyebrow: string;
   title: string;
-  subtitle: string;
   carouselLabel: string;
   plant: string;
   growing: string;
-  skip: string;
+  skipGrowing: string;
   writeTitle: string;
   nameLabel: string;
   messageLabel: string;
@@ -98,15 +96,24 @@ export interface GardenText {
   /** Tên từng màu chữ, theo khóa trong `src/lib/wish-style.ts` */
   inkNames: Record<string, string>;
   send: string;
+  sendSub: string;
   doneTitle: string;
   plantAnother: string;
-  gardenTitle: string;
-  gardenEmpty: string;
-  /** Có thể dùng {count} */
-  moreFlowers: string;
-  /** Có thể dùng {name} */
-  flowerOf: string;
-  anonymous: string;
+  /** Nút mở lớp phủ gieo hoa (dưới sổ lưu bút, nút nổi) và câu gợi ý đứng trên nút */
+  open: string;
+  ctaHint: string;
+  /** Nút nhấn giữ để gieo hạt, gợi ý dưới nút, và nhãn đọc cho bàn phím/trình đọc màn hình */
+  hold: string;
+  holdHint: string;
+  holdKeyboard: string;
+  /** Tiêu đề bước chọn hoa và trạng thái đang gieo */
+  chooseTitle: string;
+  sowing: string;
+  close: string;
+  /** Nút ở bước hoàn thành, dẫn xuống sổ lưu bút */
+  seeBook: string;
+  /** Dòng dưới mẩu giấy xem trước ở bước hoàn thành */
+  noteCaption: string;
   errors: {
     nameRequired: string;
     nameTooLong: string;
@@ -386,19 +393,16 @@ export const weddingConfig: WeddingConfig = {
     },
   },
   garden: {
-    eyebrow: "OUR LITTLE GARDEN",
     title: "Gieo một lời chúc",
-    subtitle:
-      "Chọn loài hoa bạn yêu thích và gửi một lời chúc đến tổ ấm của chúng mình.",
     carouselLabel: "Các loài hoa",
     plant: "Gieo hoa này",
     growing: "Hạt đang nảy mầm…",
-    skip: "Xem hoa nở ngay",
+    skipGrowing: "Bỏ qua",
     writeTitle: "Viết lời chúc",
-    nameLabel: "Tên của bạn",
-    messageLabel: "Lời chúc",
-    suggestAnother: "Đổi gợi ý",
-    inkLabel: "Màu chữ",
+    nameLabel: "Tên người gửi",
+    messageLabel: "Lời chúc gửi đôi mình",
+    suggestAnother: "Chọn một mầm hoa khác",
+    inkLabel: "Chọn sắc màu cho lời thương",
     inkNames: {
       brown: "Nâu mực",
       navy: "Xanh mực",
@@ -406,15 +410,26 @@ export const weddingConfig: WeddingConfig = {
       wine: "Đỏ rượu vang",
       plum: "Tím mận",
       teal: "Xanh ngọc",
+      earth: "Nâu đất",
+      rose: "Hồng mận trầm",
+      charcoal: "Xám than",
+      olive: "Xanh olive đậm",
     },
-    send: "Gửi lời chúc",
-    doneTitle: "Hoa của bạn đã nở trong khu vườn",
+    send: "Gieo lời thương",
+    sendSub: "Một lời chúc nhỏ, một kỷ niệm dài lâu.",
+    doneTitle: "Hoa của bạn đã nở",
     plantAnother: "Gieo thêm một bông",
-    gardenTitle: "Khu vườn lời chúc",
-    gardenEmpty: "Khu vườn đang chờ bông hoa đầu tiên. Bạn gieo nhé!",
-    moreFlowers: "+{count} bông hoa khác",
-    flowerOf: "Hoa của {name}",
-    anonymous: "Một vị khách",
+    open: "Gieo một lời chúc",
+    ctaHint:
+      "Mỗi lời chúc là một bông hoa nằm trong sổ này. Bạn gieo một bông nhé.",
+    hold: "Chạm giữ để gieo hạt",
+    holdHint: "Giữ ngón tay khoảng một giây",
+    holdKeyboard: "Gieo hạt ngay",
+    chooseTitle: "Chọn loài hoa của bạn",
+    sowing: "Hạt đang rơi xuống chậu…",
+    close: "Đóng",
+    seeBook: "Xem lời chúc trong sổ lưu bút",
+    noteCaption: "Mẩu giấy này sẽ được dán vào sổ lưu bút của chúng mình",
     errors: {
       nameRequired: "Bạn cho chúng mình biết tên của bạn nhé.",
       nameTooLong:

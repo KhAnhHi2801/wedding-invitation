@@ -14,7 +14,7 @@ import "./envelope-intro.css"
 interface EnvelopeIntroProps {
   /** Gọi NGAY trong lúc khách chạm (đồng bộ), cần cho việc bật nhạc: iOS chỉ cho phát trong chính handler thao tác */
   onOpenStart?: () => void
-  /** Gọi khi phong bì đã mở xong, để trang mở khóa cuộn */
+  /** Gọi sau khi phong bì mở và phần intro đã mờ đi, để trang mở khóa cuộn */
   onOpened: () => void
 }
 
@@ -23,7 +23,9 @@ const HEARTS = [0, 1, 2]
 export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
   const { hero, couple, ui } = weddingConfig
   const rootRef = useRef<HTMLElement>(null)
-  const [state, setState] = useState<"closed" | "opening" | "open">("closed")
+  const [state, setState] = useState<
+    "closed" | "opening" | "fading" | "hidden"
+  >("closed")
   const year = getEventParts(getWeddingEvent().event.startsAt).year
   const guest = getGuestName(weddingConfig.guestParam, hero.guestFallback)
 
@@ -35,7 +37,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
     onOpenStart?.()
 
     const finish = () => {
-      setState("open")
+      setState("hidden")
       onOpened()
     }
 
@@ -57,7 +59,8 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
       .set(q(".envelope__flap"), { zIndex: 1 }, 0.6)
       .set(q(".envelope__card"), { zIndex: 3 }, 0.6)
       .to(q(".envelope__card"), { yPercent: -50, duration: 1, ease: "power1.out" }, 0.6)
-      .call(finish, [], 1.8)
+      .call(() => setState("fading"), [], 1.8)
+      .call(finish, [], 2.6)
 
     // Trái tim bay chậm lên rồi mờ dần, lắc nhẹ hai bên (4s, 5s, 7s như mẫu)
     const rise = Math.min(600, window.innerHeight * 0.7)
@@ -71,6 +74,8 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
         .to(heart, { x: i % 2 ? 24 : -24, duration: 2, ease: "sine.inOut", repeat: Math.ceil(life / 2), yoyo: true }, 0)
     })
   })
+
+  if (state === "hidden") return null
 
   return (
     <section className="intro" ref={rootRef} aria-label={hero.title} data-state={state}>

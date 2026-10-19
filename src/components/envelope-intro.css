@@ -7,6 +7,12 @@
   overflow-x: clip;
 }
 
+.intro[data-state="fading"] {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
 .intro__head {
   text-align: center;
   display: grid;

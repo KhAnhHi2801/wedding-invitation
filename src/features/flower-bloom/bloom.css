@@ -3,19 +3,23 @@
   position: relative;
   width: 100%;
   max-width: 26rem;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 5 / 7;
   margin-inline: auto;
   user-select: none;
 }
 
-/* Quầng sáng tĩnh (gradient), không dùng filter: blur trên một lớp lớn rất nặng với GPU điện thoại */
+/* Quầng sáng (gradient), không dùng filter: blur trên một lớp lớn rất nặng với GPU điện thoại */
 .bloom__glow {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  opacity: 0.35;
+  opacity: 0;
   background: radial-gradient(circle at 50% 40%, var(--glow-a) 0%, var(--glow-b) 40%, transparent 70%);
   pointer-events: none;
+}
+
+.bloom--complete .bloom__glow {
+  animation: bloom-glow 750ms ease-in-out both;
 }
 
 .bloom__still,
@@ -36,10 +40,10 @@
   pointer-events: none;
 }
 
-/* Gốc xoay ở chân hoa (mặt đất nằm khoảng 86% chiều cao khung) */
+/* Gốc xoay ở chân hoa (mặt đất nằm khoảng 78% chiều cao khung) */
 /* Đung đưa và hạt phấn chỉ chạy vài vòng rồi dừng (không vẽ lại mãi sau khi hoa nở); transform của thẻ HTML tự được GPU xử lý nên không cần will-change */
 .bloom__sway {
-  transform-origin: 50% 86%;
+  transform-origin: 50% 78%;
   animation: bloom-sway 7s ease-in-out 2;
 }
 
@@ -93,6 +97,25 @@
   }
 }
 
+@keyframes bloom-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  35% {
+    opacity: 0.2;
+    transform: scale(0.96);
+  }
+  75% {
+    opacity: 0.48;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0.58;
+    transform: scale(1.06);
+  }
+}
+
 .lite .bloom__pollen,
 .lite .bloom__seed {
   animation: none;
@@ -103,6 +126,11 @@
   .bloom__pollen,
   .bloom__seed {
     animation: none;
+  }
+
+  .bloom--complete .bloom__glow {
+    animation: none;
+    opacity: 0.58;
   }
 }
 

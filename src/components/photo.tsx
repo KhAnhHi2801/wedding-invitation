@@ -7,8 +7,8 @@ interface PhotoProps {
   alt: string
   /** Gợi ý kích thước hiển thị để trình duyệt chọn bản 640px hay 1200px */
   sizes: string
-  /** Ảnh đầu trang: tải ngay với độ ưu tiên cao; còn lại lazy */
-  priority?: boolean
+  /** Ảnh đầu trang: tải ngay với độ ưu tiên cao; "low" là ảnh lộ ra ở màn đầu nhưng không được giành băng thông với ảnh chính; còn lại lazy */
+  priority?: boolean | "low"
   className?: string
   style?: CSSProperties
 }
@@ -25,8 +25,8 @@ export function Photo({ name, alt, sizes, priority = false, className, style }: 
       width={image.width}
       height={image.height}
       alt={alt}
-      loading={priority ? undefined : "lazy"}
-      fetchPriority={priority ? "high" : undefined}
+      loading={priority === true ? undefined : "lazy"}
+      fetchPriority={priority === true ? "high" : priority === "low" ? "low" : undefined}
       decoding="async"
     />
   )

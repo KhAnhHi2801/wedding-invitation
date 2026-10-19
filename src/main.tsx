@@ -8,6 +8,10 @@ import "./styles/global.css"
 import "./styles/sections.css"
 import "./styles/reveal.css"
 
+// Reload phải bắt đầu ở phong bì; nếu trình duyệt phục hồi vị trí giữa trang thì main còn inert và bị khóa cuộn.
+if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual"
+window.scrollTo(0, 0)
+
 applyDeviceTier()
 
 createRoot(document.getElementById("root")!).render(

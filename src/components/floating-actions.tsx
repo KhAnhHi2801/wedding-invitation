@@ -1,5 +1,5 @@
-import { useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
+import { gardenOverlay } from "../lib/garden-overlay"
 import { music, useMusicState } from "../lib/music"
 import { ChairIcon } from "./icons/shapes"
 import { ChatIcon, GiftIcon, MusicOffIcon, MusicOnIcon } from "./icons/ui-icons"
@@ -19,14 +19,12 @@ function scrollToSection(id: string) {
 }
 
 /**
- * Các nút cố định: lời chúc (tới khu vườn), quà mừng, xác nhận tham dự và nhạc nền.
+ * Các nút cố định: lời chúc (mở lớp phủ gieo hoa), quà mừng, xác nhận tham dự và nhạc nền.
  * Nằm ngoài <main> để luôn bấm được; chỉ hiện sau khi thiệp đã mở (App quyết định lúc dựng).
  */
 export function FloatingActions({ onOpenRsvp }: FloatingActionsProps) {
   const { ui } = weddingConfig
   const musicState = useMusicState()
-  // Nút "Gửi lời chúc…" chỉ có khi trang có khu vườn lời chúc (nội dung trang đã dựng xong trước khi nút này xuất hiện)
-  const [hasGarden] = useState(() => document.getElementById("garden") !== null)
 
   return (
     <>
@@ -42,12 +40,10 @@ export function FloatingActions({ onOpenRsvp }: FloatingActionsProps) {
         </button>
       )}
 
-      {hasGarden && (
-        <button type="button" className="fab fab__pill" onClick={() => scrollToSection("garden")}>
-          <ChatIcon />
-          <span>{ui.fabWish}</span>
-        </button>
-      )}
+      <button type="button" className="fab fab__pill" onClick={gardenOverlay.open}>
+        <ChatIcon />
+        <span>{ui.fabWish}</span>
+      </button>
 
       <div className="fab__group">
         <button type="button" className="fab fab__round" aria-label={ui.fabGift} onClick={() => scrollToSection("gift")}>

@@ -39,6 +39,7 @@ export function Cover() {
         name={hero.coverPhoto}
         alt={`${couple.bride.name} ${couple.connector} ${couple.groom.name}`}
         sizes="100vw"
+        priority="low"
         className="cover__photo"
       />
       <CountdownBoxes targetMs={startsAtMs} units={ui.countdownUnits} />
