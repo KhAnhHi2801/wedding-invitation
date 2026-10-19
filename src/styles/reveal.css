@@ -1,0 +1,76 @@
+/*
+ * Hiệu ứng hiện dần khi cuộn (xem hooks/use-reveal.ts). Chỉ dùng transform, opacity và clip-path trên phần tử nhỏ.
+ * Trạng thái ẩn chỉ áp dụng khi phần tử có data-reveal; `.is-in` đưa về trạng thái hiện.
+ */
+[data-reveal] {
+  opacity: 0;
+  transition:
+    opacity var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms),
+    transform var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms),
+    clip-path var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms);
+}
+
+/* Chỉ chuyển opacity để không tranh transform với parallax (GSAP) trên cùng phần tử */
+[data-reveal="fadeIn"] {
+  transition-property: opacity;
+}
+
+[data-reveal="fadeUp"] {
+  transform: translate3d(0, 1.5rem, 0);
+}
+
+[data-reveal="slideLeft"] {
+  transform: translate3d(-2.5rem, 0, 0);
+}
+
+[data-reveal="slideRight"] {
+  transform: translate3d(2.5rem, 0, 0);
+}
+
+[data-reveal="scaleIn"] {
+  transform: scale(0.88);
+}
+
+/* Vòm RSVP: lớn dần từ đáy lên */
+[data-reveal="scaleUp"] {
+  transform: translate3d(0, 2rem, 0) scale(0.92);
+  transform-origin: 50% 100%;
+}
+
+/* Đường kẻ dọc vẽ dần từ trên xuống */
+[data-reveal="lineY"] {
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition-duration: 1.1s;
+}
+
+/* Đường kẻ ngang mở ra từ chỗ số ngày: tháng mở sang trái, năm mở sang phải */
+[data-reveal="wipeToLeft"] {
+  clip-path: inset(0 0 0 100%);
+}
+
+[data-reveal="wipeToRight"] {
+  clip-path: inset(0 100% 0 0);
+}
+
+/* Chữ ký "Thank you" hiện dần từ trái sang như đang viết */
+[data-reveal="write"] {
+  clip-path: inset(0 100% 0 0);
+  transition-duration: 1.6s;
+  transition-timing-function: linear;
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+  }
+}

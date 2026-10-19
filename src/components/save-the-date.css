@@ -1,0 +1,86 @@
+.save__heading {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: var(--fs-54);
+  color: var(--wine);
+}
+
+.save__photo-wrap {
+  position: relative;
+  width: min(100%, 44rem);
+  margin: 0 auto var(--space-12);
+  padding: var(--space-6) var(--space-6) 0 0;
+}
+
+.save__frame {
+  position: absolute;
+  inset: 0 var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6));
+  border: 1px solid var(--blush);
+}
+
+.save__photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
+.save__stamp {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: var(--space-4) var(--space-2);
+  background: var(--wine);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: var(--fs-26);
+  letter-spacing: 0.08em;
+}
+
+.save__calendar {
+  width: min(100%, 30rem);
+  margin: 0 auto;
+  border-collapse: collapse;
+  text-align: center;
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.save__calendar th {
+  padding: var(--space-2) 0;
+  font-weight: 500;
+  font-size: var(--fs-14);
+  color: var(--wine-2);
+}
+
+.save__calendar td {
+  padding: var(--space-1) 0;
+}
+
+.save__day {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  font-size: var(--fs-16);
+}
+
+.save__day--event {
+  background: var(--wine);
+  color: var(--white);
+}
+
+/* Ngày cưới nhấp nhẹ 3 lần khi lịch vừa hiện ra */
+.save__calendar.is-in .save__day--event {
+  animation: save-pulse 1.4s ease-in-out 0.9s 3;
+}
+
+@keyframes save-pulse {
+  50% {
+    transform: scale(1.18);
+  }
+}

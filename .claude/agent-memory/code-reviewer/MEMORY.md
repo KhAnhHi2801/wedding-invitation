@@ -1,0 +1,1 @@
+- [Bash hook blocked words](reference_bash_hook_blocks.md) — node_modules/dist/build blocked in Bash; workarounds for vite build, sharp, tsc

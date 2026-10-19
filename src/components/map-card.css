@@ -1,0 +1,65 @@
+.map {
+  display: grid;
+}
+
+.map .reading {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: center;
+}
+
+.map__card {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: color-mix(in srgb, var(--rose) 35%, var(--paper));
+  border: 1px solid var(--blush);
+  overflow: hidden;
+}
+
+.map__frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.map__facade {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.map__venue {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-34);
+  color: var(--wine);
+}
+
+.map__address {
+  margin: 0;
+  font-size: var(--fs-16);
+}
+
+.map__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 var(--space-6);
+  border: 1px solid var(--wine);
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--white);
+  font-size: var(--fs-16);
+  text-decoration: none;
+}
+
+.map__button--ghost {
+  background: transparent;
+  color: var(--wine);
+}

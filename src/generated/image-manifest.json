@@ -1,0 +1,47 @@
+{
+  "hero/couple": {
+    "width": 1600,
+    "height": 2399,
+    "smallWidth": 640
+  },
+  "photos/photo-01": {
+    "width": 1200,
+    "height": 1800,
+    "smallWidth": 640
+  },
+  "photos/photo-02": {
+    "width": 1200,
+    "height": 1799,
+    "smallWidth": 640
+  },
+  "photos/photo-03": {
+    "width": 1200,
+    "height": 1800,
+    "smallWidth": 640
+  },
+  "photos/photo-04": {
+    "width": 1200,
+    "height": 1800,
+    "smallWidth": 640
+  },
+  "photos/photo-05": {
+    "width": 1200,
+    "height": 1800,
+    "smallWidth": 640
+  },
+  "photos/photo-06": {
+    "width": 1200,
+    "height": 1800,
+    "smallWidth": 640
+  },
+  "photos/photo-07": {
+    "width": 1200,
+    "height": 800,
+    "smallWidth": 640
+  },
+  "photos/photo-08": {
+    "width": 1200,
+    "height": 1800,
+    "smallWidth": 640
+  }
+}

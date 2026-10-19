@@ -1,0 +1,60 @@
+.rsvp {
+  display: grid;
+  justify-items: center;
+  padding-top: clamp(1rem, 4vw, 3rem);
+}
+
+.rsvp__arch {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  width: min(100% - 2 * var(--gutter), 32rem);
+  padding: clamp(6rem, 24vw, 10rem) var(--space-6) var(--space-12);
+  background: var(--rose);
+  /* Bán kính lớn hơn nửa chiều rộng: CSS tự thu về đúng nửa vòng tròn */
+  border-radius: 16rem 16rem 0 0;
+  text-align: center;
+}
+
+.rsvp__eyebrow {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: var(--fs-14);
+  letter-spacing: 0.3em;
+  color: var(--ink);
+}
+
+.rsvp__title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-26);
+  color: var(--ink);
+}
+
+.rsvp__text {
+  margin: 0;
+  max-width: 24rem;
+  font-size: var(--fs-16);
+  color: var(--ink);
+}
+
+.rsvp__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 3rem;
+  margin-top: var(--space-3);
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--wine);
+  font-size: var(--fs-16);
+  font-weight: 700;
+}
+
+.rsvp__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

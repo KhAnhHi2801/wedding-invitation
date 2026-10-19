@@ -1,0 +1,34 @@
+/* Khung dùng chung cho các section của thiệp */
+.section {
+  position: relative;
+  padding-block: clamp(3rem, 8vw, 6rem);
+  /* Phần tử chờ hiện dần đang lệch ngang không được làm trang rộng ra (iOS vẫn cho kéo ngang nếu chỉ chặn ở body) */
+  overflow-x: clip;
+}
+
+.section > .container {
+  position: relative;
+}
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+}
+
+.reading {
+  width: min(100% - 2 * var(--gutter), var(--reading));
+  margin-inline: auto;
+}
+
+/* Chữ dọc trang trí (Bride, Groom, I love you forever...) */
+.vertical {
+  writing-mode: vertical-rl;
+}
+
+/* Nhãn chữ hoa giãn chữ (Arial theo mẫu) */
+.label {
+  font-family: var(--font-label);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}

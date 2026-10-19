@@ -1,0 +1,94 @@
+.ceremony .container {
+  max-width: 52rem;
+}
+
+.ceremony__top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.ceremony__title {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: var(--fs-34);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.ceremony__rule {
+  width: 2px;
+  height: clamp(3rem, 10vw, 6rem);
+}
+
+.ceremony__rule--solid {
+  background: var(--wine);
+}
+
+.ceremony__rule--faint {
+  background: var(--blush);
+}
+
+.ceremony__names {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--wine);
+}
+
+.ceremony__name,
+.ceremony__amp {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: var(--fs-54);
+  line-height: 1.2;
+}
+
+.ceremony__name--bride {
+  justify-self: end;
+  text-align: right;
+}
+
+.ceremony__amp {
+  justify-self: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+}
+
+.ceremony__families {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+  text-align: center;
+}
+
+.ceremony__family-name {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-34);
+  color: var(--black);
+}
+
+.ceremony__parent {
+  margin: 0;
+  font-size: var(--fs-26);
+  line-height: 1.4;
+}
+
+.ceremony__place {
+  margin: var(--space-6) 0 0;
+  font-size: var(--fs-26);
+  color: color-mix(in srgb, var(--ink) 70%, var(--paper));
+}
+
+@media (max-width: 34rem) {
+  .ceremony__families {
+    gap: var(--space-3);
+  }
+}

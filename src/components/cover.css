@@ -1,0 +1,48 @@
+.cover {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: min(100svh, 62rem);
+  overflow: clip;
+  background: var(--mist);
+}
+
+.cover__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+.cover__count {
+  position: relative;
+  z-index: var(--z-raised);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: min(100% - 2 * var(--gutter), 34rem);
+  margin: 0 auto var(--space-8);
+  padding: 0;
+  list-style: none;
+}
+
+.cover__unit {
+  display: grid;
+  justify-items: center;
+  padding: var(--space-3) var(--space-1);
+  background: color-mix(in srgb, var(--wine) 80%, transparent);
+  color: var(--white);
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.cover__number {
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  line-height: 1.2;
+}
+
+.cover__unit-label {
+  font-size: var(--fs-14);
+}

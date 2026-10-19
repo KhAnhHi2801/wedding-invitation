@@ -1,0 +1,58 @@
+.timeline__list {
+  position: relative;
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.timeline__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Trục dọc chạy giữa các mốc (không dùng transform để khỏi tranh với hiệu ứng vẽ dần) */
+.timeline__axis {
+  position: absolute;
+  left: calc(50% - 1px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: color-mix(in srgb, var(--ink) 55%, var(--paper));
+}
+
+.timeline__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+}
+
+.timeline__icon {
+  justify-self: end;
+  width: clamp(3rem, 8vw, 4.5rem);
+  height: auto;
+  color: var(--wine-2);
+}
+
+.timeline__heart {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.2rem;
+  background: var(--paper);
+  color: var(--blush);
+}
+
+.timeline__text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.timeline__time {
+  font-variant-numeric: lining-nums tabular-nums;
+}

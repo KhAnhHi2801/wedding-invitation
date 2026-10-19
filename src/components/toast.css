@@ -1,0 +1,32 @@
+.toast {
+  position: fixed;
+  inset: auto auto calc(5.5rem + env(safe-area-inset-bottom)) 50%;
+  z-index: var(--z-modal);
+  /* Đặt lại kiểu mặc định của [popover] */
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  max-width: min(90vw, 26rem);
+  padding: var(--space-3) var(--space-6);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: var(--fs-14);
+  text-align: center;
+  opacity: 0;
+  transform: translate3d(-50%, 0.75rem, 0);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+/* Chưa hiện thì để popover tự ẩn (display: none); trình duyệt không hỗ trợ popover vẫn dùng opacity */
+.toast:not(:popover-open)[data-visible="false"] {
+  opacity: 0;
+}
+
+.toast[data-visible="true"] {
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0);
+}

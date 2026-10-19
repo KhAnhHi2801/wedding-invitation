@@ -1,0 +1,152 @@
+.rsvp-modal {
+  width: min(100% - 2rem, 30rem);
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 1.25rem;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: auto;
+}
+
+.rsvp-modal::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.rsvp-modal__panel {
+  position: relative;
+  padding: var(--space-8) var(--space-6) var(--space-6);
+}
+
+.rsvp-modal__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--wine);
+}
+
+.rsvp-modal__close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.rsvp-modal__title {
+  margin: 0 0 var(--space-6);
+  padding-right: 2.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-34);
+  color: var(--wine);
+}
+
+.rsvp-modal__field {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  border: 0;
+}
+
+.rsvp-modal__field label,
+.rsvp-modal__field legend {
+  padding: 0;
+  font-size: var(--fs-14);
+  font-weight: 700;
+}
+
+.rsvp-modal input[type="text"],
+.rsvp-modal select,
+.rsvp-modal textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--ink) 35%, var(--paper));
+  border-radius: 0.5rem;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  /* 16px trở lên để iOS không tự phóng to khi focus */
+  font-size: var(--fs-16);
+}
+
+.rsvp-modal [aria-invalid="true"] {
+  border-color: var(--wine);
+  outline: 1px solid var(--wine);
+}
+
+.rsvp-modal__choices {
+  gap: var(--space-1);
+}
+
+.rsvp-modal__choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  font-weight: 500 !important;
+  font-size: var(--fs-16) !important;
+}
+
+.rsvp-modal__choice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--wine);
+}
+
+.rsvp-modal__error {
+  margin: 0;
+  font-size: var(--fs-14);
+  color: var(--wine);
+}
+
+.rsvp-modal__error--form {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--rose) 35%, var(--paper));
+}
+
+.rsvp-modal__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--white);
+  font-size: var(--fs-16);
+  font-weight: 700;
+}
+
+.rsvp-modal__submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.rsvp-modal__done {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.rsvp-modal__done p {
+  margin: 0;
+}
+
+/* Ô bẫy bot: đưa ra khỏi màn hình thay vì display:none (bot vẫn thấy) */
+.rsvp-modal__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}

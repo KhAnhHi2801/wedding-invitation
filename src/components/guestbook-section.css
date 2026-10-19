@@ -1,0 +1,17 @@
+.guestbook {
+  text-align: center;
+}
+
+.guestbook__title {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-signature);
+  font-weight: 400;
+  font-size: var(--fs-70);
+  line-height: 1.05;
+  color: var(--wine);
+}
+
+/* Chỗ giữ sẵn cho sổ (cao khoảng một quyển sổ + thanh điều khiển) để trang không bị dịch bố cục khi nó dựng xong */
+.guestbook__placeholder {
+  min-height: 34rem;
+}

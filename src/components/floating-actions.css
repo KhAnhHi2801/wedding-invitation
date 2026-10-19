@@ -1,0 +1,57 @@
+.fab {
+  position: fixed;
+  z-index: var(--z-fab);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, var(--paper));
+  background: color-mix(in srgb, var(--mist) 92%, transparent);
+  color: var(--ink);
+  font-size: var(--fs-14);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.12);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.fab:active {
+  transform: scale(0.96);
+}
+
+.fab svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--wine);
+}
+
+.fab__round {
+  width: 2.75rem;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.fab__pill {
+  left: max(0.75rem, env(safe-area-inset-left));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  padding: 0 var(--space-4) 0 var(--space-3);
+  border-radius: 999px;
+}
+
+/* Hai nút tròn cạnh nhau ở góc phải dưới */
+.fab__group {
+  position: fixed;
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  z-index: var(--z-fab);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.fab__group .fab {
+  position: static;
+}
+
+.fab__music {
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: max(0.75rem, env(safe-area-inset-right));
+}

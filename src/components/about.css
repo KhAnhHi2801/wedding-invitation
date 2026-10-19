@@ -1,0 +1,88 @@
+.about__heading {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-signature);
+  font-weight: 400;
+  font-size: var(--fs-70);
+  color: var(--wine);
+}
+
+.about__person {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 52rem;
+  margin: 0 auto var(--space-12);
+  /* Chừa chỗ cho nhãn dọc Bride/Groom nằm trong khung, không tràn ra ngoài màn hình */
+  padding-inline: clamp(1.75rem, 6vw, 4rem);
+}
+
+.about__card {
+  display: grid;
+  align-content: center;
+  gap: var(--space-3);
+  min-height: clamp(14rem, 40vw, 22rem);
+  padding: var(--space-6) var(--space-3);
+  border: 2px solid var(--blush);
+  text-align: center;
+  font-family: var(--font-hand);
+  color: var(--ink);
+}
+
+.about__name {
+  margin: 0;
+  font-weight: 400;
+  font-size: var(--fs-34);
+  line-height: 1.2;
+}
+
+.about__detail {
+  margin: 0;
+  font-size: var(--fs-34);
+  line-height: 1.2;
+}
+
+.about__photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.about__label {
+  position: absolute;
+  top: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-54);
+  letter-spacing: 0.15em;
+  color: var(--blush);
+}
+
+.about__person--bride .about__label {
+  right: 0;
+}
+
+/* Chú rể: ảnh bên trái, thẻ bên phải */
+.about__person--groom {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+}
+
+.about__person--groom .about__card {
+  order: 2;
+}
+
+.about__person--groom .about__photo {
+  order: 1;
+}
+
+.about__person--groom .about__label {
+  left: 0;
+}
+
+@media (max-width: 34rem) {
+  .about__label {
+    display: none;
+  }
+}

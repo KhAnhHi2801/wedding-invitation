@@ -1,0 +1,72 @@
+import { useEffect, useRef, useState } from "react"
+import { About } from "./components/about"
+import { Ceremony } from "./components/ceremony"
+import { Cover } from "./components/cover"
+import { EnvelopeIntro } from "./components/envelope-intro"
+import { EventInfo } from "./components/event-info"
+import { FloatingActions } from "./components/floating-actions"
+import { Gallery } from "./components/gallery"
+import { GardenSection } from "./components/garden-section"
+import { Gift } from "./components/gift"
+import { GuestbookSection } from "./components/guestbook-section"
+import { Invitation } from "./components/invitation"
+import { MapCard } from "./components/map-card"
+import { MarryMe } from "./components/marry-me"
+import { Rsvp } from "./components/rsvp"
+import { RsvpModal } from "./components/rsvp-modal"
+import { SaveTheDate } from "./components/save-the-date"
+import { ThankYou } from "./components/thank-you"
+import { Timeline } from "./components/timeline"
+import { ToastProvider } from "./components/toast"
+import { weddingConfig } from "./config/wedding-config"
+import { music } from "./lib/music"
+import { lockScroll } from "./lib/scroll-lock"
+
+export default function App() {
+  const [opened, setOpened] = useState(false)
+  const [rsvpOpen, setRsvpOpen] = useState(false)
+  const mainRef = useRef<HTMLElement>(null)
+
+  // Trước khi mở phong bì thì khóa cuộn (khóa có đếm, dùng chung với modal)
+  useEffect(() => (opened ? undefined : lockScroll()), [opened])
+
+  // Mở xong: về đầu trang và chuyển tiêu điểm sang nội dung để bàn phím và trình đọc màn hình đi tiếp
+  useEffect(() => {
+    if (!opened) return
+    window.scrollTo({ top: 0, behavior: "instant" })
+    mainRef.current?.focus({ preventScroll: true })
+  }, [opened])
+
+  const handleOpenStart = () => {
+    // Phải bật nhạc ngay trong thao tác chạm của khách (iOS không cho phát sau khi animation kết thúc)
+    if (weddingConfig.music.autoplay) music.play()
+  }
+
+  const openRsvp = () => setRsvpOpen(true)
+
+  return (
+    <ToastProvider>
+      <EnvelopeIntro onOpenStart={handleOpenStart} onOpened={() => setOpened(true)} />
+      {/* inert: phần sau phong bì không focus/đọc được cho tới khi thiệp mở */}
+      <main ref={mainRef} tabIndex={-1} inert={!opened}>
+        <Cover />
+        <Invitation />
+        <Ceremony />
+        <EventInfo />
+        <MapCard />
+        <MarryMe />
+        <About />
+        <SaveTheDate />
+        <Timeline />
+        <Gallery />
+        <Rsvp onOpen={openRsvp} />
+        <Gift />
+        <GardenSection />
+        <GuestbookSection />
+        <ThankYou />
+      </main>
+      {opened && <FloatingActions onOpenRsvp={openRsvp} />}
+      <RsvpModal open={rsvpOpen} onClose={() => setRsvpOpen(false)} />
+    </ToastProvider>
+  )
+}

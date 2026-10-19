@@ -1,0 +1,49 @@
+.hearts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hearts__heart {
+  position: absolute;
+  left: var(--x);
+  bottom: -2rem;
+  width: var(--size);
+  height: var(--size);
+  color: var(--blush);
+  opacity: 0;
+  animation: hearts-rise var(--duration) linear var(--delay) infinite;
+  animation-play-state: paused;
+}
+
+.hearts[data-active="true"] .hearts__heart {
+  animation-play-state: running;
+}
+
+@keyframes hearts-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.8);
+  }
+  15% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(1.5rem, -30rem, 0) scale(1.1);
+  }
+}
+
+.lite .hearts {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hearts {
+    display: none;
+  }
+}

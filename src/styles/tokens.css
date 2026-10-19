@@ -1,0 +1,66 @@
+/* Token thiết kế: màu, chữ, khoảng cách, chuyển động, lớp. Component chỉ dùng biến, không viết hex rời. */
+:root {
+  /* Màu */
+  --paper: #fcfcfc;
+  --ink: #3b3232;
+  --wine: #8b2f30;
+  --wine-2: #834343;
+  --blush: #dfbaba;
+  --rose: #e0b9be;
+  --envelope: #a33b3b;
+  --envelope-flap: #7f2527;
+  --envelope-light: #b04845;
+  --seal: #a8714a;
+  --coral: #c4575c;
+  --mist: #ededed;
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Font */
+  --font-hero-script: "Pinyon Script", "Allura", cursive;
+  --font-hand: "Allura", "Pinyon Script", cursive;
+  --font-signature: "The Nautigal", "Allura", cursive;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-label: Arial, Helvetica, sans-serif;
+
+  /* Thang chữ, co giãn theo chiều rộng màn hình (mobile 360px đến desktop 1440px) */
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-22: clamp(1.125rem, 0.95rem + 0.9vw, 1.375rem);
+  --fs-26: clamp(1.25rem, 1rem + 1.2vw, 1.625rem);
+  --fs-34: clamp(1.5rem, 1.1rem + 1.8vw, 2.125rem);
+  --fs-54: clamp(2.25rem, 1.4rem + 3.8vw, 3.375rem);
+  --fs-70: clamp(2.75rem, 1.6rem + 5vw, 4.375rem);
+  --fs-125: clamp(5rem, 2.6rem + 10vw, 7.8125rem);
+
+  /* Khoảng cách theo nhịp 4px */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+
+  /* Bố cục */
+  --container: 72rem;
+  --reading: 40rem;
+
+  /* Chuyển động */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 700ms;
+
+  /* Lớp xếp chồng */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-fab: 40;
+  --z-modal: 100;
+  --z-intro: 1000;
+}

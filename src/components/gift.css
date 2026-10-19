@@ -1,0 +1,119 @@
+.gift__heading {
+  margin: 0 0 var(--space-12);
+  text-align: center;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--fs-54);
+  color: var(--coral);
+}
+
+.gift__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 44rem;
+  margin: 0 auto var(--space-12);
+  padding-inline: 0.9rem;
+}
+
+.gift__row--reverse {
+  flex-direction: row-reverse;
+}
+
+.gift__avatar {
+  flex: none;
+  width: clamp(6rem, 22vw, 11rem);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  outline: 0.5rem dashed var(--blush);
+  outline-offset: 0.3rem;
+}
+
+.gift__card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: 2.5rem;
+  background: var(--mist);
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.gift__info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Chỗ giữ sẵn cho mã QR để không dịch bố cục khi mã dựng xong */
+.gift__qr {
+  flex: none;
+  width: 8.75rem;
+  height: 8.75rem;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  background: var(--white);
+}
+
+.gift__qr img {
+  width: 100%;
+  height: 100%;
+}
+
+.gift__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  margin-top: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--wine);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wine);
+  font-size: var(--fs-14);
+}
+
+.gift__copy svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+@media (max-width: 34rem) {
+  /* Màn hẹp: ảnh đại diện nằm trên thẻ cho đủ chỗ đọc số tài khoản và quét QR */
+  .gift__row,
+  .gift__row--reverse {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .gift__card {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+
+.gift__role,
+.gift__holder,
+.gift__bank {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gift__role {
+  font-size: var(--fs-26);
+}
+
+.gift__holder {
+  font-size: var(--fs-26);
+  overflow-wrap: anywhere;
+}
+
+.gift__bank {
+  margin-top: var(--space-2);
+  font-size: var(--fs-16);
+}

@@ -1,0 +1,90 @@
+.event__body {
+  text-align: center;
+  font-family: var(--font-display);
+  color: var(--ink);
+}
+
+.event__body p,
+.event__body h2 {
+  margin: 0;
+}
+
+.event__welcome {
+  font-size: var(--fs-34);
+  font-weight: 500;
+  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+}
+
+.event__guest {
+  margin-top: var(--space-2);
+  font-size: var(--fs-54);
+  font-weight: 500;
+  color: var(--wine);
+  overflow-wrap: anywhere;
+}
+
+.event__title {
+  margin-top: var(--space-12) !important;
+  font-size: var(--fs-34);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.event__time {
+  margin-top: var(--space-6);
+  font-size: var(--fs-26);
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+}
+
+/* Hàng ngày: 2 đường kẻ ngang chạy tới sát số, số lớn nằm giữa */
+.event__date {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-top: var(--space-4);
+}
+
+.event__side {
+  align-self: center;
+  padding-block: var(--space-4);
+  border-block: 2px solid color-mix(in srgb, var(--ink) 12%, var(--paper));
+  font-size: var(--fs-34);
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ink) 55%, var(--paper));
+}
+
+.event__day {
+  padding-inline: var(--space-4);
+  font-size: var(--fs-125);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--wine);
+  font-variant-numeric: lining-nums;
+}
+
+.event__lunar {
+  margin-top: var(--space-6);
+  font-size: var(--fs-26);
+  font-weight: 500;
+}
+
+.event__venue-label {
+  margin-top: var(--space-12);
+  font-size: var(--fs-26);
+  font-weight: 500;
+  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+}
+
+.event__venue {
+  margin-top: var(--space-2);
+  font-size: var(--fs-54);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.event__address {
+  margin-top: var(--space-3);
+  font-size: var(--fs-26);
+  font-weight: 500;
+}

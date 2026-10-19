@@ -1,0 +1,17 @@
+/* Font self-host (@fontsource), chỉ nạp subset latin + vietnamese để dấu tiếng Việt đúng và file nhẹ. */
+@import "@fontsource/pinyon-script/latin-400.css";
+@import "@fontsource/pinyon-script/vietnamese-400.css";
+@import "@fontsource/allura/latin-400.css";
+@import "@fontsource/allura/vietnamese-400.css";
+@import "@fontsource/the-nautigal/latin-400.css";
+@import "@fontsource/the-nautigal/vietnamese-400.css";
+@import "@fontsource/cormorant-garamond/latin-500.css";
+@import "@fontsource/cormorant-garamond/vietnamese-500.css";
+@import "@fontsource/cormorant-garamond/latin-700.css";
+@import "@fontsource/cormorant-garamond/vietnamese-700.css";
+@import "@fontsource/playfair-display/latin-500.css";
+@import "@fontsource/playfair-display/vietnamese-500.css";
+@import "@fontsource/quicksand/latin-500.css";
+@import "@fontsource/quicksand/vietnamese-500.css";
+@import "@fontsource/quicksand/latin-700.css";
+@import "@fontsource/quicksand/vietnamese-700.css";
