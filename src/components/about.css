@@ -9,7 +9,7 @@
 .about__person {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
   align-items: center;
   gap: var(--space-4);
   max-width: 52rem;
@@ -19,12 +19,15 @@
 }
 
 .about__card {
+  --fs-card: clamp(1.05rem, 0.55rem + 2.5vw, 2.125rem);
   display: grid;
   align-content: center;
   gap: var(--space-3);
   min-height: clamp(14rem, 40vw, 22rem);
-  padding: var(--space-6) var(--space-3);
+  padding: var(--space-6) var(--space-2);
   border: 2px solid var(--blush);
+  /* Họ tên và ngày sinh dài hơn khung hẹp trên điện thoại: cho xuống dòng thay vì bị cắt */
+  overflow-wrap: anywhere;
   text-align: center;
   font-family: var(--font-hand);
   color: var(--ink);
@@ -33,13 +36,13 @@
 .about__name {
   margin: 0;
   font-weight: 400;
-  font-size: var(--fs-34);
+  font-size: var(--fs-card);
   line-height: 1.2;
 }
 
 .about__detail {
   margin: 0;
-  font-size: var(--fs-34);
+  font-size: var(--fs-card);
   line-height: 1.2;
 }
 
@@ -66,7 +69,7 @@
 
 /* Chú rể: ảnh bên trái, thẻ bên phải */
 .about__person--groom {
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
 }
 
 .about__person--groom .about__card {

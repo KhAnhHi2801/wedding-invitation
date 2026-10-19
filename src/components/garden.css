@@ -37,6 +37,8 @@
 /* Sân khấu: hoa bên trái, bảng điều khiển bên phải (màn rộng); xếp dọc trên điện thoại */
 .garden__stage {
   display: grid;
+  /* minmax(0, ...) để dải 15 thẻ hoa cuộn ngang không kéo giãn cột rộng hơn màn hình */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-8);
   align-items: start;
   max-width: 56rem;
@@ -221,7 +223,7 @@
   color: var(--ink);
   font: inherit;
   /* 16px trở lên để iOS không tự phóng to khi focus */
-  font-size: var(--fs-16);
+  font-size: 1rem;
 }
 
 .garden__field-row textarea {

@@ -110,7 +110,7 @@ export default function GardenContent() {
           {step !== "choose" && <p className="garden__flower-message">{entry.wish.message}</p>}
         </div>
 
-        <div className="garden__panel" ref={panelRef} tabIndex={-1}>
+        <div className="garden__panel" ref={panelRef} tabIndex={-1} role="region" aria-label={garden.title}>
           {step === "choose" && (
             <>
               <div className="garden__carousel" role="radiogroup" aria-label={garden.carouselLabel}>
@@ -121,7 +121,11 @@ export default function GardenContent() {
                       name={id("flower")}
                       className="sr-only"
                       checked={item.def.id === selectedId}
-                      onChange={() => setSelectedId(item.def.id)}
+                      onChange={(event) => {
+                        setSelectedId(item.def.id)
+                        // Chọn bằng bàn phím: cuộn thẻ vừa chọn vào giữa danh sách
+                        event.currentTarget.closest("label")?.scrollIntoView({ inline: "center", block: "nearest" })
+                      }}
                     />
                     <span className="garden__card-icon">
                       <FlowerMiniPreview flower={item.def} />
@@ -200,7 +204,7 @@ export default function GardenContent() {
               <fieldset className="garden__inks">
                 <legend>{garden.inkLabel}</legend>
                 {INKS.map((item) => (
-                  <label key={item.key} className="garden__ink" title={item.label}>
+                  <label key={item.key} className="garden__ink" title={garden.inkNames[item.key]}>
                     <input
                       type="radio"
                       name={id("ink")}
@@ -209,7 +213,7 @@ export default function GardenContent() {
                       onChange={() => setInk(item.key)}
                     />
                     <span className="garden__ink-dot" style={{ backgroundColor: item.color }} />
-                    <span className="sr-only">{item.label}</span>
+                    <span className="sr-only">{garden.inkNames[item.key]}</span>
                   </label>
                 ))}
               </fieldset>

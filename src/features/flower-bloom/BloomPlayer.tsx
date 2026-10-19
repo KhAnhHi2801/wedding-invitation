@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useLayoutEffect } from "react"
 import type { FlowerDefinition } from "../../types/flower"
 import { BotanicalFlowerEngine } from "./BotanicalFlowerEngine"
 import { useBloomProgress } from "./use-bloom-progress"
@@ -7,7 +7,7 @@ export type BloomMode = "idle" | "growing" | "bloomed"
 
 interface BloomPlayerProps {
   flower: FlowerDefinition
-  /** idle: hạt nằm trong đất; growing: đang mọc; bloomed: đã nở */
+  /** idle: xem trước hoa đã nở của loài đang chọn; growing: đang mọc từ hạt; bloomed: đã nở */
   mode: BloomMode
   /** Gọi một lần khi hoa mọc xong */
   onGrown: () => void
@@ -21,12 +21,15 @@ interface BloomPlayerProps {
 export function BloomPlayer({ flower, mode, onGrown, skipLabel }: BloomPlayerProps) {
   const { progress, stage, play, skip } = useBloomProgress(onGrown)
 
-  useEffect(() => {
+  // Layout effect: đặt lại tiến trình về 0 trước khi trình duyệt vẽ, khỏi chớp một khung hoa đã nở khi bắt đầu gieo lần nữa
+  useLayoutEffect(() => {
     if (mode === "growing") play()
   }, [mode, play])
 
-  const shown = mode === "growing" ? progress : mode === "bloomed" ? 1 : 0
-  const shownStage = mode === "bloomed" ? "completed" : mode === "idle" ? "seed" : stage
+  // Chưa gieo thì cho xem trước hoa đã nở, khung không bị trống
+  const growing = mode === "growing"
+  const shown = growing ? progress : 1
+  const shownStage = growing ? stage : "completed"
   const lite = document.documentElement.classList.contains("lite")
 
   return (

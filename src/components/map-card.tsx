@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
+import { getWeddingEvent } from "../lib/wedding-event"
 import { mapsEmbed, mapsLink } from "../lib/maps"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import "./map-card.css"
@@ -10,7 +11,8 @@ import "./map-card.css"
 const REVEAL: readonly RevealRule[] = [{ selector: ".map__card", preset: "fadeUp" }]
 
 export function MapCard() {
-  const { event, ui } = weddingConfig
+  const { ui } = weddingConfig
+  const { event } = getWeddingEvent()
   const [shown, setShown] = useState(false)
   const ref = useReveal<HTMLElement>(REVEAL)
 

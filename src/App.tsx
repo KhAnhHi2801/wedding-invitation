@@ -9,7 +9,6 @@ import { Gallery } from "./components/gallery"
 import { GardenSection } from "./components/garden-section"
 import { Gift } from "./components/gift"
 import { GuestbookSection } from "./components/guestbook-section"
-import { Invitation } from "./components/invitation"
 import { MapCard } from "./components/map-card"
 import { MarryMe } from "./components/marry-me"
 import { Rsvp } from "./components/rsvp"
@@ -50,7 +49,6 @@ export default function App() {
       {/* inert: phần sau phong bì không focus/đọc được cho tới khi thiệp mở */}
       <main ref={mainRef} tabIndex={-1} inert={!opened}>
         <Cover />
-        <Invitation />
         <Ceremony />
         <EventInfo />
         <MapCard />

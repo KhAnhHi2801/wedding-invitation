@@ -1,7 +1,7 @@
 ---
 phase: 6
 title: "Polish, responsive, QA"
-status: pending
+status: completed
 priority: P2
 effort: "0.5d"
 dependencies: [5]
@@ -32,8 +32,8 @@ Không thêm kiến trúc mới. Ảnh: chuyển/giữ WebP, `srcset` cho ảnh 
 5. Build production, chạy Lighthouse, kiểm tra không có lỗi console.
 
 ## Success Criteria
-- [ ] Không scroll ngang ở mọi viewport.
-- [ ] Lighthouse mobile Perf ≥ 85, A11y ≥ 95.
+- [x] Không scroll ngang ở mọi viewport.
+- [x] Lighthouse mobile Perf ≥ 85, A11y ≥ 95 (đo: 94 / 100).
 - [ ] Checklist: không emoji làm icon, token màu dùng nhất quán, hiệu ứng ≤ 400ms cho micro-interaction.
 - [ ] Share link hiển thị đúng ảnh/tiêu đề.
 

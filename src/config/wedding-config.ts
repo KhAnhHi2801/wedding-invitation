@@ -31,6 +31,20 @@ export interface TimelineItem {
   icon: "car" | "camera" | "toast";
 }
 
+export interface EventInfo {
+  /** ISO có múi giờ, nguồn duy nhất cho countdown, lịch, ngày, giờ, thứ */
+  startsAt: string;
+  /** Ngày âm lịch không suy ra được từ `startsAt`, nhập tay */
+  lunarText: string;
+  venue: string;
+  address: string;
+  /** Nguồn duy nhất cho link và iframe bản đồ (xem `src/lib/maps.ts`) */
+  mapsQuery: string;
+}
+
+/** Phần riêng của một bên (nhà trai/nhà gái): chỉ ghi trường khác `event`/`timeline` mặc định, trường bỏ trống lấy mặc định. */
+export type SideOverride = Partial<EventInfo> & { timeline?: TimelineItem[] };
+
 export interface BankAccount {
   role: string;
   holder: string;
@@ -81,11 +95,11 @@ export interface GardenText {
   messageLabel: string;
   suggestAnother: string;
   inkLabel: string;
+  /** Tên từng màu chữ, theo khóa trong `src/lib/wish-style.ts` */
+  inkNames: Record<string, string>;
   send: string;
-  sending: string;
   doneTitle: string;
   plantAnother: string;
-  openGuestbook: string;
   gardenTitle: string;
   gardenEmpty: string;
   /** Có thể dùng {count} */
@@ -149,16 +163,12 @@ export interface WeddingConfig {
   /** Tên khách lấy từ query này, ví dụ `?to=Anh%20Nam` */
   guestParam: string;
   couple: { bride: Person; groom: Person; connector: string };
-  event: {
-    /** ISO có múi giờ, nguồn duy nhất cho countdown, lịch, ngày, giờ, thứ */
-    startsAt: string;
-    /** Ngày âm lịch không suy ra được từ `startsAt`, nhập tay */
-    lunarText: string;
-    venue: string;
-    address: string;
-    /** Nguồn duy nhất cho link và iframe bản đồ (xem `src/lib/maps.ts`) */
-    mapsQuery: string;
-  };
+  /** Tên query chọn bên, ví dụ `?from=bride` (nhà gái) hoặc `?from=groom` (nhà trai) */
+  sideParam: string;
+  /** Mặc định khi link không có `from` hoặc `from` không hợp lệ */
+  event: EventInfo;
+  /** Mỗi bên có thể có địa điểm, giờ tổ chức và lịch trình riêng */
+  sides: { groom: SideOverride; bride: SideOverride };
   invitation: { heading: string; lines: string[] };
   ceremony: {
     titleLines: string[];
@@ -245,6 +255,7 @@ export const weddingConfig: WeddingConfig = {
     guestFallback: "Quý Khách",
   },
   guestParam: "to",
+  sideParam: "from",
   couple: {
     bride: {
       name: "Mai Anh",
@@ -268,6 +279,23 @@ export const weddingConfig: WeddingConfig = {
     venue: "TRỐNG ĐỒNG PALACE",
     address: "(18A Lý Văn Phức, P. Ô Chợ Dừa, Tp Hà Nội)",
     mapsQuery: "Trống Đồng Palace, 18A Lý Văn Phức, Ô Chợ Dừa, Hà Nội",
+  },
+  sides: {
+    // Nhà trai dùng đúng thông tin mặc định ở `event` và `timeline`
+    groom: {},
+    // Ví dụ mẫu cho nhà gái (nội dung giả định, sửa lại cho đúng): link `?from=bride`
+    bride: {
+      startsAt: "2026-12-20T10:00:00+07:00",
+      lunarText: "(Tức ngày 13 tháng 11 năm Bính Ngọ)",
+      venue: "NHÀ VĂN HÓA THÀNH PHỐ ĐIỆN BIÊN",
+      address: "(Phường Mường Thanh, Tp Điện Biên Phủ)",
+      mapsQuery: "Nhà văn hóa thành phố Điện Biên Phủ",
+      timeline: [
+        { time: "07:30", label: "Lễ Đón Dâu", icon: "car" },
+        { time: "09:00", label: "Chụp hình lưu niệm", icon: "camera" },
+        { time: "10:00", label: "Khai tiệc", icon: "toast" },
+      ],
+    },
   },
   invitation: {
     heading: "INVITATION",
@@ -371,11 +399,17 @@ export const weddingConfig: WeddingConfig = {
     messageLabel: "Lời chúc",
     suggestAnother: "Đổi gợi ý",
     inkLabel: "Màu chữ",
+    inkNames: {
+      brown: "Nâu mực",
+      navy: "Xanh mực",
+      forest: "Xanh rêu",
+      wine: "Đỏ rượu vang",
+      plum: "Tím mận",
+      teal: "Xanh ngọc",
+    },
     send: "Gửi lời chúc",
-    sending: "Đang gửi…",
     doneTitle: "Hoa của bạn đã nở trong khu vườn",
     plantAnother: "Gieo thêm một bông",
-    openGuestbook: "Mở sổ lưu bút",
     gardenTitle: "Khu vườn lời chúc",
     gardenEmpty: "Khu vườn đang chờ bông hoa đầu tiên. Bạn gieo nhé!",
     moreFlowers: "+{count} bông hoa khác",

@@ -1,5 +1,6 @@
 import { weddingConfig } from "../config/wedding-config"
 import { getEventParts } from "../lib/event-date"
+import { getWeddingEvent } from "../lib/wedding-event"
 import { getGuestName } from "../lib/guest"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import "./event-info.css"
@@ -14,7 +15,8 @@ const REVEAL: readonly RevealRule[] = [
 ]
 
 export function EventInfo() {
-  const { party, event, hero, guestParam } = weddingConfig
+  const { party, hero, guestParam } = weddingConfig
+  const { event } = getWeddingEvent()
   const parts = getEventParts(event.startsAt)
   const guest = getGuestName(guestParam, hero.guestFallback)
   const ref = useReveal<HTMLElement>(REVEAL)

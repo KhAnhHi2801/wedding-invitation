@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react"
-import { weddingConfig } from "../config/wedding-config"
+import { getWeddingEvent } from "../lib/wedding-event"
 import type { TimelineItem } from "../config/wedding-config"
 import { CameraIcon, CarIcon, HeartIcon, ToastIcon } from "./icons/shapes"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
@@ -18,7 +18,7 @@ const REVEAL: readonly RevealRule[] = [
 ]
 
 export function Timeline() {
-  const { timeline } = weddingConfig
+  const { timeline } = getWeddingEvent()
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
     <section className="section timeline" ref={ref}>

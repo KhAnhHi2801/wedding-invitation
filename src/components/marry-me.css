@@ -63,7 +63,9 @@
   font-size: clamp(2.25rem, 1.2rem + 5.6vw, 4.5rem);
   line-height: 1.25;
   letter-spacing: 0.16em;
-  color: color-mix(in srgb, var(--wine-2) 40%, transparent);
+  /* Chữ nằm trên ảnh để không bị ảnh che, nên cần đủ đậm để đọc được trên nền ảnh */
+  z-index: 2;
+  color: color-mix(in srgb, var(--wine-2) 70%, var(--paper));
   -webkit-text-stroke: 2px var(--wine-2);
   paint-order: stroke fill;
 }

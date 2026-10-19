@@ -1,7 +1,7 @@
 ---
 title: "Clone thiệp cưới Mai Anh & Quốc Huy (ngaychungdoi canvas-template)"
 description: "Dựng lại thiệp cưới online dạng phong bì + scroll story, đủ nội dung, hiệu ứng, typography; thêm mini-game gieo hoa và sổ lưu bút lưu Google Sheet."
-status: pending
+status: completed
 priority: P1
 effort: "~5d"
 tags: [wedding, landing, animation, react, vite, gsap, page-flip, google-sheet]
@@ -41,8 +41,8 @@ Trang web tĩnh responsive full-width: màn phong bì có dấu sáp, bấm đ�
 | 2 | [Content sections](./phase-02-content-sections.md) | Done |
 | 3 | [Envelope hero intro](./phase-03-envelope-hero-intro.md) | Done |
 | 4 | [Scroll effects & interactions](./phase-04-scroll-effects-interactions.md) | Done |
-| 5 | [Garden mini-game, Sheet, guestbook](./phase-05-garden-wishes-guestbook.md) | Pending |
-| 6 | [Polish, responsive, QA](./phase-06-polish-responsive-qa.md) | Pending |
+| 5 | [Garden mini-game, Sheet, guestbook](./phase-05-garden-wishes-guestbook.md) | Done |
+| 6 | [Polish, responsive, QA](./phase-06-polish-responsive-qa.md) | Done |
 
 Thứ tự: 1 → 2 → 3 → 4 → 5 → 6. Phase 2 và 3 song song được sau phase 1. Phase 5 cần phase 1 (config, API) và phần layout của phase 2.
 

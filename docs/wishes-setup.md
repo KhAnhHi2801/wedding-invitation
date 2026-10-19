@@ -73,7 +73,8 @@ Xóa các dòng thử nghiệm trong Sheet trước khi gửi thiệp thật (x�
 
 - Đổi cột `status` của dòng thành `hidden` để ẩn lời chúc khỏi website. Đổi lại `visible` (hoặc để trống) để hiện.
 - Dòng thêm tay vào Sheet mà để trống cột `status` vẫn hiện công khai.
-- Lời chúc có từ thô tục nằm trong danh sách `PROFANITY` của script được tự ghi với `status = hidden`. Khách vẫn thấy hoa của mình trong vườn trên máy họ, người khác không thấy.
+- Từ thô tục: form trên website từ chối lịch sự ngay (khách sửa rồi gửi lại). Nếu có lời lọt qua (gửi thẳng vào địa chỉ web app, hoặc viết lách luật), script ghi dòng đó với `status = hidden` nên người khác không thấy.
+- Độ dài: tên tối đa 40 ký tự, lời chúc từ 2 đến 1000 ký tự. Website và script đếm giống hệt nhau (bỏ ký tự vô hình, đếm theo code point); khi sửa giới hạn, sửa cả `src/lib/wish-validation.ts` và `wishes.gs`. Có test (`npm test`) bắt trường hợp chỉ sửa một nơi.
 - **Đừng xóa hoặc sắp xếp lại dòng** ở tab `Wishes`: phân trang dùng số dòng làm con trỏ. Muốn ẩn thì đổi `status`.
 - Dữ liệu hiển thị được lưu cache tối đa 60 giây, nên đổi `status` có thể mất tới một phút mới có hiệu lực.
 
@@ -87,6 +88,7 @@ Xóa các dòng thử nghiệm trong Sheet trước khi gửi thiệp thật (x�
 | Trần theo ngày | Tối đa 500 lời chúc và 300 xác nhận mỗi ngày cho toàn trang |
 | Chống công thức | Dấu cách đầu + định dạng văn bản thuần cho ô bắt đầu bằng `= + - @` |
 | Danh sách loài hoa | `flower` lạ bị bỏ, không bao giờ ghi giá trị tùy ý vào Sheet |
+| Giới hạn 1000 ký tự | Giữ mỗi trang dữ liệu đọc ra dưới giới hạn cache 100KB của Apps Script |
 | Chống ghi trùng | Cùng `requestId` gửi lại thì trả kết quả cũ |
 
 Vì web app mở cho "Anyone", bất kỳ ai có URL đều gọi được. Các lớp trên giảm spam, nhưng đừng coi đây là hệ thống chống tấn công; dữ liệu nhạy cảm không nên đặt trong Sheet này.

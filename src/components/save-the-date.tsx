@@ -1,6 +1,7 @@
 import { weddingConfig } from "../config/wedding-config"
 import { buildMonthGrid } from "../lib/build-calendar"
 import { getEventParts } from "../lib/event-date"
+import { getWeddingEvent } from "../lib/wedding-event"
 import { Photo } from "./photo"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { FloatingHearts } from "./floating-hearts"
@@ -15,7 +16,8 @@ const REVEAL: readonly RevealRule[] = [
 ]
 
 export function SaveTheDate() {
-  const { saveTheDate, event, ui, couple, party } = weddingConfig
+  const { saveTheDate, ui, couple, party } = weddingConfig
+  const { event } = getWeddingEvent()
   const parts = getEventParts(event.startsAt)
   const grid = buildMonthGrid(parts.year, parts.month)
   const weeks = Math.ceil(grid.length / 7)
@@ -40,33 +42,32 @@ export function SaveTheDate() {
           <p className="save__stamp vertical" aria-label={`${parts.year} ${parts.monthShortEn}`}>
             {parts.year} / {parts.monthShortEn}
           </p>
-        </div>
-
-        <table className="save__calendar">
-          <caption className="sr-only">
-            {party.monthPrefix} {parts.month} {parts.year}
-          </caption>
-          <thead>
-            <tr>
-              {ui.weekdays.map((day) => (
-                <th key={day} scope="col">
-                  {day}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from({ length: weeks }, (_, week) => (
-              <tr key={week}>
-                {cells.slice(week * 7, week * 7 + 7).map((day, i) => (
-                  <td key={i}>
-                    {day !== null && <span className={day === parts.day ? "save__day save__day--event" : "save__day"}>{day}</span>}
-                  </td>
+          <table className="save__calendar">
+            <caption className="sr-only">
+              {party.monthPrefix} {parts.month} {parts.year}
+            </caption>
+            <thead className="sr-only">
+              <tr>
+                {ui.weekdays.map((day) => (
+                  <th key={day} scope="col">
+                    {day}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {Array.from({ length: weeks }, (_, week) => (
+                <tr key={week}>
+                  {cells.slice(week * 7, week * 7 + 7).map((day, i) => (
+                    <td key={i}>
+                      {day !== null && <span className={day === parts.day ? "save__day save__day--event" : "save__day"}>{day}</span>}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   )

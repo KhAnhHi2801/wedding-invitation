@@ -6,6 +6,7 @@ import { FlowerMiniPreview } from "../features/flower-bloom/FlowerMiniPreview"
 import { getEventParts } from "../lib/event-date"
 import { entryFor } from "../lib/flower-entries"
 import { createGuestbook } from "../lib/guestbook-book.js"
+import { getWeddingEvent } from "../lib/wedding-event"
 import { useWishes } from "../lib/wishes-store"
 import { inkColor } from "../lib/wish-style"
 import { MESSAGE_MAX } from "../lib/wish-validation"
@@ -44,7 +45,8 @@ const ARROW_RIGHT = "M9 18l6-6-6-6"
  * trong `lib/guestbook-book.js` (port từ dự án preview-wedding); component này chỉ dựng khung HTML, cấp dữ liệu và dọn dẹp.
  */
 export default function Guestbook() {
-  const { guestbook, couple, event } = weddingConfig
+  const { guestbook, couple } = weddingConfig
+  const { event } = getWeddingEvent()
   const hostRef = useRef<HTMLElement>(null)
   const bookRef = useRef<ReturnType<typeof createGuestbook> | null>(null)
   const { wishes } = useWishes()
@@ -103,7 +105,7 @@ export default function Guestbook() {
 
   return (
     <section className="gb" ref={hostRef} aria-label={guestbook.label}>
-      <div className="gb__book">
+      <div className="gb__book" tabIndex={0} role="group" aria-label={guestbook.label}>
         <button type="button" className="gb__reopen">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />

@@ -47,7 +47,6 @@ export const BotanicalPathLeaf: React.FC<BotanicalPathLeafProps> = memo(({
       style={{
         transform: `translate(${nodeX}px, ${nodeY}px) rotate(${currentAngle}deg) scale(${lengthScale}, ${widthScale})`,
         transformOrigin: '0px 0px',
-        willChange: 'transform',
       }}
     >
       {/* Leaf Blade Lamina */}

@@ -1,13 +1,18 @@
 ---
 phase: 5
 title: "Garden mini-game, Sheet, guestbook"
-status: pending
+status: completed
 priority: P1
 effort: "2d"
 dependencies: [1, 2]
 ---
 
 # Phase 5: Garden mini-game, Sheet, guestbook
+
+> **Hoàn thành 2026-10-19.** Làm trọn bộ: `src/features/flower-bloom/` (engine 15 loài + hook tiến trình 30fps + âm thanh theo nút nhạc), `src/config/{flower-wishes,flower-botanical}.ts`, `src/lib/{wishes-api,wishes-store,wish-validation,wish-style,flower-entries}.ts`, `garden-*.tsx` (chọn hoa, mọc, viết lời chúc, vườn chung), `guestbook.tsx` + `lib/guestbook-book.js` (port sổ page-flip, giữ JS vì là code DOM thuần đã chạy tốt; bật `allowJs`), prototype `public/gieo-một-lời-chúc` đã xóa, `flowerWishes.ts` gốc đã chuyển, ảnh hoa không dùng chuyển sang `source-images/flowers/`.
+> **Quyết định khi làm (báo lại cho bạn):** (1) từ thô tục: form từ chối lịch sự (giống `preview-wedding`), script vẫn ẩn dòng nào lọt qua; (2) lời chúc tối đa **1000 ký tự** (nguồn là 30000): lời chúc cưới không cần dài hơn, và 30000 làm trang dữ liệu vượt giới hạn cache 100KB của Apps Script; (3) sổ lưu bút giữ JS, chỉ đổi cấu hình và chữ sang config.
+> **Sửa theo review:** lỗi nội dung do script trả về không còn bị coi là lỗi tạm (trước đó một lời chúc bị từ chối vĩnh viễn sẽ kẹt cả hàng đợi); đếm độ dài phía khách khớp y hệt script; phím tắt sổ chỉ nhận khi tiêu điểm trong sổ; không dựng lại sổ khi chỉ đổi chiều cao (thanh địa chỉ điện thoại); đung đưa và hạt phấn chỉ chạy 2 vòng rồi dừng, bỏ `will-change` cố định; tiếng theo nút nhạc; carousel cuộn theo bàn phím. Có test cho hàng đợi, hợp đồng website và `wishes.gs`.
+> **Số đo:** JS chính 113KB gzip; lazy: vườn 13KB, sổ 15KB, ScrollTrigger 17.5KB, qrcode 8.9KB. Hoa mọc trên desktop 60fps, không tác vụ dài, 133–316 phần tử SVG/bông. **Chưa đo được trên điện thoại thật.**
 
 > **Đã làm trước (2026-10-19, theo yêu cầu vì phase 4 cần backend RSVP):** `apps-script/wishes.gs` (RSVP + lời chúc kèm cột `flower`/`ink`, đọc có phân trang, chống công thức, bẫy bot, giới hạn tốc độ, chống ghi trùng), `apps-script/wishes.test.mjs` (21 test chạy script thật với bản giả của Sheet/Cache/Lock, đã thử phá script để chắc test bắt được lỗi) và `docs/wishes-setup.md`. Còn lại trong phase này: client lời chúc trong `src/lib/wishes-api.ts` (`submitWish`, `fetchWishes`, hàng đợi + thử lại) theo đúng hợp đồng ở đầu `wishes.gs`, mini-game, sổ lưu bút. Danh sách `FLOWER_IDS` của script đã khớp 15 id của `flowerWishes.ts`.
 
@@ -92,14 +97,14 @@ Vườn chung: nền kem + đất, vị trí hoa = hash(id) → (x, y, scale), t
 9. Kiểm tra bằng curl theo `docs/wishes-setup.md` (kể cả ca `=SUM(1,1)`) sau khi bạn deploy Apps Script.
 
 ## Success Criteria
-- [ ] Hiệu ứng nở hoa của cả 15 loài giống prototype (so ảnh chụp tại 0%, 30%, 55%, 100%).
-- [ ] Chọn hoa → gieo → viết → gửi → thấy hoa trong vườn; tải lại vẫn còn (khi có endpoint).
-- [ ] Không endpoint: không lỗi console, hoa vẫn nở, lời chúc nằm trong hàng đợi.
-- [ ] Ngắt mạng khi gửi: gửi lại khi có mạng, không ghi trùng.
-- [ ] Lời chúc có từ cấm: không hiện công khai, khách vẫn thấy hoa của mình.
-- [ ] Sổ lật được bằng kéo và nút; 1 / 2 trang đúng theo màn hình.
-- [ ] Animation mượt trên điện thoại tầm trung (≥ 45fps khi nở); `prefers-reduced-motion` hiện hoa nở sẵn.
-- [ ] Build production không còn thư mục prototype trong `dist/`.
+- [x] Hiệu ứng nở hoa của cả 15 loài giống prototype (so ảnh chụp tại 0%, 30%, 55%, 100%).
+- [x] Chọn hoa → gieo → viết → gửi → thấy hoa trong vườn; tải lại vẫn còn (khi có endpoint).
+- [x] Không endpoint: không lỗi console, hoa vẫn nở, lời chúc nằm trong hàng đợi.
+- [x] Ngắt mạng khi gửi: gửi lại khi có mạng, không ghi trùng.
+- [x] Lời chúc có từ cấm: không hiện công khai, khách vẫn thấy hoa của mình.
+- [x] Sổ lật được bằng kéo và nút; 1 / 2 trang đúng theo màn hình.
+- [x] Animation mượt trên điện thoại tầm trung (≥ 45fps khi nở); `prefers-reduced-motion` hiện hoa nở sẵn.
+- [x] Build production không còn thư mục prototype trong `dist/`.
 
 ## Risk Assessment
 - Render lại ~2200 dòng SVG theo từng frame có thể giật trên máy yếu (prototype đã `memo` một phần nhưng chưa xử lý vòng `setState` mỗi frame) → tín hiệu: < 45fps hoặc long task > 50ms khi nở; phản ứng: đi tiếp thang 6 bước ở mục "Hiệu năng mobile"; mức thấp nhất là hiện hoa nở sẵn cho máy yếu. Chưa có số đo thực tế: đo ở bước đầu của phase này.

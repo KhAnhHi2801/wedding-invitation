@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
 import { getEventParts } from "../lib/event-date"
 import { getGuestName } from "../lib/guest"
+import { getWeddingEvent } from "../lib/wedding-event"
 import { prefersReducedMotion } from "../lib/device-tier"
 import { gsap, useGSAP } from "../lib/gsap"
 import { DoubleHappiness } from "./icons/double-happiness"
@@ -23,7 +24,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
   const { hero, couple, ui } = weddingConfig
   const rootRef = useRef<HTMLElement>(null)
   const [state, setState] = useState<"closed" | "opening" | "open">("closed")
-  const year = getEventParts(weddingConfig.event.startsAt).year
+  const year = getEventParts(getWeddingEvent().event.startsAt).year
   const guest = getGuestName(weddingConfig.guestParam, hero.guestFallback)
 
   const { contextSafe } = useGSAP({ scope: rootRef })
@@ -41,8 +42,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
     const q = gsap.utils.selector(rootRef)
     if (prefersReducedMotion()) {
       gsap.set(q(".envelope__flap"), { rotateX: -180, zIndex: 1 })
-      gsap.set(q(".envelope__card"), { yPercent: -38, zIndex: 3 })
-      gsap.set([q(".envelope__seal"), q(".intro__hint")], { autoAlpha: 0 })
+      gsap.set(q(".envelope__card"), { yPercent: -50, zIndex: 3 })
       finish()
       return
     }
@@ -50,29 +50,26 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
     // Trên máy yếu chỉ giữ 1 trái tim cho nhẹ
     const hearts = q(".intro__heart").filter((node) => getComputedStyle(node).display !== "none")
 
+    // Nhịp theo trang mẫu: nắp lật 1.2s, thư (ảnh) trượt lên sau 0.6s trong ~1s; ấn sáp và dòng gợi ý vẫn nằm yên
     gsap
-      .timeline({ onComplete: finish })
-      .to(q(".intro__hint"), { autoAlpha: 0, duration: 0.25 }, 0)
-      .to(q(".envelope__seal"), { scale: 0.55, autoAlpha: 0, duration: 0.3, ease: "power2.in" }, 0)
-      .to(q(".envelope__flap"), { rotateX: -180, duration: 0.7, ease: "power2.inOut" }, 0.2)
-      .set(q(".envelope__flap"), { zIndex: 1 }, 0.55)
-      .set(q(".envelope__card"), { zIndex: 3 }, 0.55)
-      .to(q(".envelope__card"), { yPercent: -38, duration: 0.8, ease: "power3.out" }, 0.8)
-      .fromTo(
-        hearts,
-        { y: 0, x: 0, autoAlpha: 0, scale: 0.5 },
-        {
-          y: (i: number) => -150 - i * 45,
-          x: (i: number) => [-70, 10, 80][i] ?? 0,
-          autoAlpha: 1,
-          scale: 1,
-          duration: 1.1,
-          stagger: 0.14,
-          ease: "power2.out",
-        },
-        0.95,
-      )
-      .to(hearts, { autoAlpha: 0, duration: 0.5, stagger: 0.1 }, 1.9)
+      .timeline()
+      .to(q(".envelope__flap"), { rotateX: -180, duration: 1.2, ease: "power1.out" }, 0)
+      .set(q(".envelope__flap"), { zIndex: 1 }, 0.6)
+      .set(q(".envelope__card"), { zIndex: 3 }, 0.6)
+      .to(q(".envelope__card"), { yPercent: -50, duration: 1, ease: "power1.out" }, 0.6)
+      .call(finish, [], 1.8)
+
+    // Trái tim bay chậm lên rồi mờ dần, lắc nhẹ hai bên (4s, 5s, 7s như mẫu)
+    const rise = Math.min(600, window.innerHeight * 0.7)
+    hearts.forEach((heart, i) => {
+      const life = [4, 5, 7][i] ?? 5
+      gsap
+        .timeline({ delay: 1.2 + i * 0.2 })
+        .fromTo(heart, { y: 0, scale: 0.5, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.5, ease: "power1.out" }, 0)
+        .to(heart, { y: -rise, duration: life, ease: "none" }, 0)
+        .to(heart, { autoAlpha: 0, duration: life * 0.5, ease: "power1.in" }, life * 0.5)
+        .to(heart, { x: i % 2 ? 24 : -24, duration: 2, ease: "sine.inOut", repeat: Math.ceil(life / 2), yoyo: true }, 0)
+    })
   })
 
   return (

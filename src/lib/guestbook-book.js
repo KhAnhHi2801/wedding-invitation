@@ -277,6 +277,7 @@ export function createGuestbook({ host, texts, wedding, flowerSvg, inkColor, mes
   let shut = false // sách đang đóng bằng nắp bìa
   let cropped = false // điện thoại dọc: sách dựng 2 trang nhưng chỉ lộ nửa phải
   let reopenTimer = 0
+  let builtWidth = 0 // bề rộng cửa sổ lúc dựng sổ gần nhất
   let turning = false // đang chạy cú lật lùi 3D: bỏ qua các lệnh lật khác cho đến khi xong
   let abortLeaf = null // hủy cú lật lùi đang chạy (khi sách bị dựng lại giữa chừng)
 
@@ -422,6 +423,7 @@ export function createGuestbook({ host, texts, wedding, flowerSvg, inkColor, mes
     host.classList.toggle("is-spread", !size.portrait)
 
     cropped = size.portrait
+    builtWidth = window.innerWidth
     const pages = paginate(wishes, size, fontPx)
     const nodes = [coverPage(false)]
     pageOfNew = -1
@@ -575,6 +577,8 @@ export function createGuestbook({ host, texts, wedding, flowerSvg, inkColor, mes
   holder.addEventListener("pointerup", (e) => e.pointerType === "mouse" && !onControl(e) && swipeEnd(e.clientX, e.clientY))
 
   const onKeydown = (e) => {
+    // Chỉ nhận phím khi tiêu điểm đang ở trong sổ (không cướp phím cuộn trang hay Enter của nút khác) và không có phím tắt trình duyệt
+    if (!host.contains(e.target) || e.altKey || e.ctrlKey || e.metaKey) return
     if (!active || !flip || document.querySelector("dialog[open]")) return
     const target = e.target
     if (target instanceof HTMLElement && target.matches("input, textarea, select")) return
@@ -593,6 +597,8 @@ export function createGuestbook({ host, texts, wedding, flowerSvg, inkColor, mes
   const onResize = () => {
     clearTimeout(resizeTimer)
     resizeTimer = setTimeout(() => {
+      // Thanh địa chỉ hoặc bàn phím ảo trên điện thoại chỉ đổi chiều cao: không dựng lại sổ. Chỉ dựng lại khi bề rộng đổi (xoay máy, đổi cỡ cửa sổ).
+      if (window.innerWidth === builtWidth) return
       // Bàn phím ảo đang mở chỉ đổi chiều cao: không dựng lại sổ
       if (document.documentElement.classList.contains("is-typing")) return
       refresh()

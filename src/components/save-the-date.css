@@ -8,70 +8,71 @@
 
 .save__photo-wrap {
   position: relative;
-  width: min(100%, 44rem);
-  margin: 0 auto var(--space-12);
-  padding: var(--space-6) var(--space-6) 0 0;
+  width: min(88%, 34rem);
+  margin: var(--space-12) auto;
 }
 
+/* Khung viền mảnh lệch lên trên và sang trái, chỉ phủ phần trên ảnh như trang mẫu */
 .save__frame {
   position: absolute;
-  inset: 0 var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6));
-  border: 1px solid var(--blush);
+  top: -2.4rem;
+  left: -1.5rem;
+  right: -0.6rem;
+  height: 34%;
+  border: 1px solid color-mix(in srgb, var(--wine) 65%, transparent);
 }
 
 .save__photo {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 2 / 3;
   object-fit: cover;
   object-position: 50% 25%;
 }
 
 .save__stamp {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -3.4rem;
+  right: 4%;
   margin: 0;
   padding: var(--space-4) var(--space-2);
-  background: var(--wine);
+  background: var(--rose);
   color: var(--white);
   font-family: var(--font-body);
   font-size: var(--fs-26);
   letter-spacing: 0.08em;
 }
 
+/* Lịch nằm đè lên nửa dưới ảnh, nền trong suốt, không có hàng thứ (hàng thứ vẫn có cho trình đọc màn hình) */
 .save__calendar {
-  width: min(100%, 30rem);
-  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  bottom: 4%;
+  width: 71%;
+  border: 1px solid color-mix(in srgb, var(--wine) 65%, transparent);
   border-collapse: collapse;
   text-align: center;
   font-family: var(--font-label);
   font-variant-numeric: tabular-nums;
 }
 
-.save__calendar th {
-  padding: var(--space-2) 0;
-  font-weight: 500;
-  font-size: var(--fs-14);
-  color: var(--wine-2);
-}
-
 .save__calendar td {
-  padding: var(--space-1) 0;
+  padding: 0.3rem 0;
 }
 
 .save__day {
   display: inline-grid;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  font-size: var(--fs-16);
+  width: 2.4em;
+  height: 2.4em;
+  font-size: clamp(0.8125rem, 0.55rem + 1.1vw, 1.125rem);
+  color: var(--black);
 }
 
+/* Ngày cưới nằm trong trái tim viền */
 .save__day--event {
-  background: var(--wine);
-  color: var(--white);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c4575c' stroke-width='1.2'%3E%3Cpath d='M12 21C5 15.5 2.5 12.4 2.5 8.7 2.5 5.9 4.7 3.8 7.4 3.8c1.7 0 3.3.9 4.6 2.6 1.3-1.7 2.9-2.6 4.6-2.6 2.7 0 4.9 2.1 4.9 4.9 0 3.7-2.5 6.8-9.5 12.3z'/%3E%3C/svg%3E") center / contain no-repeat;
+  color: var(--coral);
 }
 
 /* Ngày cưới nhấp nhẹ 3 lần khi lịch vừa hiện ra */

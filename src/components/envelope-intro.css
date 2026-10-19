@@ -1,6 +1,5 @@
 .intro {
   position: relative;
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +21,13 @@
   font-size: clamp(0.9rem, 0.7rem + 1.1vw, 1.5rem);
   letter-spacing: 0.4em;
   color: var(--black);
+}
+
+/* Màn hẹp: giảm giãn chữ để dòng không chạm nút nhạc ở góc phải */
+@media (max-width: 30rem) {
+  .intro__eyebrow {
+    letter-spacing: 0.24em;
+  }
 }
 
 .intro__title {
@@ -146,8 +152,8 @@
 
 .envelope__invite {
   font-family: var(--font-label);
-  font-size: clamp(0.65rem, 0.55rem + 0.5vw, 0.85rem);
-  letter-spacing: 0.22em;
+  font-size: clamp(0.75rem, 0.6rem + 0.5vw, 0.85rem);
+  letter-spacing: 0.16em;
 }
 
 .envelope__guest {
@@ -218,13 +224,18 @@
   animation: intro-hint 2.2s ease-in-out infinite;
 }
 
+/* Dừng nhịp nhấp nháy khi mở phong bì để GSAP làm mờ dần chữ gợi ý */
+.intro:not([data-state="closed"]) .intro__hint {
+  animation: none;
+}
+
 @keyframes intro-hint {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.45;
+    opacity: 0.8;
   }
 }
 

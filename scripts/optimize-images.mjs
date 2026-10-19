@@ -1,6 +1,6 @@
 /**
  * Nén ảnh thiệp: đọc bản gốc ở `source-images/`, ghi bản nhẹ vào `public/`.
- * - hero: tối đa 1600px chiều rộng; ảnh thường: 1200px; mỗi ảnh có thêm bản 640px cho `srcset`.
+ * - hero: tối đa 960px chiều rộng (khung phong bì rộng nhất 30rem, màn 2x); ảnh thường: 1200px; mỗi ảnh có thêm bản 640px cho `srcset`.
  * - WebP, giảm chất lượng dần cho tới khi ≤ MAX_BYTES (hoặc chạm sàn MIN_QUALITY).
  * - Hoạt họa: `source-images/animations/*.gif` -> WebP động (+ ảnh tĩnh `-still.webp` cho người dùng giảm chuyển động).
  * - Tạo `public/og.jpg` (1200x630) từ ảnh hero cho thẻ chia sẻ (og:image cần JPEG/PNG tuyệt đối).
@@ -18,7 +18,7 @@ const START_QUALITY = 80
 const MIN_QUALITY = 50
 
 const JOBS = [
-  { dir: "hero", width: 1600 },
+  { dir: "hero", width: 960 },
   { dir: "photos", width: 1200 },
 ]
 const SMALL_WIDTH = 640
