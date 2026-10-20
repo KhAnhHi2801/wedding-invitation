@@ -7,164 +7,223 @@
   color: var(--coral);
 }
 
-.gift__row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  max-width: 44rem;
-  margin: 0 auto var(--space-12);
-  padding-inline: 0.9rem;
+/* Một cột trên điện thoại, hai vé cạnh nhau từ màn rộng */
+.gift__list {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-12);
 }
 
-.gift__row--reverse {
-  flex-direction: row-reverse;
+@media (min-width: 48rem) {
+  .gift__list {
+    grid-template-columns: repeat(2, minmax(0, 22rem));
+    justify-content: center;
+    gap: var(--space-16);
+  }
 }
 
-.gift__avatar {
-  flex: none;
-  width: clamp(6rem, 22vw, 11rem);
+/*
+ * Vé mừng cưới. Hai vé nghiêng ngược chiều bằng thuộc tính `rotate` riêng (không tranh với transform của hiệu ứng hiện dần).
+ * Hai nửa vòng ở đường xé được vẽ bằng màu nền trang nên chỉ đúng khi nền section là --paper.
+ */
+.ticket {
+  --tilt: -1.2deg;
+  --gold: #c9a24a;
+  position: relative;
+  width: min(100%, 21.5rem);
+  rotate: var(--tilt);
+  filter: drop-shadow(0 0.7rem 1.1rem rgba(70, 20, 22, 0.18));
+}
+
+.ticket--alt {
+  --tilt: 1.2deg;
+}
+
+.ticket__head {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  padding: var(--space-8) var(--space-4) var(--space-6);
+  border-radius: 1.25rem 1.25rem 0 0;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.16), transparent 50%),
+    radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.6px) 0 0 / 14px 14px,
+    linear-gradient(160deg, var(--wine) 0%, #6a2123 100%);
+  color: var(--white);
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Viền vàng mảnh bên trong đầu vé, nhắc lại bìa sổ lưu bút */
+.ticket__head::before {
+  content: "";
+  position: absolute;
+  inset: 0.5rem 0.5rem 0;
+  border: 1px solid color-mix(in srgb, var(--gold) 60%, transparent);
+  border-bottom: 0;
+  border-radius: 0.9rem 0.9rem 0 0;
+  pointer-events: none;
+}
+
+/* Vệt sáng quét qua đầu vé một lần khi vé hiện ra */
+.ticket__head::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.ticket.is-in .ticket__head::after {
+  animation: ticket-shine 1.4s ease-out 0.5s 1 forwards;
+}
+
+@keyframes ticket-shine {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+.ticket__avatar {
+  width: 5.75rem;
   aspect-ratio: 1;
   object-fit: cover;
+  border: 3px solid #fbf6ef;
   border-radius: 50%;
-  outline: 0.5rem dashed var(--blush);
-  outline-offset: 0.3rem;
+  outline: 2px dashed color-mix(in srgb, var(--gold) 85%, transparent);
+  outline-offset: 4px;
+  margin-bottom: var(--space-3);
 }
 
-.gift__card {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* Thiếu chỗ thì mã QR xuống dưới phần thông tin, không ép cột chữ hẹp lại */
-  flex-wrap: wrap;
-  /* Khi QR xuống dưới thì căn giữa thẻ */
-  justify-content: center;
-  gap: var(--space-4);
-  padding: var(--space-6);
-  border-radius: 2.5rem;
-  background: var(--mist);
-  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+.ticket__role {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: var(--o-12);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #e9cb82;
+}
+
+.ticket__holder {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: var(--o-29);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+/* Đường xé răng cưa với hai nửa vòng khuyết ở hai mép */
+.ticket__perf {
+  position: relative;
+  height: 2px;
+  margin-inline: 1.2rem;
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--wine) 35%, transparent) 0 6px, transparent 6px 12px);
+}
+
+.ticket__perf::before,
+.ticket__perf::after {
+  content: "";
+  position: absolute;
+  top: calc(-0.75rem + 1px);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.ticket__perf::before {
+  left: -1.95rem;
+}
+
+.ticket__perf::after {
+  right: -1.95rem;
+}
+
+.ticket__body {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4) var(--space-6);
+  border-radius: 0 0 1.25rem 1.25rem;
+  background: #fbf6ef;
   text-align: center;
 }
 
-.gift__info {
-  flex: 1 1 6.25rem;
-  min-width: 6.25rem;
-}
-
-/* Chỗ giữ sẵn cho mã QR để không dịch bố cục khi mã dựng xong */
-.gift__qr {
-  flex: none;
-  width: 8.75rem;
-  height: 8.75rem;
-  padding: 0.25rem;
+.ticket__qr {
+  width: 11rem;
+  height: 11rem;
+  padding: 0.6rem;
   border-radius: 0.75rem;
   background: var(--white);
+  outline: 1px solid color-mix(in srgb, var(--gold) 65%, transparent);
+  outline-offset: 0.35rem;
+  margin-bottom: var(--space-2);
 }
 
-.gift__qr img {
+.ticket__qr img {
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-.gift__copy {
+.ticket__hint {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-12);
+  color: color-mix(in srgb, var(--ink) 70%, #fbf6ef);
+}
+
+.ticket__bank {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-label);
+  font-size: var(--o-12);
+  letter-spacing: 0.28em;
+  color: color-mix(in srgb, var(--ink) 75%, #fbf6ef);
+}
+
+.ticket__number {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 6vw, 1.625rem);
+  letter-spacing: 0.06em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--wine);
+  /* Số tài khoản luôn nằm trên một dòng, không bị bẻ giữa dãy số */
+  white-space: nowrap;
+}
+
+.ticket__copy {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   min-height: 2.75rem;
   margin-top: var(--space-2);
-  padding: 0 var(--space-3);
+  padding: 0 var(--space-6);
   border: 1px solid var(--wine);
   border-radius: 999px;
   background: transparent;
   color: var(--wine);
-  font-size: var(--fs-14);
+  font-size: var(--o-13);
+  transition:
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
 }
 
-.gift__copy svg {
+.ticket__copy:active {
+  background: var(--wine);
+  color: var(--white);
+}
+
+.ticket__copy svg {
   width: 1.1rem;
   height: 1.1rem;
 }
 
-.gift__role,
-.gift__holder,
-.gift__bank {
-  margin: 0;
-  line-height: 1.4;
-}
-
-.gift__role {
-  font-size: var(--fs-26);
-}
-
-.gift__holder {
-  font-size: var(--fs-26);
-  overflow-wrap: anywhere;
-}
-
-.gift__bank {
-  margin-top: var(--space-2);
-  font-size: var(--fs-16);
-}
-
-@media (max-width: 34rem) {
-  /* Màn hẹp: giữ hàng ngang như bản gốc (ảnh tròn đè lên mép thẻ, QR cạnh thông tin) để mỗi người chỉ cao ~10rem */
-  .gift__row {
-    gap: 0;
-    margin-bottom: var(--space-8);
-    padding-inline: var(--gutter);
-  }
-
-  .gift__avatar {
-    width: 5.5rem;
-    z-index: 1;
-    margin-right: -1.75rem;
-    outline-width: 0.3rem;
-    outline-offset: 0.2rem;
-  }
-
-  .gift__row--reverse .gift__avatar {
-    margin-right: 0;
-    margin-left: -1.75rem;
-  }
-
-  .gift__card {
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-3) var(--space-3) 2.5rem;
-    border-radius: 1.5rem;
-  }
-
-  .gift__row--reverse .gift__card {
-    padding: var(--space-3) 2.5rem var(--space-3) var(--space-3);
-  }
-
-  .gift__qr {
-    width: 4.5rem;
-    height: 4.5rem;
-  }
-
-  /* Cột thông tin hẹp: nút gọn lại, chữ canh giữa xuống tối đa 2 dòng */
-  .gift__copy {
-    width: 100%;
-    justify-content: center;
-    padding: var(--space-1) var(--space-2);
-    font-size: var(--fs-12);
-    line-height: 1.25;
-    text-align: center;
-  }
-
-  .gift__copy svg {
-    display: none;
-  }
-
-  .gift__role,
-  .gift__holder {
-    font-size: var(--fs-16);
-  }
-
-  .gift__bank {
-    font-size: var(--fs-14);
-    overflow-wrap: break-word;
+@media (prefers-reduced-motion: reduce) {
+  .ticket.is-in .ticket__head::after {
+    animation: none;
   }
 }

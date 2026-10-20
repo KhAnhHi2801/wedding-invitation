@@ -1,8 +1,5 @@
 import { useRef, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
-import { getEventParts } from "../lib/event-date"
-import { getGuestName } from "../lib/guest"
-import { getWeddingEvent } from "../lib/wedding-event"
 import { prefersReducedMotion } from "../lib/device-tier"
 import { gsap, useGSAP } from "../lib/gsap"
 import { DoubleHappiness } from "./icons/double-happiness"
@@ -26,8 +23,6 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
   const [state, setState] = useState<
     "closed" | "opening" | "fading" | "hidden"
   >("closed")
-  const year = getEventParts(getWeddingEvent().event.startsAt).year
-  const guest = getGuestName(weddingConfig.guestParam, hero.guestFallback)
 
   const { contextSafe } = useGSAP({ scope: rootRef })
 
@@ -44,7 +39,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
     const q = gsap.utils.selector(rootRef)
     if (prefersReducedMotion()) {
       gsap.set(q(".envelope__flap"), { rotateX: -180, zIndex: 0 })
-      gsap.set(q(".envelope__card"), { yPercent: -50 })
+      gsap.set(q(".envelope__card"), { yPercent: -52 })
       finish()
       return
     }
@@ -58,7 +53,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
       .to(q(".envelope__flap"), { rotateX: -180, duration: 1.2, ease: "power1.out" }, 0)
       // Nắp đã lật lên thì nằm sau thẻ; thẻ luôn nằm dưới mặt trước phong bì nên ảnh trượt lên từ trong túi, không đè lên
       .set(q(".envelope__flap"), { zIndex: 0 }, 0.6)
-      .to(q(".envelope__card"), { yPercent: -50, duration: 1, ease: "power1.out" }, 0.6)
+      .to(q(".envelope__card"), { yPercent: -52, duration: 1, ease: "power1.out" }, 0.6)
       .call(() => setState("fading"), [], 1.8)
       .call(finish, [], 2.6)
 
@@ -78,6 +73,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
   if (state === "hidden") return null
 
   return (
+    <div className="intro-wrap">
     <section className="intro" ref={rootRef} aria-label={hero.title} data-state={state}>
       <header className="intro__head">
         <p className="intro__eyebrow">{hero.eyebrow}</p>
@@ -106,13 +102,6 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
           <div className="envelope__pocket envelope__pocket--left" />
           <div className="envelope__pocket envelope__pocket--right" />
           <div className="envelope__pocket envelope__pocket--bottom" />
-          <div className="envelope__label">
-            <span className="envelope__year">
-              {hero.yearPrefix} {year}
-            </span>
-            <span className="envelope__invite">{hero.inviteLine}</span>
-            <span className="envelope__guest">{guest}</span>
-          </div>
           <div className="envelope__flap" />
           <button
             type="button"
@@ -133,5 +122,6 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
         ))}
       </div>
     </section>
+    </div>
   )
 }

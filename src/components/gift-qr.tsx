@@ -20,7 +20,7 @@ export function GiftQr({ bankBin, accountNumber, alt, className }: GiftQrProps) 
     if (!seen) return
     let cancelled = false
     import("qrcode")
-      .then((qr) => qr.toDataURL(buildVietQr(bankBin, accountNumber), { errorCorrectionLevel: "M", margin: 1, width: 280 }))
+      .then((qr) => qr.toDataURL(buildVietQr(bankBin, accountNumber), { errorCorrectionLevel: "M", margin: 1, width: 360 }))
       .then((url) => {
         if (!cancelled) setSrc(url)
       })

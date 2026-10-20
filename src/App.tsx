@@ -47,7 +47,7 @@ export default function App() {
     <ToastProvider>
       <EnvelopeIntro onOpenStart={handleOpenStart} onOpened={() => setOpened(true)} />
       {/* inert: phần sau phong bì không focus/đọc được cho tới khi thiệp mở */}
-      <main ref={mainRef} tabIndex={-1} inert={!opened}>
+      <main ref={mainRef} tabIndex={-1} inert={!opened} className={opened ? "is-open" : "is-pending"}>
         <Cover />
         <Ceremony />
         <EventInfo />

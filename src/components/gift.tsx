@@ -9,10 +9,14 @@ import "./gift.css"
 
 const REVEAL: readonly RevealRule[] = [
   { selector: ".gift__heading", preset: "fadeUp" },
-  { selector: ".gift__row:nth-of-type(odd)", preset: "slideLeft" },
-  { selector: ".gift__row:nth-of-type(even)", preset: "slideRight" },
+  { selector: ".ticket", preset: "fadeUp", delay: 150, stagger: 200 },
 ]
 
+/**
+ * Quà mừng: mỗi tài khoản là một "vé mừng cưới" đứng dọc. Đầu vé đỏ rượu có ảnh đại diện và tên, đường xé răng cưa,
+ * thân vé giấy kem có mã QR lớn, số tài khoản nổi bật và nút sao chép. Một cột trên điện thoại, hai vé nghiêng
+ * ngược chiều nhau; hai cột cạnh nhau trên màn rộng.
+ */
 export function Gift() {
   const { gift } = weddingConfig
   const toast = useToast()
@@ -26,35 +30,40 @@ export function Gift() {
     <section className="section gift" id="gift">
       <div className="container" ref={ref}>
         <h2 className="gift__heading">{gift.heading}</h2>
-        {gift.accounts.map((account, index) => (
-          <article className={`gift__row${index % 2 === 1 ? " gift__row--reverse" : ""}`} key={account.role}>
-            <Photo
-              name={account.photo}
-              alt={account.holder}
-              sizes="(min-width: 768px) 12rem, 30vw"
-              className="gift__avatar"
-            />
-            <div className="gift__card">
-              <div className="gift__info">
-                <p className="gift__role">{account.role}</p>
-                <p className="gift__holder">{account.holder}</p>
-                <p className="gift__bank">
-                  {account.bank} : {account.accountNumber}
-                </p>
-                <button type="button" className="gift__copy" onClick={() => copy(account.accountNumber)}>
+        <div className="gift__list">
+          {gift.accounts.map((account, index) => (
+            <article className={`ticket${index % 2 === 1 ? " ticket--alt" : ""}`} key={account.role}>
+              <header className="ticket__head">
+                <Photo
+                  name={account.photo}
+                  alt={account.holder}
+                  sizes="(min-width: 768px) 8rem, 30vw"
+                  className="ticket__avatar"
+                />
+                <p className="ticket__role">{account.role}</p>
+                <h3 className="ticket__holder">{account.holder}</h3>
+              </header>
+
+              <div className="ticket__perf" aria-hidden="true" />
+
+              <div className="ticket__body">
+                <GiftQr
+                  className="ticket__qr"
+                  bankBin={account.bankBin}
+                  accountNumber={account.accountNumber}
+                  alt={`${gift.qrAlt} ${account.holder}`}
+                />
+                <p className="ticket__hint">{gift.scanHint}</p>
+                <p className="ticket__bank">{account.bank}</p>
+                <p className="ticket__number">{account.accountNumber}</p>
+                <button type="button" className="ticket__copy" onClick={() => copy(account.accountNumber)}>
                   <CopyIcon />
                   {gift.copyLabel}
                 </button>
               </div>
-              <GiftQr
-                className="gift__qr"
-                bankBin={account.bankBin}
-                accountNumber={account.accountNumber}
-                alt={`${gift.qrAlt} ${account.holder}`}
-              />
-            </div>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   )

@@ -23,7 +23,7 @@ function CountdownBoxes({ targetMs, units }: { targetMs: number; units: readonly
 }
 
 const REVEAL: readonly RevealRule[] = [
-  { selector: ".cover__photo", preset: "fadeIn" },
+  { selector: ".cover__photo", preset: "fadeIn", delay: 200 },
   { selector: ".cover__count", preset: "fadeUp", delay: 250 },
   { selector: ".cover__title, .cover__line", preset: "fadeUp", delay: 400, stagger: 90 },
 ]

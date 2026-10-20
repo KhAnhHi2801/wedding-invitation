@@ -32,3 +32,24 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
 }
+
+/* Phần chính ẩn hoàn toàn cho tới khi mở thiệp xong (vẫn dựng sẵn để ảnh kịp tải); mở ra thì hiện dần */
+main.is-pending {
+  visibility: hidden;
+}
+
+main.is-open {
+  animation: main-in 0.8s ease-out;
+}
+
+@keyframes main-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main.is-open {
+    animation: none;
+  }
+}

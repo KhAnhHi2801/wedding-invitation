@@ -1,10 +1,22 @@
+/*
+ * Trang đầu (phong bì) theo trang mẫu. Cả khung cao 144% bề rộng, mọi vị trí và cỡ chữ tính theo bề rộng khung (cqw)
+ * lấy từ số đo của mẫu: phong bì dẹt 86x57%, không có chữ trên mặt phong bì, ảnh bìa lộ ra ngay dưới dòng gợi ý.
+ * Màn rộng: khung giữ bề rộng tối đa 34rem ở giữa trang.
+ */
+/* Chưa mở thiệp thì màn hình chỉ có phong bì, đặt giữa màn hình */
+.intro-wrap {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: 100svh;
+}
+
 .intro {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--space-6) var(--gutter) var(--space-8);
-  overflow-x: clip;
+  container-type: inline-size;
+  width: min(100%, 34rem);
+  margin-inline: auto;
+  aspect-ratio: 100 / 144;
 }
 
 .intro[data-state="fading"] {
@@ -13,78 +25,112 @@
   transition: opacity 0.8s ease;
 }
 
+/* Phần đầu: các dòng chữ đặt tuyệt đối theo tọa độ của mẫu */
 .intro__head {
+  display: contents;
+}
+
+.intro__eyebrow,
+.intro__title,
+.intro__name,
+.intro__amp {
+  position: absolute;
+  margin: 0;
   text-align: center;
-  display: grid;
-  justify-items: center;
-  gap: var(--space-2);
+  white-space: nowrap;
 }
 
 .intro__eyebrow {
-  margin: 0;
+  left: 2cqw;
+  top: 2cqw;
+  width: 96cqw;
   font-family: var(--font-label);
   font-weight: 500;
-  font-size: clamp(0.9rem, 0.7rem + 1.1vw, 1.5rem);
-  letter-spacing: 0.4em;
+  font-size: 3.2cqw;
+  line-height: 1.2;
+  letter-spacing: 1.8cqw;
   color: var(--black);
 }
 
-/* Màn hẹp: giảm giãn chữ để dòng không chạm nút nhạc ở góc phải */
-@media (max-width: 30rem) {
-  .intro__eyebrow {
-    letter-spacing: 0.24em;
-  }
-}
-
 .intro__title {
-  margin: var(--space-3) 0 0;
+  left: 12cqw;
+  top: 11cqw;
+  width: 76cqw;
   font-family: var(--font-label);
   font-weight: 500;
-  font-size: clamp(1.5rem, 1rem + 2.6vw, 2.4rem);
-  letter-spacing: 0.06em;
+  font-size: 5.2cqw;
+  line-height: 1.2;
+  letter-spacing: 0.4cqw;
   color: var(--wine-2);
 }
 
+/* Tên cô dâu và chú rể cách xa hai bên, dấu & ở giữa */
 .intro__names {
-  margin: var(--space-4) 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: 0 clamp(0.5rem, 3vw, 2.5rem);
+  display: contents;
   color: var(--wine-2);
 }
 
 .intro__name {
+  top: 23cqw;
   font-family: var(--font-hero-script);
-  font-size: clamp(1.85rem, 1rem + 4.2vw, 4rem);
+  font-size: 8.6cqw;
   line-height: 1.25;
-  white-space: nowrap;
+}
+
+.intro__name:first-child {
+  left: 3cqw;
+  width: 39cqw;
+}
+
+.intro__name:last-child {
+  left: 56cqw;
+  width: 39cqw;
 }
 
 .intro__amp {
+  left: 40cqw;
+  width: 19cqw;
+  top: 23.5cqw;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.5rem, 1rem + 3vw, 3.4rem);
+  font-size: 8cqw;
+  line-height: 1.25;
 }
 
 .intro__logo {
-  width: clamp(3.5rem, 2.5rem + 4vw, 5rem);
+  position: absolute;
+  left: 44cqw;
+  top: 38cqw;
+  width: 11cqw;
   height: auto;
-  margin-top: var(--space-3);
 }
 
-/* Sân khấu: chừa chỗ phía trên để ảnh trồi lên không đè tiêu đề */
+/* Sân khấu: phong bì, bóng, dòng gợi ý và trái tim nằm trong khung 86% bề rộng, cách đỉnh 58% */
 .intro__stage {
-  position: relative;
-  width: clamp(17rem, 86vw, 34rem);
-  margin-top: clamp(3.5rem, 20vw, 8rem);
+  position: absolute;
+  left: 7cqw;
+  top: 58cqw;
+  width: 86cqw;
 }
 
 .envelope {
   position: relative;
-  aspect-ratio: 1.15 / 1;
+  aspect-ratio: 86 / 57;
   perspective: 1200px;
+  /* Phong bì lơ lửng nhẹ lên xuống như mẫu (3s, 8px) cho tới lúc được mở; dùng `translate` riêng để không tranh transform của các lớp con */
+  animation:
+    intro-up 1.3s ease-out 0.3s both,
+    envelope-float 3s ease-in-out 1.6s infinite;
+}
+
+.intro:not([data-state="closed"]) .envelope {
+  animation-play-state: paused;
+}
+
+@keyframes envelope-float {
+  50% {
+    translate: 0 -8px;
+  }
 }
 
 .envelope > * {
@@ -98,8 +144,9 @@
   box-shadow: 0 0.6rem 1.4rem rgba(0, 0, 0, 0.2);
 }
 
+/* Ảnh nằm gọn trong phong bì: ngang 77/86, cao 52/57 so với phong bì (số đo của mẫu) */
 .envelope__card {
-  inset: 8% 7%;
+  inset: 5.3% 4.65% 3.5%;
   z-index: 1;
   background: var(--white);
   padding: 0.5rem;
@@ -113,7 +160,7 @@
   object-position: 50% 22%;
 }
 
-/* Thứ tự lớp khi mở: nền < nắp(1) < tam giác bên(2) < ảnh(3) < tam giác đáy(4) < chữ(5).
+/* Thứ tự lớp khi mở: nền < nắp(0) < ảnh(1) < tam giác bên(2) < tam giác đáy(4).
    Khi đóng: ảnh(1) nằm dưới mọi lớp và nắp(6) phủ trên cùng. */
 .envelope__pocket {
   inset: 0;
@@ -122,62 +169,25 @@
 
 .envelope__pocket--left {
   background: var(--envelope);
-  clip-path: polygon(0 0, 50% 52%, 0 100%);
+  clip-path: polygon(0 0, 50% 54%, 0 100%);
 }
 
 .envelope__pocket--right {
   background: var(--envelope);
-  clip-path: polygon(100% 0, 50% 52%, 100% 100%);
+  clip-path: polygon(100% 0, 50% 54%, 100% 100%);
 }
 
 .envelope__pocket--bottom {
   z-index: 4;
   background: var(--envelope-light);
-  clip-path: polygon(0 100%, 50% 52%, 100% 100%);
-}
-
-.envelope__label {
-  left: 0;
-  right: 0;
-  bottom: 8%;
-  z-index: 5;
-  display: grid;
-  justify-items: center;
-  gap: 0.15rem;
-  color: var(--paper);
-  text-align: center;
-  pointer-events: none;
-}
-
-.envelope__year {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(0.85rem, 0.7rem + 0.8vw, 1.2rem);
-  letter-spacing: 0.2em;
-}
-
-.envelope__invite {
-  font-family: var(--font-label);
-  font-size: clamp(0.75rem, 0.6rem + 0.5vw, 0.85rem);
-  letter-spacing: 0.16em;
-}
-
-.envelope__guest {
-  font-family: var(--font-hand);
-  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem);
-  line-height: 1.3;
-  max-width: 90%;
-  /* Giữ 1 dòng để không đẩy chữ lên dưới dấu sáp; tên đầy đủ hiện ở phần thông tin tiệc */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  clip-path: polygon(0 100%, 50% 54%, 100% 100%);
 }
 
 .envelope__flap {
   left: 0;
   right: 0;
   top: 0;
-  height: 56%;
+  height: 54%;
   z-index: 6;
   background: var(--envelope-flap);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
@@ -187,9 +197,10 @@
 
 .envelope__seal {
   left: 50%;
-  top: 56%;
+  top: 50%;
   z-index: 7;
-  width: max(3rem, 12%);
+  width: 12.8%;
+  min-width: 2.75rem;
   aspect-ratio: 1;
   padding: 0;
   border: 0;
@@ -213,35 +224,85 @@
   height: 100%;
 }
 
+/* Bóng ellipse mờ rộng nằm dưới dòng gợi ý như mẫu */
 .intro__shadow {
-  height: 1.2rem;
-  margin: 1.25rem 4% 0;
+  position: absolute;
+  left: -4%;
+  width: 108%;
+  top: 71cqw;
+  height: 8cqw;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.28), transparent 70%);
 }
 
 .intro__hint {
-  margin: var(--space-2) 0 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 68cqw;
+  margin: 0;
   text-align: center;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: var(--fs-26);
+  font-size: 5cqw;
   color: var(--wine);
-  animation: intro-hint 2.2s ease-in-out infinite;
 }
 
-/* Dừng nhịp nhấp nháy khi mở phong bì để GSAP làm mờ dần chữ gợi ý */
-.intro:not([data-state="closed"]) .intro__hint {
-  animation: none;
+/*
+ * Hiệu ứng vào trang theo mẫu (đo từ trang gốc, mọi chuyển động 50px, 1.3s ease-out):
+ * "WEDDING INVITATION" và tiêu đề trượt lên; tên cô dâu trượt từ trái, chú rể từ phải; dấu & hiện dần;
+ * phong bì hiện lên trễ 0.3s rồi lơ lửng; dòng gợi ý hiện chậm (1.6s, trễ 0.4s).
+ */
+.intro__eyebrow,
+.intro__title {
+  animation: intro-up 1.3s ease-out both;
 }
 
-@keyframes intro-hint {
-  0%,
-  100% {
-    opacity: 1;
+.intro__name:first-child {
+  animation: intro-from-left 1.3s ease-out both;
+}
+
+.intro__name:last-child {
+  animation: intro-from-right 1.3s ease-out both;
+}
+
+.intro__amp {
+  animation: intro-fade 1.3s ease-out both;
+}
+
+.intro__hint {
+  animation: intro-fade 1.6s ease-out 0.4s both;
+}
+
+/* Bóng đổ hiện cùng lúc với phong bì */
+.intro__shadow {
+  animation: intro-fade 1.3s ease-out 0.3s both;
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
   }
-  50% {
-    opacity: 0.8;
+}
+
+@keyframes intro-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+}
+
+@keyframes intro-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+}
+
+@keyframes intro-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
   }
 }
 
@@ -261,4 +322,16 @@
 /* Máy yếu: chỉ giữ 1 trái tim */
 .lite .intro__heart:nth-of-type(n + 2) {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope,
+  .intro__eyebrow,
+  .intro__title,
+  .intro__name,
+  .intro__amp,
+  .intro__shadow,
+  .intro__hint {
+    animation: none;
+  }
 }

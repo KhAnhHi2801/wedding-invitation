@@ -222,6 +222,8 @@ export interface WeddingConfig {
     copied: string;
     copyFailed: string;
     qrAlt: string;
+    /** Dòng gợi ý dưới mã QR trên mỗi thẻ */
+    scanHint: string;
     accounts: BankAccount[];
   };
   /** `animation`: WebP động, `still`: ảnh tĩnh cho người giảm chuyển động (tạo bởi `npm run images`) */
@@ -469,6 +471,7 @@ export const weddingConfig: WeddingConfig = {
     copied: "Đã sao chép số tài khoản",
     copyFailed: "Chưa sao chép được, bạn giữ vào số tài khoản để chép nhé",
     qrAlt: "Mã QR chuyển khoản",
+    scanHint: "Quét mã bằng ứng dụng ngân hàng",
     accounts: [
       {
         role: "Cô dâu",
