@@ -17,8 +17,8 @@
 
 .thanks__text {
   margin: 0;
-  font-family: var(--font-signature);
-  font-size: clamp(4rem, 2rem + 9vw, 7rem);
+  font-family: var(--font-thanks);
+  font-size: var(--o-78);
   line-height: 1;
   color: var(--wine);
 }

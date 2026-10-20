@@ -10,31 +10,32 @@
 }
 
 .event__welcome {
-  font-size: var(--fs-34);
-  font-weight: 500;
-  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+  font-size: var(--o-16);
+  font-weight: 700;
+  color: var(--ink);
 }
 
 .event__guest {
   margin-top: var(--space-2);
-  font-size: var(--fs-54);
-  font-weight: 500;
+  font-size: var(--o-24);
+  font-weight: 700;
   color: var(--wine);
   overflow-wrap: anywhere;
+  font-family: var(--font-guest);
 }
 
 .event__title {
   margin-top: var(--space-12) !important;
-  font-size: var(--fs-34);
+  font-size: var(--o-20);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
 .event__time {
   margin-top: var(--space-6);
-  font-size: var(--fs-26);
+  font-size: var(--o-16);
   font-weight: 700;
-  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+  color: var(--ink);
 }
 
 /* Hàng ngày: 2 đường kẻ ngang chạy tới sát số, số lớn nằm giữa */
@@ -49,15 +50,15 @@
   align-self: center;
   padding-block: var(--space-4);
   border-block: 2px solid color-mix(in srgb, var(--ink) 12%, var(--paper));
-  font-size: var(--fs-34);
+  font-size: var(--o-24);
   font-weight: 700;
-  color: color-mix(in srgb, var(--ink) 55%, var(--paper));
+  color: var(--ink);
 }
 
 .event__day {
   padding-inline: var(--space-4);
-  font-size: var(--fs-125);
-  font-weight: 500;
+  font-size: var(--o-66);
+  font-weight: 700;
   line-height: 1;
   color: var(--wine);
   font-variant-numeric: lining-nums;
@@ -65,26 +66,26 @@
 
 .event__lunar {
   margin-top: var(--space-6);
-  font-size: var(--fs-26);
-  font-weight: 500;
+  font-size: var(--o-16);
+  font-weight: 400;
 }
 
 .event__venue-label {
   margin-top: var(--space-12);
-  font-size: var(--fs-26);
+  font-size: var(--o-16);
   font-weight: 500;
-  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+  color: var(--ink);
 }
 
 .event__venue {
   margin-top: var(--space-2);
-  font-size: var(--fs-54);
+  font-size: var(--o-25);
   font-weight: 700;
   line-height: 1.1;
 }
 
 .event__address {
   margin-top: var(--space-3);
-  font-size: var(--fs-26);
-  font-weight: 500;
+  font-size: var(--o-15);
+  font-weight: 400;
 }

@@ -64,7 +64,9 @@
 [data-reveal].is-in {
   opacity: 1;
   transform: none;
-  clip-path: inset(0);
+  /* Vùng hiện nới ra ngoài khung phần tử: chữ hoa có dấu (Í, Ờ, Ể...) và chữ viết tay nhô lên trên dòng,
+     inset(0) sẽ cắt mất dấu. Vẫn nội suy được từ các inset % của hiệu ứng quét. */
+  clip-path: inset(-2rem -1rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

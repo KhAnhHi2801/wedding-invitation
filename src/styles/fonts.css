@@ -79,3 +79,27 @@
   font-weight: 400;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Soul Note Display";
+  src: url("/fonts/soul-note-display.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "The Hamstter";
+  src: url("/fonts/the-hamstter.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wedding Noto Sans";
+  src: url("/fonts/noto-sans.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}

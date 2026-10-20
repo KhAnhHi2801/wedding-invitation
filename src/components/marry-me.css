@@ -3,30 +3,45 @@
 }
 
 .marry__eyebrow {
-  margin: 0 0 var(--space-8);
+  margin: 0 0 clamp(1.5rem, 9vw, 4rem);
   text-align: center;
-  font-size: clamp(1.25rem, 0.8rem + 2vw, 2.1rem);
-  letter-spacing: 0.45em;
+  font-size: var(--o-18);
+  letter-spacing: 0.7em;
   color: var(--wine-2);
 }
 
+/*
+ * Khung bố cục theo trang mẫu. Toàn bộ vị trí và cỡ chữ tính theo bề rộng khung (% và cqw), đo từ trang mẫu:
+ * ảnh ngang vuông 64% ở phải, ảnh dọc 60x90% ở trái đè lên nó, khối hồng chạy sát mép phải xuống hết khung.
+ */
 .marry__stage {
   position: relative;
-  width: min(100% - 2 * var(--gutter), 48rem);
+  container-type: inline-size;
+  width: min(100%, 44rem);
   margin-inline: auto;
-  aspect-ratio: 1 / 1.3;
+  aspect-ratio: 100 / 150;
 }
 
 .marry__stage > * {
   position: absolute;
 }
 
+/* Khối hồng phía sau, sát mép phải, nhô qua mép khung nên bị cắt bởi section */
 .marry__block {
-  right: 0;
-  top: 34%;
-  width: 56%;
-  height: 58%;
+  left: 61.3%;
+  top: 2cqw;
+  width: 38.7%;
+  height: 147cqw;
   background: var(--rose);
+}
+
+/* Khung viền nhạt lệch lên trên và sang trái phía sau ảnh ngang */
+.marry__frame {
+  left: 28%;
+  top: 1cqw;
+  width: 68.8%;
+  aspect-ratio: 68.8 / 68;
+  background: color-mix(in srgb, var(--rose) 45%, var(--paper));
 }
 
 .marry__photo {
@@ -35,49 +50,94 @@
 }
 
 .marry__photo--a {
-  top: 3%;
-  left: 24%;
-  width: 66%;
-  aspect-ratio: 4 / 3.4;
+  left: 30.4%;
+  top: 3cqw;
+  width: 64%;
+  aspect-ratio: 1 / 1;
 }
 
 .marry__photo--b {
-  top: 44%;
-  left: 2%;
-  width: 46%;
-  aspect-ratio: 3 / 4;
-}
-
-.marry__photo--c {
-  top: 62%;
-  left: 60%;
-  width: 30%;
-  aspect-ratio: 3 / 4;
+  left: 2.5%;
+  top: 50.2cqw;
+  width: 60%;
+  aspect-ratio: 2 / 3;
 }
 
 .marry__text {
   margin: 0;
-  display: grid;
+  z-index: 3;
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(2.25rem, 1.2rem + 5.6vw, 4.5rem);
+  font-weight: 500;
+  font-size: 9.6cqw;
   line-height: 1.25;
-  letter-spacing: 0.16em;
-  /* Chữ nằm trên ảnh để không bị ảnh che, nên cần đủ đậm để đọc được trên nền ảnh */
-  z-index: 2;
-  color: color-mix(in srgb, var(--wine-2) 70%, var(--paper));
-  -webkit-text-stroke: 2px var(--wine-2);
-  paint-order: stroke fill;
+  letter-spacing: 2.5cqw;
+  white-space: nowrap;
 }
 
+/* MARRY ME?: hai dòng so le, chữ màu rượu có một lớp bóng cùng màu lệch nhẹ tạo nét đôi như mẫu */
 .marry__text--question {
-  left: -1%;
-  top: 8%;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 40cqw;
+  color: var(--wine-2);
+  text-shadow: 0.7cqw 0.15cqw 0 var(--wine-2);
+  pointer-events: none;
 }
 
+.marry__text--question span {
+  position: absolute;
+}
+
+.marry__text--question span:nth-child(1) {
+  left: 1.5%;
+  top: 2cqw;
+}
+
+.marry__text--question span:nth-child(2) {
+  left: 10%;
+  top: 21.1cqw;
+  letter-spacing: 1.5cqw;
+  font-size: 9.8cqw;
+}
+
+/* YES ! I DO !: chữ trắng, bóng đỏ rượu lệch sang phải; dòng sau lùi trái 4.5% so với dòng trước */
 .marry__text--answer {
-  right: 2%;
-  top: 38%;
-  justify-items: end;
-  letter-spacing: 0.12em;
+  inset: 95.8cqw auto auto 0;
+  width: 100%;
+  height: 30cqw;
+  color: var(--white);
+  text-shadow: 0.5cqw 0 0 var(--wine);
+  pointer-events: none;
+}
+
+.marry__text--answer span {
+  position: absolute;
+}
+
+.marry__text--answer span:nth-child(1) {
+  left: 71%;
+  top: 0;
+}
+
+.marry__text--answer span:nth-child(2) {
+  left: 68.5%;
+  top: 14.2cqw;
+}
+
+.marry__heart {
+  z-index: 2;
+  filter: drop-shadow(0 0.4cqw 0.8cqw rgba(139, 47, 48, 0.18));
+}
+
+.marry__heart--big {
+  left: 82.4%;
+  top: 85.6cqw;
+  width: 17.6%;
+}
+
+.marry__heart--small {
+  left: 70%;
+  top: 98cqw;
+  width: 5.5%;
+  opacity: 0.85;
 }

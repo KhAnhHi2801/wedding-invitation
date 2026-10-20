@@ -57,12 +57,12 @@
 }
 
 .cover__number {
-  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  font-size: var(--o-11);
   line-height: 1.2;
 }
 
 .cover__unit-label {
-  font-size: var(--fs-14);
+  font-size: var(--o-11);
 }
 
 /* Khung mờ chứa lời mời, đọc rõ trên ảnh */
@@ -78,15 +78,15 @@
 
 .cover__title {
   margin: 0 0 var(--space-4);
-  font-size: clamp(1.5rem, 1rem + 2.4vw, 2.4rem);
-  letter-spacing: 0.3em;
+  font-size: var(--o-20);
+  letter-spacing: 0.42em;
   font-weight: 500;
   color: var(--wine);
 }
 
 .cover__line {
   margin: 0 0 var(--space-3);
-  font-size: var(--fs-16);
+  font-size: var(--o-12);
   line-height: 1.65;
 }
 

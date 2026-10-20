@@ -65,7 +65,7 @@
   place-items: center;
   width: 2.4em;
   height: 2.4em;
-  font-size: clamp(0.8125rem, 0.55rem + 1.1vw, 1.125rem);
+  font-size: var(--o-11);
   color: var(--black);
 }
 
