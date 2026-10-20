@@ -1,4 +1,4 @@
-/* Font self-host (@fontsource), chỉ nạp subset latin + vietnamese để dấu tiếng Việt đúng và file nhẹ. */
+/* Google-font subsets dự phòng các ký tự tiếng Việt còn thiếu. */
 @import "@fontsource/pinyon-script/latin-400.css";
 @import "@fontsource/pinyon-script/vietnamese-400.css";
 @import "@fontsource/allura/latin-400.css";
@@ -15,3 +15,67 @@
 @import "@fontsource/quicksand/vietnamese-500.css";
 @import "@fontsource/quicksand/latin-700.css";
 @import "@fontsource/quicksand/vietnamese-700.css";
+
+@font-face {
+  font-family: "Wedding Edwardian";
+  src: url("/fonts/edwardianscriptregular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HoaTay1";
+  src: url("/fonts/hoatay1.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Carlytte";
+  src: url("/fonts/carlytte.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "The Artisan";
+  src: url("/fonts/the-artisan.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Belinda Avenue";
+  src: url("/fonts/belinda-avenue.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Baskerville Book";
+  src: url("/fonts/baskervillebook.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wedding Playfair Display";
+  src: url("/fonts/playfairdisplay.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wedding Quicksand";
+  src: url("/fonts/quicksand.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}

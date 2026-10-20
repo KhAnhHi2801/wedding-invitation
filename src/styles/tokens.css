@@ -17,12 +17,12 @@
   --black: #000000;
 
   /* Font */
-  --font-hero-script: "Pinyon Script", "Allura", cursive;
-  --font-hand: "Allura", "Pinyon Script", cursive;
-  --font-signature: "The Nautigal", "Allura", cursive;
-  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --font-heading: "Playfair Display", Georgia, serif;
-  --font-body: "Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hero-script: "Wedding Edwardian", "Pinyon Script", "Allura", cursive;
+  --font-hand: "HoaTay1", "Allura", "Pinyon Script", cursive;
+  --font-signature: "Carlytte", "The Artisan", "The Nautigal", "Allura", cursive;
+  --font-display: "Belinda Avenue", "Baskerville Book", "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-heading: "Wedding Playfair Display", "Playfair Display", Georgia, serif;
+  --font-body: "Wedding Quicksand", "Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-label: Arial, Helvetica, sans-serif;
 
   /* Thang chữ, co giãn theo chiều rộng màn hình. Nhỏ và thanh như trang mẫu (chữ thân ~13-14px trên điện thoại);

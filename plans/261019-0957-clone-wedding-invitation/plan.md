@@ -71,17 +71,17 @@ Thứ tự: 1 → 2 → 3 → 4 → 5 → 6. Phase 2 và 3 song song được sa
 
 ## Typography (đo từ trang mẫu, thay bằng font Google đã kiểm tra subset `vietnamese`)
 
-| Vai trò | Mẫu dùng | Cỡ / màu | Font thay thế | Ghi chú |
+| Vai trò | Mẫu dùng | Cỡ / màu | Font hiện dùng | Ghi chú |
 |---------|----------|----------|---------------|---------|
-| Tên hero (Mai Anh, Quốc Huy) | EdwardianScript | 63px, #834343 | **Pinyon Script** | script trang trọng, gần Edwardian nhất, có Việt |
-| Tên / ngày sinh / Lễ Thành Hôn | HoaTay1 | 35–54px, #8B2F30 / #3B3232 | **Allura** | viết tay mềm, có Việt |
-| "About us", "Thank you", chữ dọc script | Carlytte / The Artisan | 70px, #8B2F30 | **The Nautigal** | chữ ký, mẫu cũng đang tải font này |
-| Tiêu đề display, "Nhà Trai", số 24, "&" | Belinda Avenue | 28–125px | **Cormorant Garamond** 500–700 | serif thanh, có Việt |
-| "Save the date" | Playfair Display | 51px | **Playfair Display** | giống hệt |
-| Thân bài | Quicksand | 22–26px / 500 | **Quicksand** | giống hệt |
+| Tên hero (Mai Anh, Quốc Huy) | EdwardianScript | 63px, #834343 | **Edwardian Script** (`edwardianscriptregular.woff2`) | dùng font đã tải; Pinyon Script dự phòng |
+| Tên / ngày sinh / Lễ Thành Hôn | HoaTay1 | 35–54px, #8B2F30 / #3B3232 | **HoaTay1** (`hoatay1.woff2`) | dùng font đã tải; Allura dự phòng dấu Việt |
+| "About us", "Thank you", chữ dọc script | Carlytte / The Artisan | 70px, #8B2F30 | **Carlytte / The Artisan** | dùng font đã tải; The Nautigal dự phòng |
+| Tiêu đề display, "Nhà Trai", số 24, "&" | Belinda Avenue | 28–125px | **Belinda Avenue / Baskerville Book** | dùng font đã tải; Cormorant Garamond dự phòng dấu Việt |
+| "Save the date" | Playfair Display | 51px | **Playfair Display** (`playfairdisplay.woff2`) | dùng font đã tải |
+| Thân bài | Quicksand | 22–26px / 500 | **Quicksand** (`quicksand.woff2`) | dùng font đã tải |
 | Nhãn letter-spaced (WEDDING INVITATION, SWEET WEDDING) | Arial | 23–38px, tracking 9–16px | Arial / Helvetica stack | giữ nguyên |
 
-Đã loại: Instrument Serif (không có subset Việt), Parisienne, Mrs Saint Delafield, Sacramento (thiếu dấu Việt). Cài bằng `@fontsource/*` (self-host, subset latin + vietnamese), không phụ thuộc CDN.
+Các font mẫu được self-host trong `public/fonts`. Các subset `@fontsource/*` được giữ làm phương án dự phòng cho ký tự tiếng Việt không có trong font gốc; trang không phụ thuộc CDN.
 
 Palette: nền #FCFCFC; đỏ rượu #8B2F30 / #834343; hồng phấn #DFBABA; hồng arch #E0B9BE; xám #3B3232; phong bì ~#A33B3B (nắp #7F2527).
 

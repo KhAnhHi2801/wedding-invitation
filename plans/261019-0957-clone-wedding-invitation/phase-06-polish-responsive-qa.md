@@ -34,7 +34,7 @@ Không thêm kiến trúc mới. Ảnh: chuyển/giữ WebP, `srcset` cho ảnh 
 ## Success Criteria
 - [x] Không scroll ngang ở mọi viewport.
 - [x] Lighthouse mobile Perf ≥ 85, A11y ≥ 95 (đo: 94 / 100).
-- [ ] Checklist: không emoji làm icon, token màu dùng nhất quán, hiệu ứng ≤ 400ms cho micro-interaction.
+- [x] Checklist: không emoji làm icon, token màu dùng nhất quán, hiệu ứng ≤ 400ms cho micro-interaction (đã rà: emoji chỉ trong dữ liệu test; hex rời chỉ ở màu hạt/chậu; các hiệu ứng dài hơn là chuyển cảnh, không phải micro-interaction).
 - [ ] Share link hiển thị đúng ảnh/tiêu đề.
 
 ## Risk Assessment

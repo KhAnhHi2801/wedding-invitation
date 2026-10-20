@@ -41,7 +41,7 @@ var FLOWER_IDS = [
   'magnolia',
   'cosmos',
 ];
-var INK_KEYS = ['brown', 'navy', 'forest', 'wine', 'plum', 'teal']; // khớp src/lib/wish-style.ts
+var INK_KEYS = ['brown', 'navy', 'forest', 'wine', 'plum', 'teal', 'earth', 'rose', 'charcoal', 'olive']; // khớp src/lib/wish-style.ts (cùng thứ tự)
 var RSVP_SHEET = 'RSVP';
 var RSVP_HEADERS = ['createdAt', 'name', 'attending', 'guests', 'note', 'guest'];
 

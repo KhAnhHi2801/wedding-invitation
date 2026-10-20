@@ -225,7 +225,7 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
     <dialog
       ref={dialogRef}
       className="gov"
-      aria-labelledby={id("title")}
+      aria-label={title}
       onClose={handleClose}
       onPointerDown={(event) => {
         pressedOnBackdrop.current = event.target === event.currentTarget;
