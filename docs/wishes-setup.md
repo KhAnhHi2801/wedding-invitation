@@ -2,7 +2,7 @@
 
 Lời chúc (kèm loài hoa khách chọn) và xác nhận tham dự (RSVP) lưu trong **một Google Sheet của bạn**:
 
-- Tab `Wishes`: `id | createdAt | name | message | status | flower | ink`. Hiển thị trong vườn hoa và sổ lưu bút.
+- Tab `Wishes`: `id | createdAt | name | message | status | flower | ink`. Hiển thị trong phần "Lời chúc" của trang.
 - Tab `RSVP`: `createdAt | name | attending | guests | note | guest`. Chỉ bạn xem được, website không có cách nào đọc tab này ra.
 
 Cả hai tab tự được tạo ở lần ghi đầu tiên. Một đoạn Apps Script (`apps-script/wishes.gs`) làm cổng ghi/đọc.

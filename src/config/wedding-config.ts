@@ -101,9 +101,8 @@ export interface GardenText {
   sendSub: string;
   doneTitle: string;
   plantAnother: string;
-  /** Nút mở lớp phủ gieo hoa (dưới sổ lưu bút, nút nổi) và câu gợi ý đứng trên nút */
+  /** Nút mở lớp phủ gieo hoa (ở phần "Lời chúc" và nút nổi) */
   open: string;
-  ctaHint: string;
   /** Nút nhấn giữ để gieo hạt, gợi ý dưới nút, và nhãn đọc cho bàn phím/trình đọc màn hình */
   hold: string;
   holdHint: string;
@@ -112,8 +111,8 @@ export interface GardenText {
   chooseTitle: string;
   sowing: string;
   close: string;
-  /** Nút ở bước hoàn thành, dẫn xuống sổ lưu bút */
-  seeBook: string;
+  /** Nút ở bước hoàn thành, dẫn xuống phần "Lời chúc" */
+  seeWishes: string;
   /** Dòng dưới mẩu giấy xem trước ở bước hoàn thành */
   noteCaption: string;
   errors: {
@@ -125,26 +124,21 @@ export interface GardenText {
   };
 }
 
-export interface GuestbookText {
+/** Phần "Lời chúc": ảnh hoa, lời tiêu biểu, danh sách và chi tiết từng lời. `{n}` và `{name}` được thay khi hiển thị. */
+export interface WishGalleryText {
   label: string;
-  coverTitle: string;
-  introTitle: string;
-  /** Lời của cô dâu chú rể ở trang đầu */
-  introText: string;
-  introHint: string;
-  endTitle: string;
-  endText: string;
-  write: string;
-  reopen: string;
-  prev: string;
-  next: string;
-  nextClose: string;
-  statusClosed: string;
-  statusCover: string;
-  /** Dùng {page} và {total} */
-  statusPage: string;
-  /** Gắn sau tên khi một lời chúc dài sang trang kế */
-  continued: string;
+  subtitle: string;
+  /** Hiện khi chưa có lời chúc nào */
+  empty: string;
+  view: string;
+  hide: string;
+  viewAll: string;
+  listLabel: string;
+  close: string;
+  flowerLabel: string;
+  inkLabel: string;
+  /** Tên người gửi khi lời chúc thêm tay vào Sheet không có tên */
+  anonymous: string;
 }
 
 export interface WeddingConfig {
@@ -163,7 +157,6 @@ export interface WeddingConfig {
     photo: ImageKey;
     /** Ảnh bìa lớn ngay sau khi mở thiệp */
     coverPhoto: ImageKey;
-    sealHint: string;
     /** Chữ đứng trước năm; năm lấy từ `event.startsAt` */
     yearPrefix: string;
     inviteLine: string;
@@ -217,7 +210,7 @@ export interface WeddingConfig {
     form: RsvpFormText;
   };
   garden: GardenText;
-  guestbook: GuestbookText;
+  wishGallery: WishGalleryText;
   gift: {
     heading: string;
     /** Nhãn đọc cho nút sao chép số tài khoản (nút chỉ có biểu tượng) */
@@ -259,7 +252,6 @@ export const weddingConfig: WeddingConfig = {
     title: "THIỆP MỜI CƯỚI",
     photo: "hero/couple",
     coverPhoto: "photos/photo-01",
-    sealHint: "Chạm để mở thiệp",
     yearPrefix: "NĂM",
     inviteLine: "TRÂN TRỌNG KÍNH MỜI",
     guestFallback: "Quý Khách",
@@ -426,16 +418,14 @@ export const weddingConfig: WeddingConfig = {
     doneTitle: "Hoa của bạn đã nở",
     plantAnother: "Gieo thêm một bông",
     open: "Gieo một lời chúc",
-    ctaHint:
-      "Mỗi lời chúc là một bông hoa nằm trong sổ này. Bạn gieo một bông nhé.",
     hold: "Chạm giữ để gieo hạt",
     holdHint: "Giữ ngón tay khoảng một giây",
     holdKeyboard: "Gieo hạt ngay",
     chooseTitle: "Chọn loài hoa của bạn",
     sowing: "Hạt đang rơi xuống chậu…",
     close: "Đóng",
-    seeBook: "Xem lời chúc trong sổ lưu bút",
-    noteCaption: "Mẩu giấy này sẽ được dán vào sổ lưu bút của chúng mình",
+    seeWishes: "Xem lời chúc của bạn",
+    noteCaption: "Lời chúc này sẽ nằm trong phần Lời chúc của chúng mình",
     errors: {
       nameRequired: "Bạn cho chúng mình biết tên của bạn nhé.",
       nameTooLong:
@@ -446,24 +436,18 @@ export const weddingConfig: WeddingConfig = {
         "Tơ hồng đã se, duyên lành đã định, chúng mình chỉ nhận lời chúc thanh tịnh thôi. Bạn gột rửa từ ngữ rồi gửi lại nha.",
     },
   },
-  guestbook: {
-    label: "Sổ lưu bút",
-    coverTitle: "Sổ lưu bút",
-    introTitle: "Lời chúc từ những người thân yêu",
-    introText:
-      "Mỗi bông hoa trong khu vườn là một lời chúc. Cảm ơn bạn đã dành cho chúng mình những yêu thương này.",
-    introHint: "Lật trang để đọc lời chúc của mọi người",
-    endTitle: "Hết",
-    endText: "Cảm ơn bạn đã gửi yêu thương cho chúng mình.",
-    write: "Gửi lời chúc",
-    reopen: "Đọc lại từ đầu",
-    prev: "Trang trước",
-    next: "Trang sau",
-    nextClose: "Đóng sổ",
-    statusClosed: "Đã đóng sổ",
-    statusCover: "Bìa sổ",
-    statusPage: "Trang {page} / {total}",
-    continued: " (tiếp)",
+  wishGallery: {
+    label: "Lời chúc",
+    subtitle: "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu trong khu vườn của chúng mình.",
+    empty: "Hãy là người gieo bông hoa đầu tiên.",
+    view: "Xem lời chúc",
+    hide: "Thu gọn",
+    viewAll: "Xem tất cả ({n})",
+    listLabel: "Các lời chúc",
+    close: "Đóng",
+    flowerLabel: "Loài hoa",
+    inkLabel: "Màu mực",
+    anonymous: "Một người bạn",
   },
   gift: {
     heading: "GỬI QUÀ MỪNG",

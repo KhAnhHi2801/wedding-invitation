@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react"
 import { fetchWishes, type PublicWish } from "./wishes-api"
 
 /**
- * Kho lời chúc dùng chung cho vườn hoa và sổ lưu bút: một lần tải từ Google Sheet, cộng các lời chúc khách vừa gửi trong
+ * Kho lời chúc dùng chung cho mini-game gieo hoa và phần "Lời chúc": một lần tải từ Google Sheet, cộng các lời chúc khách vừa gửi trong
  * phiên (hiện ngay, kể cả khi Sheet chưa lưu kịp hoặc chưa nối). Lời chúc của chính khách bị ẩn bởi kiểm duyệt vẫn hiện
  * trên máy khách đó, người khác không thấy.
  */

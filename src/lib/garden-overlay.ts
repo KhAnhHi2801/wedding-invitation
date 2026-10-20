@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react"
 
 /**
  * Trạng thái mở/đóng của lớp phủ gieo hoa. Nằm ở một kho nhỏ để mọi nơi mở được mà không truyền props:
- * thẻ mời ở section vườn, nút "Gửi lời chúc…" nổi, và nút "Gửi lời chúc" ở trang cuối sổ lưu bút.
+ * thẻ mời ở section vườn, nút "Gửi lời chúc…" nổi, và nút "Gieo một lời chúc" ở phần "Lời chúc".
  */
 let isOpen = false
 const listeners = new Set<() => void>()

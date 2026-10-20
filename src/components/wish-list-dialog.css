@@ -1,0 +1,106 @@
+/* Lớp "Xem tất cả": toàn màn hình trên điện thoại, hộp giữa màn hình trên màn rộng */
+.wl {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.wl::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wl[open] {
+    animation: wl-in 280ms var(--ease-out);
+  }
+}
+
+@keyframes wl-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@media (min-width: 48rem) {
+  .wl {
+    width: min(100% - 3rem, 34rem);
+    height: min(100dvh - 3rem, 52rem);
+    margin: auto;
+    border-radius: 1.25rem;
+  }
+}
+
+.wl__panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Thanh trên luôn thấy, nút Đóng không bao giờ bị cuộn mất */
+.wl__head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-6);
+  border-bottom: 1px solid color-mix(in srgb, var(--wine) 16%, transparent);
+  background: color-mix(in srgb, var(--rose) 14%, var(--paper));
+}
+
+.wl__title {
+  margin: 0;
+  font-family: var(--font-signature);
+  font-weight: 400;
+  font-size: var(--fs-54);
+  line-height: 1.1;
+  color: var(--wine);
+}
+
+.wl__count {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-body);
+  font-size: var(--fs-14);
+  color: color-mix(in srgb, var(--ink) 70%, var(--paper));
+}
+
+.wl__close {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: none;
+  color: var(--wine);
+}
+
+.wl__close:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: -2px;
+}
+
+.wl__close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.wl__body {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: var(--space-6);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.wl__sentinel {
+  height: 1px;
+}

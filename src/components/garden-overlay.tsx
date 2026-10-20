@@ -54,11 +54,12 @@ function initialName(): string {
   return guest === hero.guestFallback ? "" : guest;
 }
 
-/** Cuộn xuống sổ lưu bút; sổ tự lật tới lời chúc của khách khi hiện vào màn hình (xem `reveal` trong guestbook-book.js). */
-function scrollToGuestbook() {
-  document.getElementById("guestbook")?.scrollIntoView({
+/** Cuộn tới lời chúc của khách trong phần "Lời chúc" (lời mới nhất đứng đầu); chưa dựng thì cuộn tới đầu phần. */
+function scrollToWishes() {
+  const section = document.getElementById("guestbook");
+  (section?.querySelector(".wish-gallery__feature") ?? section)?.scrollIntoView({
     behavior: prefersReducedMotion() ? "auto" : "smooth",
-    block: "start",
+    block: "center",
   });
 }
 
@@ -68,8 +69,8 @@ interface GardenOverlayProps {
 
 /**
  * Lớp phủ toàn màn hình của mini-game "Gieo một lời chúc": chọn hoa, nhấn giữ để gieo hạt vào chậu, xem hoa nở, viết lời
- * chúc, rồi xuống sổ lưu bút xem lời chúc của mình. Mỗi lúc chỉ hiện một bước. Lời chúc gửi ngầm lên Google Sheet
- * (hàng đợi + thử lại), hoa của khách hiện ngay trong sổ không chờ máy chủ.
+ * chúc, rồi xuống phần "Lời chúc" xem lời chúc của mình. Mỗi lúc chỉ hiện một bước. Lời chúc gửi ngầm lên Google Sheet
+ * (hàng đợi + thử lại), lời chúc của khách hiện ngay trong phần "Lời chúc" không chờ máy chủ.
  */
 export default function GardenOverlay({ open }: GardenOverlayProps) {
   const { garden } = weddingConfig;
@@ -195,10 +196,10 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
     setStep("done");
   };
 
-  const seeBook = () => {
+  const seeWishes = () => {
     gardenOverlay.close();
     // Chờ hộp thoại đóng xong và nhả khóa cuộn rồi mới cuộn
-    window.setTimeout(scrollToGuestbook, 80);
+    window.setTimeout(scrollToWishes, 80);
   };
 
   const bloomMode: BloomMode =
@@ -436,8 +437,8 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
               )}
               <p className="gov__note-caption">{garden.noteCaption}</p>
               <div className="gov__actions">
-                <button type="button" className="gov__button" onClick={seeBook}>
-                  {garden.seeBook}
+                <button type="button" className="gov__button" onClick={seeWishes}>
+                  {garden.seeWishes}
                 </button>
                 <button
                   type="button"

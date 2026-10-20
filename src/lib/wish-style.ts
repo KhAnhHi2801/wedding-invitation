@@ -1,6 +1,6 @@
 /**
  * Màu chữ khách chọn cho lời chúc. `key` là giá trị lưu ở cột `ink` của Sheet (apps-script/wishes.gs có danh sách khóa
- * giống hệt, sửa thì sửa cả hai nơi). Đều đậm, tương phản trên 7:1 với giấy kem của sổ lưu bút để luôn đọc được.
+ * giống hệt, sửa thì sửa cả hai nơi). Đều đậm, tương phản trên 7:1 với giấy kem của phần "Lời chúc" để luôn đọc được.
  * Màu đầu tiên là mặc định. Tên hiển thị của từng màu nằm ở `garden.inkNames` trong wedding-config.ts.
  */
 export interface Ink {

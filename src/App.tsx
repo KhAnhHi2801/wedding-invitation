@@ -8,7 +8,7 @@ import { FloatingActions } from "./components/floating-actions"
 import { Gallery } from "./components/gallery"
 import { GardenOverlayHost } from "./components/garden-overlay-host"
 import { Gift } from "./components/gift"
-import { GuestbookSection } from "./components/guestbook-section"
+import { WishGallery } from "./components/wish-gallery"
 import { MapCard } from "./components/map-card"
 import { MarryMe } from "./components/marry-me"
 import { Rsvp } from "./components/rsvp"
@@ -59,7 +59,7 @@ export default function App() {
         <Gallery />
         <Rsvp onOpen={openRsvp} />
         <Gift />
-        <GuestbookSection />
+        <WishGallery />
         <ThankYou />
       </main>
       {opened && <FloatingActions onOpenRsvp={openRsvp} />}

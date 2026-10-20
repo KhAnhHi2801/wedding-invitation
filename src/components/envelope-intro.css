@@ -219,9 +219,16 @@
   cursor: default;
 }
 
-.envelope__seal svg {
-  width: 100%;
-  height: 100%;
+.envelope__seal img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  width: 123%;
+  height: 123%;
+  max-width: none;
+  object-fit: contain;
+  transform: translate(-52.3%, -46%);
 }
 
 /* Bóng ellipse mờ rộng nằm dưới dòng gợi ý như mẫu */

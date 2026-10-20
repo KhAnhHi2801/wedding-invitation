@@ -1,0 +1,226 @@
+/* Phần "Lời chúc": ảnh botanical là điểm nhấn, lời chúc là nội dung phụ trình bày bằng chữ và đường kẻ mảnh (không khung thẻ) */
+.wish-gallery {
+  padding-block: clamp(3rem, 12vw, 5rem) clamp(3rem, 10vw, 5rem);
+  text-align: center;
+}
+
+.wish-gallery__title {
+  margin: 0;
+  font-family: var(--font-signature);
+  font-weight: 400;
+  font-size: var(--fs-70);
+  line-height: 1.05;
+  color: var(--wine);
+}
+
+.wish-gallery__subtitle {
+  margin: var(--space-3) auto 0;
+  max-width: 19rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-16);
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ink) 72%, var(--paper));
+}
+
+/* Vùng ảnh luôn có tỉ lệ cố định: chưa có ảnh hoặc ảnh lỗi vẫn là nền kem mềm, bố cục không nhảy */
+.wish-gallery__art {
+  position: relative;
+  width: min(86vw, 26rem);
+  margin: var(--space-6) auto 0;
+  aspect-ratio: 4 / 5;
+  background: radial-gradient(ellipse 62% 56% at 50% 48%, color-mix(in srgb, var(--rose) 38%, var(--paper)), transparent 72%);
+}
+
+.wish-gallery__art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Lời tiêu biểu: chỉ là chữ, không khung */
+.wish-gallery__feature {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  width: min(100% - 2 * var(--gutter), 24rem);
+  min-width: 0;
+  margin: var(--space-4) auto 0;
+  padding: var(--space-3) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+}
+
+.wish-gallery__feature-flower {
+  width: 3rem;
+  height: 3rem;
+}
+
+.wish-gallery__feature-flower svg,
+.wish-gallery__row-flower svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wish-gallery__quote {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-22);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.wish-gallery__feature-name {
+  max-width: 100%;
+  font-family: var(--font-hand);
+  font-size: var(--fs-34);
+  line-height: 1.1;
+  color: var(--wine);
+  overflow-wrap: anywhere;
+}
+
+.wish-gallery__empty {
+  margin: var(--space-6) auto 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-22);
+  color: var(--wine);
+}
+
+.wish-gallery__actions {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.wish-gallery__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 var(--space-8);
+  border: 1px solid var(--wine);
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--white);
+  font-size: var(--fs-16);
+  font-weight: 700;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.wish-gallery__button:active,
+.wish-gallery__row:active,
+.wish-gallery__feature:active {
+  opacity: 0.7;
+}
+
+.wish-gallery__button--ghost {
+  background: transparent;
+  color: var(--wine);
+}
+
+/* Rê chuột: nút đặc đậm hơn, nút viền và dòng lời chúc nền hồng nhạt */
+@media (hover: hover) {
+  .wish-gallery__button:hover {
+    background: var(--wine-2);
+  }
+
+  .wish-gallery__button--ghost:hover {
+    background: color-mix(in srgb, var(--rose) 22%, var(--paper));
+  }
+
+  .wish-gallery__row:hover,
+  .wish-gallery__feature:hover {
+    background: color-mix(in srgb, var(--rose) 14%, var(--paper));
+  }
+}
+
+/* Viền tiêu điểm rõ khi dùng bàn phím */
+.wish-gallery__button:focus-visible,
+.wish-gallery__row:focus-visible,
+.wish-gallery__feature:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
+}
+
+/* Danh sách: lớp nội dung phụ, đường kẻ mảnh ngăn các dòng */
+.wish-gallery__list-wrap {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.wish-gallery__list {
+  width: min(100% - 2 * var(--gutter), 30rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.wish-gallery__list li + li {
+  border-top: 1px solid color-mix(in srgb, var(--wine) 16%, transparent);
+}
+
+.wish-gallery__row {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  align-items: start;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 4.5rem;
+  padding: var(--space-4) 0 var(--space-4) var(--space-2);
+  border: 0;
+  border-left: 2px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.wish-gallery__row.is-own {
+  border-left-color: var(--wine);
+}
+
+.wish-gallery__row-flower {
+  width: 3rem;
+  height: 3rem;
+}
+
+.wish-gallery__row-body {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.wish-gallery__row-name {
+  font-family: var(--font-hand);
+  font-size: var(--fs-34);
+  line-height: 1.1;
+  color: var(--wine);
+  overflow-wrap: anywhere;
+}
+
+.wish-gallery__row-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--fs-16);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
