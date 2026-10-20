@@ -52,18 +52,20 @@
   height: 7rem;
 }
 
-.wd__flower svg {
+.wd__flower svg,
+.wd__flower img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 .wd__name {
   margin: 0;
   font-family: var(--font-hand);
   font-weight: 400;
-  font-size: var(--fs-54);
-  line-height: 1.1;
+  font-size: var(--fs-70);
+  line-height: 1.05;
   color: var(--wine);
   overflow-wrap: anywhere;
 }

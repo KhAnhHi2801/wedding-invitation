@@ -19,6 +19,9 @@ export interface ImageSet {
 
 const entries = manifest as Record<string, ManifestEntry>
 
+/** Khóa có trong manifest hay không (dùng khi khóa ghép từ dữ liệu, ví dụ ảnh minh họa theo mã loài hoa). */
+export const hasImage = (key: string): key is ImageKey => key in entries
+
 /**
  * Thuộc tính `<img>` cho một ảnh theo khóa trong manifest (ví dụ "photos/photo-01"):
  * `src` bản lớn, `srcSet` hai cỡ, `width`/`height` gốc để trình duyệt giữ chỗ và không dịch bố cục.
@@ -28,7 +31,11 @@ export function imageSet(key: ImageKey): ImageSet {
   if (!entry) throw new Error(`Ảnh "${key}" chưa có trong image-manifest.json. Chạy: npm run images`)
   return {
     src: assetUrl(`${key}.webp`),
-    srcSet: `${assetUrl(`${key}-640.webp`)} ${entry.smallWidth}w, ${assetUrl(`${key}.webp`)} ${entry.width}w`,
+    // Ảnh nhỏ hơn bản 640 thì chỉ có một cỡ (hai cỡ trùng nhau sẽ lặp mô tả `w` trong srcset)
+    srcSet:
+      entry.smallWidth >= entry.width
+        ? `${assetUrl(`${key}.webp`)} ${entry.width}w`
+        : `${assetUrl(`${key}-640.webp`)} ${entry.smallWidth}w, ${assetUrl(`${key}.webp`)} ${entry.width}w`,
     width: entry.width,
     height: entry.height,
   }

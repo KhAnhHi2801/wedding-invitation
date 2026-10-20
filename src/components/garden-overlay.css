@@ -45,12 +45,12 @@
   background: color-mix(in srgb, var(--rose) 14%, var(--paper));
 }
 
-/* Khung vàng mảnh bên trong, nhắc lại viền vàng đôi trên bìa sổ lưu bút để hai phần cùng một thế giới */
+/* Khung mảnh bên trong màu đỏ rượu nhạt, cùng bảng màu với phần "Lời chúc" */
 .gov__panel::before {
   content: "";
   position: absolute;
   inset: 0.5rem;
-  border: 1px solid color-mix(in srgb, #c9a24a 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--wine) 22%, transparent);
   border-radius: 0.75rem;
   pointer-events: none;
 }
@@ -183,6 +183,13 @@
   font-size: var(--fs-22);
   line-height: 1.4;
   text-align: center;
+}
+
+/* Bước viết: đoạn trích của loài hoa nhỏ lại để ô tên và ô lời chúc không bị đẩy xuống thấp */
+.gov__panel[data-step="writing"] .gov__flower-message {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-16);
+  line-height: 1.45;
 }
 
 /* Danh sách 15 loài: cuộn ngang, mỗi thẻ bắt vào giữa */
@@ -328,7 +335,7 @@
   border: 0;
   background: none;
   color: var(--wine);
-  font-size: var(--fs-14);
+  font-size: var(--fs-16);
   text-decoration: underline;
 }
 

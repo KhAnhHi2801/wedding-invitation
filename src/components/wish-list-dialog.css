@@ -60,8 +60,8 @@
   margin: 0;
   font-family: var(--font-signature);
   font-weight: 400;
-  font-size: var(--fs-54);
-  line-height: 1.1;
+  font-size: var(--fs-70);
+  line-height: 1;
   color: var(--wine);
 }
 

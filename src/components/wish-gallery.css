@@ -1,5 +1,7 @@
 /* Phần "Lời chúc": ảnh botanical là điểm nhấn, lời chúc là nội dung phụ trình bày bằng chữ và đường kẻ mảnh (không khung thẻ) */
 .wish-gallery {
+  /* Tên người gửi viết bằng font tay mảnh nên cần cỡ lớn hơn chữ thường mới đọc được trên điện thoại */
+  --fs-name: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
   padding-block: clamp(3rem, 12vw, 5rem) clamp(3rem, 10vw, 5rem);
   text-align: center;
 }
@@ -61,10 +63,13 @@
 }
 
 .wish-gallery__feature-flower svg,
-.wish-gallery__row-flower svg {
+.wish-gallery__row-flower svg,
+.wish-gallery__feature-flower img,
+.wish-gallery__row-flower img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 .wish-gallery__quote {
@@ -84,7 +89,7 @@
 .wish-gallery__feature-name {
   max-width: 100%;
   font-family: var(--font-hand);
-  font-size: var(--fs-34);
+  font-size: var(--fs-name);
   line-height: 1.1;
   color: var(--wine);
   overflow-wrap: anywhere;
@@ -208,7 +213,7 @@
 
 .wish-gallery__row-name {
   font-family: var(--font-hand);
-  font-size: var(--fs-34);
+  font-size: var(--fs-name);
   line-height: 1.1;
   color: var(--wine);
   overflow-wrap: anywhere;

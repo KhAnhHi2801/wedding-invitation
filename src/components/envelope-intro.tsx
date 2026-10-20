@@ -18,7 +18,7 @@ interface EnvelopeIntroProps {
 const HEARTS = [0, 1, 2];
 
 export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
-  const { hero, couple, ui } = weddingConfig;
+  const { hero, couple } = weddingConfig;
   const rootRef = useRef<HTMLElement>(null);
   const [state, setState] = useState<
     "closed" | "opening" | "fading" | "hidden"

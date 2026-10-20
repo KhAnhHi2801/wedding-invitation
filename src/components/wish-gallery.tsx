@@ -32,7 +32,7 @@ interface Layer {
 
 /**
  * Phần "Lời chúc": ảnh botanical làm điểm nhấn, một lời tiêu biểu (lời mới nhất, lời của khách vừa gửi nếu có), nút mở
- * vài lời ngay trong trang (tối đa 4), "Xem tất cả" mở lớp danh sách riêng, và nút gieo hoa. Bấm một lời mở chi tiết.
+ * bốn lời kế tiếp ngay trong trang, "Xem tất cả" mở lớp danh sách riêng, và nút gieo hoa. Bấm một lời mở chi tiết.
  * Mỗi lớp đang mở giữ đúng một mục lịch sử: nút Back của điện thoại đóng lớp trên cùng (chi tiết trước, rồi danh sách)
  * thay vì rời trang.
  */
@@ -112,7 +112,8 @@ export function WishGallery() {
 
   const total = wishes.length
   const featured = wishes[0]
-  const preview = wishes.slice(0, WISH_PREVIEW)
+  // Lời đầu đã hiện ở phần tiêu biểu nên danh sách trong trang bắt đầu từ lời thứ hai
+  const preview = wishes.slice(1, 1 + WISH_PREVIEW)
   const detail = layers.find((layer) => layer.kind === "detail")
   const listOpen = layers.some((layer) => layer.kind === "list")
 
@@ -148,7 +149,7 @@ export function WishGallery() {
       )}
 
       <div className="wish-gallery__actions">
-        {total > 0 && (
+        {total > 1 && (
           <button
             type="button"
             className="wish-gallery__button wish-gallery__button--ghost"
@@ -164,7 +165,7 @@ export function WishGallery() {
         </button>
       </div>
 
-      {open && total > 0 && (
+      {open && total > 1 && (
         <div className="wish-gallery__list-wrap" id={listId}>
           <ol className="wish-gallery__list" aria-label={text.listLabel}>
             {preview.map((wish, index) => (
@@ -173,7 +174,7 @@ export function WishGallery() {
               </li>
             ))}
           </ol>
-          {total > WISH_PREVIEW && (
+          {total > 1 + WISH_PREVIEW && (
             <button
               type="button"
               className="wish-gallery__button wish-gallery__button--ghost"

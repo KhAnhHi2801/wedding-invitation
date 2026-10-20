@@ -1,12 +1,11 @@
 import { weddingConfig } from "../config/wedding-config"
-import { FlowerMiniPreview } from "../features/flower-bloom/FlowerMiniPreview"
-import { entryFor } from "../lib/flower-entries"
 import { inkColor } from "../lib/wish-style"
 import type { PublicWish } from "../lib/wishes-api"
+import { FlowerArt } from "./flower-art"
 
-/** Hoa SVG nhỏ đúng loài khách chọn (id lạ thì chọn cố định theo nội dung). */
+/** Hoa nhỏ đúng loài khách chọn (id lạ thì chọn cố định theo nội dung). */
 export function WishFlower({ wish }: { wish: PublicWish }) {
-  return <FlowerMiniPreview flower={entryFor(wish.flower, wish.name + wish.message).def} />
+  return <FlowerArt id={wish.flower} seed={wish.name + wish.message} sizes="3rem" />
 }
 
 interface WishRowProps {

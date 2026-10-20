@@ -1,10 +1,10 @@
 import { useEffect, useId, useRef } from "react"
 import { weddingConfig } from "../config/wedding-config"
-import { FlowerMiniPreview } from "../features/flower-bloom/FlowerMiniPreview"
 import { entryFor } from "../lib/flower-entries"
 import { lockScroll } from "../lib/scroll-lock"
 import type { PublicWish } from "../lib/wishes-api"
 import { inkColor } from "../lib/wish-style"
+import { FlowerArt } from "./flower-art"
 import "./wish-detail.css"
 
 interface WishDetailProps {
@@ -30,6 +30,8 @@ export function WishDetail({ wish, onClose }: WishDetailProps) {
     const dialog = dialogRef.current
     if (!dialog) return
     if (!dialog.open) dialog.showModal()
+    // Tiêu điểm đầu vào nút Đóng (không vào đoạn lời chúc cuộn được, tránh khung focus bao cả đoạn văn)
+    dialog.querySelector<HTMLElement>(".wd__close")?.focus({ preventScroll: true })
     const release = lockScroll()
     return () => {
       release()
@@ -56,7 +58,7 @@ export function WishDetail({ wish, onClose }: WishDetailProps) {
     >
       <div className="wd__panel">
         <div className="wd__flower">
-          <FlowerMiniPreview flower={entry.def} />
+          <FlowerArt id={wish.flower} seed={wish.name + wish.message} sizes="7rem" />
         </div>
         <h2 className="wd__name" id={nameId} translate="no">
           {name}

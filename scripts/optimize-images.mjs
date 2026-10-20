@@ -20,6 +20,8 @@ const MIN_QUALITY = 50
 const JOBS = [
   { dir: "hero", width: 960 },
   { dir: "photos", width: 1200 },
+  // Hoa minh họa nhỏ (hiển thị 48 đến 112px): giữ nguyên kích thước gốc ~220px, không phóng to
+  { dir: "flowers", width: 512 },
 ]
 const SMALL_WIDTH = 640
 const ANIMATION_WIDTH = 360
@@ -59,11 +61,13 @@ async function main() {
       const base = name.replace(/\.webp$/, "")
       const original = (await stat(src)).size
       const full = await encodeWithinBudget(src, width)
-      const small = await encodeWithinBudget(src, SMALL_WIDTH)
+      const fullMeta = await sharp(full.buffer).metadata()
+      // Ảnh gốc không rộng hơn bản nhỏ thì không cần bản 640 riêng (srcset chỉ có một cỡ)
+      const single = fullMeta.width <= SMALL_WIDTH
+      const small = single ? full : await encodeWithinBudget(src, SMALL_WIDTH)
       // Ghi thẳng buffer đã nén: sharp(buffer).toFile() sẽ mã hóa lại WebP và phá ngân sách dung lượng.
       await writeFile(path.join(outDir, `${base}.webp`), full.buffer)
-      await writeFile(path.join(outDir, `${base}-${SMALL_WIDTH}.webp`), small.buffer)
-      const fullMeta = await sharp(full.buffer).metadata()
+      if (!single) await writeFile(path.join(outDir, `${base}-${SMALL_WIDTH}.webp`), small.buffer)
       const smallMeta = await sharp(small.buffer).metadata()
       manifest[`${dir}/${base}`] = {
         width: fullMeta.width,

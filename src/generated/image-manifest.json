@@ -48,5 +48,80 @@
     "width": 1200,
     "height": 1800,
     "smallWidth": 640
+  },
+  "flowers/baby-breath": {
+    "width": 219,
+    "height": 219,
+    "smallWidth": 219
+  },
+  "flowers/calla-lily": {
+    "width": 229,
+    "height": 229,
+    "smallWidth": 229
+  },
+  "flowers/carnation": {
+    "width": 207,
+    "height": 207,
+    "smallWidth": 207
+  },
+  "flowers/cherry-blossom": {
+    "width": 196,
+    "height": 196,
+    "smallWidth": 196
+  },
+  "flowers/cosmos": {
+    "width": 214,
+    "height": 214,
+    "smallWidth": 214
+  },
+  "flowers/daisy": {
+    "width": 222,
+    "height": 222,
+    "smallWidth": 222
+  },
+  "flowers/hydrangea": {
+    "width": 215,
+    "height": 215,
+    "smallWidth": 215
+  },
+  "flowers/lavender": {
+    "width": 232,
+    "height": 232,
+    "smallWidth": 232
+  },
+  "flowers/lotus": {
+    "width": 222,
+    "height": 222,
+    "smallWidth": 222
+  },
+  "flowers/magnolia": {
+    "width": 208,
+    "height": 208,
+    "smallWidth": 208
+  },
+  "flowers/orchid": {
+    "width": 210,
+    "height": 210,
+    "smallWidth": 210
+  },
+  "flowers/peony": {
+    "width": 219,
+    "height": 219,
+    "smallWidth": 219
+  },
+  "flowers/rose": {
+    "width": 213,
+    "height": 213,
+    "smallWidth": 213
+  },
+  "flowers/sunflower": {
+    "width": 229,
+    "height": 229,
+    "smallWidth": 229
+  },
+  "flowers/tulip": {
+    "width": 207,
+    "height": 207,
+    "smallWidth": 207
   }
 }
