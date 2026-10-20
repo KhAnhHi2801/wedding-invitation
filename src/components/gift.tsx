@@ -9,13 +9,13 @@ import "./gift.css"
 
 const REVEAL: readonly RevealRule[] = [
   { selector: ".gift__heading", preset: "fadeUp" },
-  { selector: ".ticket", preset: "fadeUp", delay: 150, stagger: 200 },
+  { selector: ".gift-card", preset: "fadeUp", delay: 150, stagger: 200 },
 ]
 
 /**
- * Quà mừng: mỗi tài khoản là một "vé mừng cưới" đứng dọc. Đầu vé đỏ rượu có ảnh đại diện và tên, đường xé răng cưa,
- * thân vé giấy kem có mã QR lớn, số tài khoản nổi bật và nút sao chép. Một cột trên điện thoại, hai vé nghiêng
- * ngược chiều nhau; hai cột cạnh nhau trên màn rộng.
+ * Quà mừng theo trang mẫu: mỗi tài khoản là một thẻ ngang, ảnh tròn viền hồng nằm ngoài thẻ, thẻ xám nhạt chứa
+ * vai trò, tên, ngân hàng, số tài khoản và mã QR. Thẻ thứ hai đảo bên. Số tài khoản có nút biểu tượng để sao chép
+ * (nút không chứa chữ nên không làm đổi bề rộng thẻ).
  */
 export function Gift() {
   const { gift } = weddingConfig
@@ -28,38 +28,37 @@ export function Gift() {
 
   return (
     <section className="section gift" id="gift">
-      <div className="container" ref={ref}>
+      <div className="gift__column" ref={ref}>
         <h2 className="gift__heading">{gift.heading}</h2>
         <div className="gift__list">
           {gift.accounts.map((account, index) => (
-            <article className={`ticket${index % 2 === 1 ? " ticket--alt" : ""}`} key={account.role}>
-              <header className="ticket__head">
-                <Photo
-                  name={account.photo}
-                  alt={account.holder}
-                  sizes="(min-width: 768px) 8rem, 30vw"
-                  className="ticket__avatar"
-                />
-                <p className="ticket__role">{account.role}</p>
-                <h3 className="ticket__holder">{account.holder}</h3>
-              </header>
-
-              <div className="ticket__perf" aria-hidden="true" />
-
-              <div className="ticket__body">
+            <article className={`gift-card${index % 2 === 1 ? " gift-card--flip" : ""}`} key={account.role}>
+              <div className="gift-card__avatar">
+                <Photo name={account.photo} alt={account.holder} sizes="(min-width: 768px) 9rem, 30vw" />
+              </div>
+              <div className="gift-card__pill">
+                <div className="gift-card__info">
+                  <p className="gift-card__role">{account.role}</p>
+                  <h3 className="gift-card__holder">{account.holder}</h3>
+                  <p className="gift-card__bank">{account.bank}</p>
+                  <p className="gift-card__number">
+                    <span>{account.accountNumber}</span>
+                    <button
+                      type="button"
+                      className="gift-card__copy"
+                      aria-label={`${gift.copyLabel} ${account.holder}`}
+                      onClick={() => copy(account.accountNumber)}
+                    >
+                      <CopyIcon />
+                    </button>
+                  </p>
+                </div>
                 <GiftQr
-                  className="ticket__qr"
+                  className="gift-card__qr"
                   bankBin={account.bankBin}
                   accountNumber={account.accountNumber}
                   alt={`${gift.qrAlt} ${account.holder}`}
                 />
-                <p className="ticket__hint">{gift.scanHint}</p>
-                <p className="ticket__bank">{account.bank}</p>
-                <p className="ticket__number">{account.accountNumber}</p>
-                <button type="button" className="ticket__copy" onClick={() => copy(account.accountNumber)}>
-                  <CopyIcon />
-                  {gift.copyLabel}
-                </button>
               </div>
             </article>
           ))}

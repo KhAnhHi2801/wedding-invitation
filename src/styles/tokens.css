@@ -12,6 +12,9 @@
   --envelope-light: #b04845;
   --seal: #a8714a;
   --coral: #c4575c;
+  --pink-soft: #e49696;
+  --gray-400: #999999;
+  --gray-600: #666666;
   --mist: #ededed;
   --white: #ffffff;
   --black: #000000;
@@ -50,6 +53,7 @@
   --o-16: clamp(0.875rem, 4.2vw, 1.25rem);
   --o-18: clamp(1rem, 4.6vw, 1.4375rem);
   --o-20: clamp(1.0625rem, 5.2vw, 1.625rem);
+  --o-22: clamp(1.125rem, 5.75vw, 1.75rem);
   --o-24: clamp(1.25rem, 6vw, 1.875rem);
   --o-25: clamp(1.3125rem, 6.4vw, 2rem);
   --o-29: clamp(1.5rem, 7.4vw, 2.25rem);

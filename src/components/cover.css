@@ -1,9 +1,10 @@
 .cover {
   position: relative;
   display: grid;
-  align-content: end;
-  /* Điện thoại: ảnh giữ nguyên tỷ lệ ở phía trên (mặt cô dâu chú rể không bị che); đồng hồ và lời mời nằm dưới mặt */
-  padding-top: clamp(19rem, 82vw, 34rem);
+  align-content: start;
+  /* Theo trang mẫu (đo theo bề rộng khung): ảnh cao 139%, đồng hồ bắt đầu ở 61%, khung mờ lời mời bắt đầu ở 66% */
+  min-height: 139vw;
+  padding-top: clamp(15rem, 61vw, 28rem);
   overflow: clip;
   background: var(--paper);
   text-align: center;
@@ -14,75 +15,89 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  /* Ảnh dựa đáy khung: mặt cô dâu chú rể nằm cao hơn dãy ô đếm ngược */
+  object-position: 50% 100%;
 }
 
 @media (min-width: 48rem) {
   /* Màn rộng: ảnh phủ phần trên của khung, đồng hồ gối lên mép dưới ảnh, lời mời nằm dưới ảnh nên không che mặt */
   .cover {
+    min-height: 0;
     padding-top: min(72svh, 44rem);
   }
 
   .cover__photo {
     height: min(72svh, 44rem);
-    object-fit: cover;
     object-position: 50% 30%;
   }
 
   .cover__count {
-    margin-top: -3rem;
+    margin: -3rem auto var(--space-4);
+  }
+
+  .cover__panel {
+    width: min(100% - 2 * var(--gutter), 42rem);
+    margin: 0 auto var(--space-6);
+    padding: var(--space-6) var(--space-4);
   }
 }
 
+/* Bốn ô vuông đỏ ở giữa: rộng 62% khung, mỗi ô ~12.4% và cách nhau ~4.2% */
 .cover__count {
   position: relative;
-  z-index: var(--z-raised);
+  z-index: calc(var(--z-raised) + 1);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0 9.7%;
+  column-gap: 6.8%;
   width: min(62%, 26rem);
-  margin: 0 auto var(--space-4);
+  /* Khung mờ lời mời bắt đầu từ nửa ô đếm ngược, nên kéo lên đè sau các ô */
+  margin: 0 auto -7.7vw;
   padding: 0;
   list-style: none;
-  column-gap: 9.7%;
 }
 
 .cover__unit {
   display: grid;
   justify-items: center;
   padding: 0;
-  background: color-mix(in srgb, var(--wine) 80%, transparent);
+  background: var(--envelope);
+  border-radius: 0.4rem;
   color: var(--white);
   font-family: var(--font-label);
   font-variant-numeric: tabular-nums;
-  aspect-ratio: 11 / 13;
+  aspect-ratio: 31 / 32;
   align-content: center;
 }
 
 .cover__number {
   font-size: var(--o-11);
+  font-weight: 400;
   line-height: 1.2;
 }
 
 .cover__unit-label {
   font-size: var(--o-11);
+  font-weight: 400;
 }
 
-/* Khung mờ chứa lời mời, đọc rõ trên ảnh */
+/* Khung mờ chứa lời mời: ảnh vẫn thấy qua, bắt đầu từ 66% khung và lệch phải như mẫu */
 .cover__panel {
   position: relative;
   z-index: var(--z-raised);
-  width: min(100% - 2 * var(--gutter), 42rem);
-  margin: 0 auto var(--space-6);
-  padding: var(--space-6) var(--space-4);
-  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  width: 89.6%;
+  margin: 0 4% 6vw auto;
+  padding: 16vw var(--space-4) var(--space-4);
+  background: color-mix(in srgb, var(--paper) 45%, transparent);
   color: var(--wine);
 }
 
 .cover__title {
   margin: 0 0 var(--space-4);
   font-size: var(--o-20);
-  letter-spacing: 0.42em;
+  /* Chữ cách chữ của mẫu là số px cố định, không co theo bề rộng */
+  letter-spacing: 11px;
   font-weight: 500;
   color: var(--wine);
 }

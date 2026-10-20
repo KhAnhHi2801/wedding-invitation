@@ -1,12 +1,22 @@
+/* Mẫu: chữ "SWEET WEDDING" sát bản đồ phía trên; khối hồng chạm tiêu đề About us ngay bên dưới */
 .marry {
-  overflow: clip;
+  /* Chỉ cắt theo chiều ngang: khối hồng và tia sáng của họa tiết được tràn ra trên/dưới như mẫu */
+  overflow-x: clip;
+  padding-block: 1.85rem 0;
+  /* Bù lại phần đệm thêm ở trên để chữ "SWEET WEDDING" giữ nguyên vị trí */
+  margin-top: -0.75rem;
 }
 
 .marry__eyebrow {
-  margin: 0 0 clamp(1.5rem, 9vw, 4rem);
+  /* Chữ nằm trên khối hồng bắt đầu ngay cạnh nó */
+  z-index: 3;
+  --ox: -0.27;
+  --oy: -0.31;
+  width: fit-content;
+  margin: 0 auto clamp(1.5rem, 16.7vw, 5rem);
   text-align: center;
   font-size: var(--o-18);
-  letter-spacing: 0.7em;
+  letter-spacing: 16px;
   color: var(--wine-2);
 }
 
@@ -18,7 +28,7 @@
   position: relative;
   container-type: inline-size;
   width: min(100%, 44rem);
-  margin-inline: auto;
+  margin: 0 auto max(-11.2vw, -2.9rem);
   aspect-ratio: 100 / 150;
 }
 
@@ -29,16 +39,16 @@
 /* Khối hồng phía sau, sát mép phải, nhô qua mép khung nên bị cắt bởi section */
 .marry__block {
   left: 61.3%;
-  top: 2cqw;
+  top: -24cqw;
   width: 38.7%;
-  height: 147cqw;
+  height: 173cqw;
   background: var(--rose);
 }
 
 /* Khung viền nhạt lệch lên trên và sang trái phía sau ảnh ngang */
 .marry__frame {
   left: 28%;
-  top: 1cqw;
+  top: -8.9cqw;
   width: 68.8%;
   aspect-ratio: 68.8 / 68;
   background: color-mix(in srgb, var(--rose) 45%, var(--paper));
@@ -51,14 +61,14 @@
 
 .marry__photo--a {
   left: 30.4%;
-  top: 3cqw;
+  top: -6.9cqw;
   width: 64%;
   aspect-ratio: 1 / 1;
 }
 
 .marry__photo--b {
   left: 2.5%;
-  top: 50.2cqw;
+  top: 40.3cqw;
   width: 60%;
   aspect-ratio: 2 / 3;
 }
@@ -70,7 +80,7 @@
   font-weight: 500;
   font-size: 9.6cqw;
   line-height: 1.25;
-  letter-spacing: 2.5cqw;
+  letter-spacing: 13px;
   white-space: nowrap;
 }
 
@@ -96,7 +106,7 @@
 .marry__text--question span:nth-child(2) {
   left: 10%;
   top: 21.1cqw;
-  letter-spacing: 1.5cqw;
+  letter-spacing: 8px;
   font-size: 9.8cqw;
 }
 
@@ -122,6 +132,12 @@
 .marry__text--answer span:nth-child(2) {
   left: 68.5%;
   top: 14.2cqw;
+  /* "I" cách 13px, "DO!" sát nhau 2px như mẫu */
+  letter-spacing: 2px;
+}
+
+.marry__text--answer span:nth-child(2)::first-letter {
+  letter-spacing: 13px;
 }
 
 .marry__heart {

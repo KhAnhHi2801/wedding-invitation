@@ -15,30 +15,41 @@ export const HeartIcon = (props: IconProps) => (
   </svg>
 )
 
+/*
+ * Ba hình minh họa màu của timeline (xe hoa, hai tay ôm tim, hai ly sâm panh), tự vẽ lại theo bố cục của trang mẫu.
+ * Dùng màu cố định (không theo currentColor) vì là tranh trang trí, không phải icon giao diện.
+ */
+const art = { "aria-hidden": true, focusable: false, viewBox: "0 0 64 40" } as const
+
 export const CarIcon = (props: IconProps) => (
-  <svg {...base} {...props}>
-    <path {...line} d="M8 40V32l6-12h30l8 12v8" />
-    <path {...line} d="M6 40h52M14 20l-4 12M44 20l4 12M12 32h40" />
-    <circle {...line} cx="18" cy="44" r="5" />
-    <circle {...line} cx="46" cy="44" r="5" />
-    <path {...line} d="M24 12c4-4 12-4 16 0" />
+  <svg {...art} {...props}>
+    <path d="M4 27c0-4 2-7 6-8l12-2 8-8h14l6 9 6 1c4 1 6 3 6 8v4H4z" fill="#f2a3b6" />
+    <path d="M31 10l-6 7h16l-4-7z" fill="#fbdde4" />
+    <path d="M4 31h56v2H4z" fill="#e58aa0" />
+    <circle cx="18" cy="33" r="6" fill="#5b4a4a" />
+    <circle cx="18" cy="33" r="2.4" fill="#fff" />
+    <circle cx="48" cy="33" r="6" fill="#5b4a4a" />
+    <circle cx="48" cy="33" r="2.4" fill="#fff" />
+    <circle cx="60" cy="25" r="2" fill="#f7d56a" />
   </svg>
 )
 
 export const CameraIcon = (props: IconProps) => (
-  <svg {...base} {...props}>
-    <path {...line} d="M10 22h10l4-7h16l4 7h10v28H10z" />
-    <circle {...line} cx="32" cy="36" r="9" />
-    <circle {...line} cx="32" cy="36" r="3.5" />
-    <path {...line} d="M46 28h4" />
+  <svg {...art} {...props}>
+    <path d="M3 31c2-9 11-15 19-13l9 4-4 11-17 5z" fill="#f7cfae" stroke="#e8ad84" strokeWidth="1" />
+    <path d="M61 31c-2-9-11-15-19-13l-9 4 4 11 17 5z" fill="#f7cfae" stroke="#e8ad84" strokeWidth="1" />
+    <path d="M32 27C23 21 20 17 20 13a6.5 6.5 0 0 1 12-3 6.5 6.5 0 0 1 12 3c0 4-3 8-12 14z" fill="#ef5f7f" />
   </svg>
 )
 
 export const ToastIcon = (props: IconProps) => (
-  <svg {...base} {...props}>
-    <path {...line} d="M12 10h18l-2 16a7 7 0 0 1-14 0zM21 33v18M15 51h12" />
-    <path {...line} d="M34 10h18l-2 16a7 7 0 0 1-14 0zM43 33v18M37 51h12" />
-    <path {...line} d="M30 5l-2 4M34 5l2 4M32 3v5" />
+  <svg {...art} {...props}>
+    <path d="M11 3h13l-2 14a4.5 4.5 0 0 1-9 0z" fill="#fbd6b0" stroke="#e8ad84" strokeWidth="1" />
+    <path d="M17.5 21v13M11.5 36h12" stroke="#e8ad84" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M40 3h13l-2 14a4.5 4.5 0 0 1-9 0z" fill="#fbd6b0" stroke="#e8ad84" strokeWidth="1" />
+    <path d="M46.5 21v13M40.5 36h12" stroke="#e8ad84" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M17.5 26l-4-2v5zM17.5 26l4-2v5z" fill="#7fb3e6" />
+    <path d="M46.5 26l-4-2v5zM46.5 26l4-2v5z" fill="#f08ca4" />
   </svg>
 )
 

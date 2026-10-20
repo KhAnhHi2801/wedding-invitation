@@ -1,7 +1,7 @@
 .rsvp {
   display: grid;
   justify-items: center;
-  padding-top: clamp(1rem, 4vw, 3rem);
+  padding-top: 0.6rem;
 }
 
 .rsvp__arch {
@@ -18,26 +18,29 @@
 
 .rsvp__eyebrow {
   margin: 0;
+  line-height: 1.2;
   font-family: var(--font-ui);
-  font-size: var(--o-11);
+  font-size: var(--o-14);
   letter-spacing: 0.12em;
-  color: var(--ink);
+  color: var(--gray-400);
   font-weight: 400;
 }
 
 .rsvp__title {
   margin: 0;
+  line-height: 1.2;
   font-family: var(--font-ui);
   font-weight: 600;
-  font-size: var(--o-14);
+  font-size: var(--o-22);
   color: var(--ink);
 }
 
 .rsvp__text {
   margin: 0;
+  line-height: 1.2;
   max-width: 24rem;
-  font-size: var(--o-11);
-  color: var(--ink);
+  font-size: var(--o-16);
+  color: var(--gray-600);
   font-family: var(--font-ui);
   font-weight: 400;
 }
@@ -53,7 +56,7 @@
   border-radius: 999px;
   background: var(--white);
   color: var(--wine);
-  font-size: var(--fs-16);
+  font-size: var(--o-16);
   font-weight: 400;
   font-family: var(--font-ui);
 }

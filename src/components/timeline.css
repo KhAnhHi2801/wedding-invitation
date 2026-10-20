@@ -1,7 +1,13 @@
+.timeline {
+  padding-block: 1.6rem 1.3rem;
+}
+
+/* Trục dọc nằm ở 46% bề rộng trang (lệch trái so với giữa) như mẫu */
 .timeline__list {
   position: relative;
   max-width: 46rem;
   margin: 0 auto;
+  left: -3.7vw;
 }
 
 .timeline__rows {
@@ -31,18 +37,16 @@
 
 .timeline__icon {
   justify-self: end;
-  width: clamp(1.75rem, 8vw, 3rem);
+  width: clamp(2.25rem, 12.6vw, 3.75rem);
   height: auto;
-  color: var(--wine-2);
 }
 
+/* Tim hồng đặc nằm đè lên trục, trục vẫn liền mạch phía sau */
 .timeline__heart {
   position: relative;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.2rem;
-  background: var(--paper);
-  color: var(--blush);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--pink-soft);
 }
 
 .timeline__text {

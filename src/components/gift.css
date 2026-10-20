@@ -1,229 +1,206 @@
+/*
+ * Quà mừng theo trang mẫu. Vị trí và kích thước tính theo bề rộng cột (cqw) lấy từ số đo của mẫu:
+ * thẻ cao 30.2cqw, ảnh tròn 30cqw, hai thẻ cách nhau 18.8cqw.
+ */
+.gift {
+  padding-top: 2.85rem;
+}
+
+.gift__column {
+  width: min(100% - 2 * var(--gutter), 34rem);
+  margin-inline: auto;
+}
+
 .gift__heading {
-  margin: 0 0 var(--space-12);
+  margin: 0 0 clamp(2.5rem, 11vw, 4.5rem);
   text-align: center;
   font-family: var(--font-label);
   font-weight: 500;
   font-size: var(--o-20);
-  color: var(--coral);
+  color: var(--pink-soft);
 }
 
-/* Một cột trên điện thoại, hai vé cạnh nhau từ màn rộng */
 .gift__list {
+  container-type: inline-size;
   display: grid;
-  justify-items: center;
-  gap: var(--space-12);
+  gap: 18.8cqw;
 }
 
-@media (min-width: 48rem) {
-  .gift__list {
-    grid-template-columns: repeat(2, minmax(0, 22rem));
-    justify-content: center;
-    gap: var(--space-16);
-  }
-}
-
-/*
- * Vé mừng cưới. Hai vé nghiêng ngược chiều bằng thuộc tính `rotate` riêng (không tranh với transform của hiệu ứng hiện dần).
- * Hai nửa vòng ở đường xé được vẽ bằng màu nền trang nên chỉ đúng khi nền section là --paper.
- */
-.ticket {
-  --tilt: -1.2deg;
-  --gold: #c9a24a;
+.gift-card {
   position: relative;
-  width: min(100%, 21.5rem);
-  rotate: var(--tilt);
-  filter: drop-shadow(0 0.7rem 1.1rem rgba(70, 20, 22, 0.18));
+  height: 30.2cqw;
 }
 
-.ticket--alt {
-  --tilt: 1.2deg;
-}
-
-.ticket__head {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: var(--space-1);
-  padding: var(--space-8) var(--space-4) var(--space-6);
-  border-radius: 1.25rem 1.25rem 0 0;
-  background:
-    radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.16), transparent 50%),
-    radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.6px) 0 0 / 14px 14px,
-    linear-gradient(160deg, var(--wine) 0%, #6a2123 100%);
-  color: var(--white);
-  text-align: center;
-  overflow: hidden;
-}
-
-/* Viền vàng mảnh bên trong đầu vé, nhắc lại bìa sổ lưu bút */
-.ticket__head::before {
-  content: "";
+/* Ảnh tròn: ảnh mờ dần ở mép, vòng nét đứt màu hồng quanh ngoài */
+.gift-card__avatar {
   position: absolute;
-  inset: 0.5rem 0.5rem 0;
-  border: 1px solid color-mix(in srgb, var(--gold) 60%, transparent);
-  border-bottom: 0;
-  border-radius: 0.9rem 0.9rem 0 0;
-  pointer-events: none;
+  top: 0;
+  left: 4.8cqw;
+  width: 30cqw;
+  aspect-ratio: 1;
 }
 
-/* Vệt sáng quét qua đầu vé một lần khi vé hiện ra */
-.ticket__head::after {
+.gift-card--flip .gift-card__avatar {
+  left: 66.8cqw;
+}
+
+.gift-card__avatar img {
+  position: absolute;
+  inset: 4.5%;
+  width: 91%;
+  height: 91%;
+  object-fit: cover;
+  border-radius: 50%;
+  -webkit-mask-image: radial-gradient(closest-side, #000 90%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 90%, transparent 100%);
+}
+
+.gift-card__avatar::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
-  transform: translateX(-120%);
-  pointer-events: none;
-}
-
-.ticket.is-in .ticket__head::after {
-  animation: ticket-shine 1.4s ease-out 0.5s 1 forwards;
-}
-
-@keyframes ticket-shine {
-  to {
-    transform: translateX(120%);
-  }
-}
-
-.ticket__avatar {
-  width: 5.75rem;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border: 3px solid #fbf6ef;
   border-radius: 50%;
-  outline: 2px dashed color-mix(in srgb, var(--gold) 85%, transparent);
-  outline-offset: 4px;
-  margin-bottom: var(--space-3);
+  background: conic-gradient(
+    transparent 0 2deg,
+    var(--blush) 2deg 22deg,
+    transparent 22deg 34deg,
+    var(--blush) 34deg 48deg,
+    transparent 48deg 56deg,
+    var(--blush) 56deg 80deg,
+    transparent 80deg 90deg,
+    var(--blush) 90deg 100deg,
+    transparent 100deg 112deg,
+    var(--blush) 112deg 136deg,
+    transparent 136deg 146deg,
+    var(--blush) 146deg 160deg,
+    transparent 160deg 172deg,
+    var(--blush) 172deg 196deg,
+    transparent 196deg 206deg,
+    var(--blush) 206deg 214deg,
+    transparent 214deg 226deg,
+    var(--blush) 226deg 250deg,
+    transparent 250deg 262deg,
+    var(--blush) 262deg 282deg,
+    transparent 282deg 294deg,
+    var(--blush) 294deg 318deg,
+    transparent 318deg 330deg,
+    var(--blush) 330deg 344deg,
+    transparent 344deg
+  );
+  -webkit-mask-image: radial-gradient(farthest-side, transparent 91%, #000 92%);
+  mask-image: radial-gradient(farthest-side, transparent 91%, #000 92%);
 }
 
-.ticket__role {
-  margin: 0;
-  font-family: var(--font-label);
-  font-size: var(--o-12);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: #e9cb82;
-}
-
-.ticket__holder {
-  margin: 0;
-  font-family: var(--font-hand);
-  font-weight: 400;
-  font-size: var(--o-29);
-  line-height: 1.25;
-  overflow-wrap: anywhere;
-}
-
-/* Đường xé răng cưa với hai nửa vòng khuyết ở hai mép */
-.ticket__perf {
-  position: relative;
-  height: 2px;
-  margin-inline: 1.2rem;
-  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--wine) 35%, transparent) 0 6px, transparent 6px 12px);
-}
-
-.ticket__perf::before,
-.ticket__perf::after {
-  content: "";
+.gift-card__pill {
   position: absolute;
-  top: calc(-0.75rem + 1px);
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  background: var(--paper);
+  top: 0;
+  left: 35.1cqw;
+  width: 60.4cqw;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  background: var(--mist);
+  border-radius: 8cqw;
+  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.12);
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--black);
 }
 
-.ticket__perf::before {
-  left: -1.95rem;
+.gift-card--flip .gift-card__pill {
+  left: 4.2cqw;
+  width: 59.3cqw;
+  flex-direction: row-reverse;
 }
 
-.ticket__perf::after {
-  right: -1.95rem;
-}
-
-.ticket__body {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-2);
-  padding: var(--space-6) var(--space-4) var(--space-6);
-  border-radius: 0 0 1.25rem 1.25rem;
-  background: #fbf6ef;
+.gift-card__info {
+  flex: 1;
+  min-width: 0;
+  padding: 4.3cqw 1cqw 0;
   text-align: center;
 }
 
-.ticket__qr {
-  width: 11rem;
-  height: 11rem;
-  padding: 0.6rem;
-  border-radius: 0.75rem;
-  background: var(--white);
-  outline: 1px solid color-mix(in srgb, var(--gold) 65%, transparent);
-  outline-offset: 0.35rem;
-  margin-bottom: var(--space-2);
+.gift-card__info > * {
+  margin: 0;
+  font-weight: 500;
 }
 
-.ticket__qr img {
-  display: block;
+.gift-card__role,
+.gift-card__holder {
+  font-size: clamp(0.8125rem, 3.8cqw, 1.1rem);
+  line-height: 4.8cqw;
+  overflow-wrap: anywhere;
+}
+
+.gift-card__role {
+  margin-bottom: 2.6cqw;
+}
+
+.gift-card__bank {
+  margin-top: 1.4cqw;
+  font-size: clamp(0.6875rem, 2.8cqw, 0.85rem);
+  line-height: 3.6cqw;
+}
+
+.gift-card__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.8cqw;
+  font-size: clamp(0.625rem, 2.9cqw, 0.9rem);
+  line-height: 3.6cqw;
+  font-variant-numeric: lining-nums tabular-nums;
+  /* Số tài khoản luôn một dòng, không bị bẻ giữa dãy số */
+  white-space: nowrap;
+}
+
+/* Nút chỉ có biểu tượng; vùng bấm mở rộng ra ngoài bằng ::after nên không đổi bố cục */
+.gift-card__copy {
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: 0.3em;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--wine);
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.gift-card__copy::after {
+  content: "";
+  position: absolute;
+  inset: -0.7rem;
+}
+
+.gift-card__copy:active {
+  opacity: 0.55;
+}
+
+.gift-card__copy svg {
   width: 100%;
   height: 100%;
 }
 
-.ticket__hint {
-  margin: var(--space-2) 0 0;
-  font-size: var(--fs-12);
-  color: color-mix(in srgb, var(--ink) 70%, #fbf6ef);
+.gift-card__qr {
+  flex: none;
+  width: 20.5cqw;
+  height: 20.5cqw;
+  margin: 3cqw 3.6cqw 0 0;
+  padding: 0.8cqw;
+  border-radius: 2.4cqw;
+  background: var(--white);
 }
 
-.ticket__bank {
-  margin: var(--space-3) 0 0;
-  font-family: var(--font-label);
-  font-size: var(--o-12);
-  letter-spacing: 0.28em;
-  color: color-mix(in srgb, var(--ink) 75%, #fbf6ef);
+.gift-card--flip .gift-card__qr {
+  margin: 3cqw 0 0 2.5cqw;
 }
 
-.ticket__number {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 6vw, 1.625rem);
-  letter-spacing: 0.06em;
-  font-variant-numeric: lining-nums tabular-nums;
-  color: var(--wine);
-  /* Số tài khoản luôn nằm trên một dòng, không bị bẻ giữa dãy số */
-  white-space: nowrap;
-}
-
-.ticket__copy {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: 2.75rem;
-  margin-top: var(--space-2);
-  padding: 0 var(--space-6);
-  border: 1px solid var(--wine);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--wine);
-  font-size: var(--o-13);
-  transition:
-    background-color 150ms var(--ease-out),
-    color 150ms var(--ease-out);
-}
-
-.ticket__copy:active {
-  background: var(--wine);
-  color: var(--white);
-}
-
-.ticket__copy svg {
-  width: 1.1rem;
-  height: 1.1rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ticket.is-in .ticket__head::after {
-    animation: none;
-  }
+.gift-card__qr img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

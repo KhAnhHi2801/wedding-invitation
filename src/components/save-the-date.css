@@ -1,25 +1,39 @@
+.save {
+  padding-top: 3.2rem;
+  padding-bottom: 0;
+}
+
+/* Tiêu đề căn giữa quanh 58% bề rộng trang, cỡ 29px ở 420px */
 .save__heading {
-  margin: 0 0 var(--space-8);
+  --s: clamp(1.25rem, 7.4vw, 2rem);
+  --ox: -1.7;
+  --oy: 0.39;
+  width: fit-content;
+  white-space: nowrap;
+  margin: 0 0 var(--space-8) 59%;
+  translate: -50% 0;
   font-family: var(--font-heading);
   font-weight: 500;
-  font-size: var(--fs-54);
+  font-size: clamp(1.5rem, 7vw, 2.75rem);
   color: var(--wine);
 }
 
 .save__photo-wrap {
   position: relative;
   width: min(96.7%, 38rem);
-  margin: var(--space-12) 0 var(--space-12) auto;
+  /* Ảnh chạm sát mép phải trang như mẫu (bù lại lề container) */
+  margin: var(--space-12) calc(-1 * var(--gutter)) 0 auto;
 }
 
 /* Khung viền mảnh lệch lên trên và sang trái, chỉ phủ phần trên ảnh như trang mẫu */
 .save__frame {
   position: absolute;
-  top: -2.4rem;
-  left: -1.5rem;
-  right: -0.6rem;
-  height: 34%;
-  border: 1px solid color-mix(in srgb, var(--wine) 65%, transparent);
+  top: -1.7rem;
+  left: -1.1rem;
+  right: 0.1rem;
+  height: 35.5%;
+  background: color-mix(in srgb, var(--rose) 16%, var(--paper));
+  border: 1px solid var(--wine);
 }
 
 .save__photo {
@@ -32,15 +46,14 @@
 
 .save__stamp {
   position: absolute;
-  top: -3.4rem;
+  top: -7.3rem;
   right: 4%;
   margin: 0;
   padding: var(--space-4) var(--space-2);
-  background: var(--rose);
+  background: var(--pink-soft);
   color: var(--white);
   font-family: var(--font-body);
   font-size: var(--fs-26);
-  letter-spacing: 0.08em;
 }
 
 /* Lịch nằm đè lên nửa dưới ảnh, nền trong suốt, không có hàng thứ (hàng thứ vẫn có cho trình đọc màn hình) */
@@ -57,8 +70,10 @@
   table-layout: fixed;
 }
 
+/* Mỗi hàng cao ~11% bề rộng trang (43px ở 390px) như mẫu */
 .save__calendar td {
-  padding: 0.3rem 0;
+  height: min(11vw, 2.9rem);
+  padding: 0;
 }
 
 .save__day {
@@ -67,6 +82,7 @@
   width: 100%;
   height: 2.4em;
   font-size: var(--o-11);
+  font-weight: 400;
   color: var(--black);
   max-width: 2.4em;
   margin-inline: auto;

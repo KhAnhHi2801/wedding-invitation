@@ -201,6 +201,8 @@ export interface WeddingConfig {
   saveTheDate: { heading: string; photo: ImageKey };
   timeline: TimelineItem[];
   gallery: {
+    /** Tiêu đề chữ trắng giãn rộng ở đầu khối ảnh */
+    title: string;
     verticalLeft: string;
     verticalRight: string;
     caption: string;
@@ -218,12 +220,11 @@ export interface WeddingConfig {
   guestbook: GuestbookText;
   gift: {
     heading: string;
+    /** Nhãn đọc cho nút sao chép số tài khoản (nút chỉ có biểu tượng) */
     copyLabel: string;
     copied: string;
     copyFailed: string;
     qrAlt: string;
-    /** Dòng gợi ý dưới mã QR trên mỗi thẻ */
-    scanHint: string;
     accounts: BankAccount[];
   };
   /** `animation`: WebP động, `still`: ảnh tĩnh cho người giảm chuyển động (tạo bởi `npm run images`) */
@@ -231,8 +232,6 @@ export interface WeddingConfig {
   /** Nhãn giao diện cố định */
   ui: {
     countdownUnits: [string, string, string, string];
-    mapShow: string;
-    mapOpen: string;
     mapTitle: string;
     /** Thứ 2 đến Chủ nhật */
     weekdays: string[];
@@ -291,7 +290,7 @@ export const weddingConfig: WeddingConfig = {
     lunarText: "(Tức ngày 17 tháng 11 năm Bính Ngọ)",
     venue: "TRỐNG ĐỒNG PALACE",
     address: "(18A Lý Văn Phức, P. Ô Chợ Dừa, Tp Hà Nội)",
-    mapsQuery: "Trống Đồng Palace, 18A Lý Văn Phức, Ô Chợ Dừa, Hà Nội",
+    mapsQuery: "18A Lý Văn Phức, Ô Chợ Dừa, Đống Đa, Hà Nội",
   },
   sides: {
     // Nhà trai dùng đúng thông tin mặc định ở `event` và `timeline`
@@ -354,6 +353,7 @@ export const weddingConfig: WeddingConfig = {
     { time: "10:30", label: "Khai tiệc", icon: "toast" },
   ],
   gallery: {
+    title: "INVITATION",
     verticalLeft: "I love you forever",
     verticalRight: "Nice to meet you",
     caption:
@@ -471,7 +471,6 @@ export const weddingConfig: WeddingConfig = {
     copied: "Đã sao chép số tài khoản",
     copyFailed: "Chưa sao chép được, bạn giữ vào số tài khoản để chép nhé",
     qrAlt: "Mã QR chuyển khoản",
-    scanHint: "Quét mã bằng ứng dụng ngân hàng",
     accounts: [
       {
         role: "Cô dâu",
@@ -499,8 +498,6 @@ export const weddingConfig: WeddingConfig = {
   },
   ui: {
     countdownUnits: ["ngày", "giờ", "phút", "giây"],
-    mapShow: "Xem bản đồ",
-    mapOpen: "Mở trong Maps",
     mapTitle: "Bản đồ địa điểm tổ chức",
     weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
     openEnvelope: "Mở thiệp",

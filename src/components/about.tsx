@@ -37,7 +37,7 @@ function AboutPerson({ person, label, side }: AboutPersonProps) {
   const ref = useReveal<HTMLElement>(PERSON_REVEAL[side])
   return (
     <article className={`about__person about__person--${side}`} ref={ref}>
-      <h2 className="about__heading">{about.heading}</h2>
+      <h2 className="about__heading ornament">{about.heading}</h2>
       <Photo
         name={person.photo}
         alt={person.fullName}

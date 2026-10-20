@@ -53,7 +53,7 @@ export function MarryMe() {
   return (
     <section className="section marry" ref={ref}>
       <FloatingHearts />
-      <p className="marry__eyebrow label">{marryMe.eyebrow}</p>
+      <p className="marry__eyebrow label ornament">{marryMe.eyebrow}</p>
       <div className="marry__stage">
         <div className="marry__block" aria-hidden="true" />
         <div className="marry__frame" aria-hidden="true" />

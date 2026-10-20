@@ -1,5 +1,5 @@
-/* Khung dùng chung cho các section của thiệp */
-.section {
+/* Khung dùng chung cho các section của thiệp. :where giữ độ ưu tiên bằng 0 để padding riêng của từng section thắng theo class, không phụ thuộc thứ tự nạp CSS */
+:where(.section) {
   position: relative;
   padding-block: clamp(3rem, 8vw, 6rem);
   /* Phần tử chờ hiện dần đang lệch ngang không được làm trang rộng ra (iOS vẫn cho kéo ngang nếu chỉ chặn ở body) */
@@ -26,7 +26,8 @@
 }
 
 /* Nhãn chữ hoa giãn chữ (Arial theo mẫu) */
-.label {
+/* :where giữ độ ưu tiên bằng 0 để class của từng component đặt lại cỡ chữ cách chữ riêng mà không bị ghi đè theo thứ tự nạp CSS */
+:where(.label) {
   font-family: var(--font-label);
   font-weight: 500;
   letter-spacing: 0.3em;
@@ -52,4 +53,44 @@ main.is-open {
   main.is-open {
     animation: none;
   }
+}
+
+/*
+ * Họa tiết đầu tiêu đề của mẫu: vòng tròn hồng gradient và hai tia sáng nhỏ ở góc trên phải.
+ * --s: đường kính vòng tròn; --ox: vị trí mép trái vòng tròn so với mép trái chữ (tính theo --s);
+ * --oy: độ lệch tâm vòng tròn so với tâm chữ (tính theo --s, dương là xuống dưới).
+ */
+:where(.ornament) {
+  --s: clamp(1.5rem, 9.3vw, 2.5rem);
+  --ox: -1.4;
+  --oy: 0;
+  position: relative;
+  /* Ngăn vòng tròn (z-index âm) chui xuống dưới nền section; chữ luôn nằm trên họa tiết */
+  isolation: isolate;
+}
+
+.ornament::before,
+.ornament::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.ornament::before {
+  z-index: -1;
+  left: calc(var(--ox) * var(--s));
+  top: calc(50% + var(--oy) * var(--s));
+  width: var(--s);
+  height: var(--s);
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 28% 28%, var(--rose), color-mix(in srgb, var(--rose) 28%, var(--paper)) 100%);
+}
+
+.ornament::after {
+  left: calc(var(--ox) * var(--s) + var(--s) * 0.95);
+  top: calc(50% + var(--oy) * var(--s) - var(--s) * 1.05);
+  width: calc(var(--s) * 0.95);
+  height: calc(var(--s) * 0.72);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Cg fill='%23e0b9be'%3E%3Cpath d='M14 4Q14 16 26 16Q14 16 14 28Q14 16 2 16Q14 16 14 4Z'/%3E%3Cpath d='M32 0Q32 7 39 7Q32 7 32 14Q32 7 25 7Q32 7 32 0Z'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
 }

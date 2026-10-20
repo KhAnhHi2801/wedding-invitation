@@ -29,7 +29,7 @@ export function SaveTheDate() {
     <section className="section save" ref={ref}>
       <FloatingHearts />
       <div className="container">
-        <h2 className="save__heading">{saveTheDate.heading}</h2>
+        <h2 className="save__heading ornament">{saveTheDate.heading}</h2>
 
         <div className="save__photo-wrap">
           <span className="save__frame" aria-hidden="true" />

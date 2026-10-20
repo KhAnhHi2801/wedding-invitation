@@ -1,3 +1,9 @@
+/* Dòng địa chỉ cách bản đồ ~8.5% bề rộng trang như mẫu */
+.event {
+  padding-top: 0;
+  padding-bottom: 8.5vw;
+}
+
 .event__body {
   text-align: center;
   font-family: var(--font-display);
@@ -15,7 +21,7 @@
 }
 
 .event__guest {
-  margin-top: var(--space-2);
+  margin-top: 1.1rem;
   font-size: var(--o-24);
   font-weight: 700;
   color: var(--wine);
@@ -24,14 +30,13 @@
 }
 
 .event__title {
-  margin-top: var(--space-12);
+  margin-top: 1.4rem;
   font-size: var(--o-20);
   font-weight: 700;
-  letter-spacing: 0.02em;
 }
 
 .event__time {
-  margin-top: var(--space-6);
+  margin-top: 0.7rem;
   font-size: var(--o-16);
   font-weight: 700;
   color: var(--ink);
@@ -42,13 +47,14 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  margin-top: var(--space-4);
+  margin-top: 1.5rem;
 }
 
 .event__side {
   align-self: center;
-  padding-block: var(--space-4);
-  border-block: 2px solid color-mix(in srgb, var(--ink) 12%, var(--paper));
+  /* Mẫu: hai nét mảnh song song (viền double 5px = hai nét 1px cách 3px) trên và dưới */
+  padding-block: calc(var(--space-4) - 2.5px);
+  border-block: 5px double color-mix(in srgb, var(--ink) 35%, var(--paper));
   font-size: var(--o-24);
   font-weight: 700;
   color: var(--ink);
@@ -64,15 +70,15 @@
 }
 
 .event__lunar {
-  margin-top: var(--space-6);
+  margin-top: 0.7rem;
   font-size: var(--o-16);
   font-weight: 400;
 }
 
 .event__venue-label {
-  margin-top: var(--space-12);
-  font-size: var(--o-16);
-  font-weight: 500;
+  margin-top: 1.1rem;
+  font-size: var(--o-15);
+  font-weight: 400;
   color: var(--ink);
 }
 
@@ -84,7 +90,7 @@
 }
 
 .event__address {
-  margin-top: var(--space-3);
-  font-size: var(--o-15);
+  margin-top: 1.25rem;
+  font-size: var(--o-16);
   font-weight: 400;
 }

@@ -1,65 +1,29 @@
+/* Trang mẫu: bản đồ cách dòng địa chỉ ~8.5% và cách "SWEET WEDDING" ~12.8% bề rộng trang; phần đệm còn lại do section kề bên */
 .map {
   display: grid;
+  padding-block: 0 0.55rem;
 }
 
-.map .reading {
+/* Khung bản đồ rộng 83% và cao 51% bề rộng khung như trang mẫu, nền xám nhạt hiện ra trong lúc bản đồ tải */
+.map__inner {
   display: grid;
-  gap: var(--space-4);
   justify-items: center;
 }
 
 .map__card {
-  width: 90%;
+  box-sizing: border-box;
+  width: min(83vw, 36rem);
+  margin-inline: auto;
   aspect-ratio: 83 / 51;
-  background: color-mix(in srgb, var(--rose) 35%, var(--paper));
-  border: 1px solid var(--blush);
+  /* Khung trắng ~10px quanh bản đồ như mẫu */
+  padding: clamp(0.4rem, 2.4vw, 0.75rem);
+  background: var(--white);
   overflow: hidden;
 }
 
 .map__frame {
+  display: block;
   width: 100%;
   height: 100%;
   border: 0;
-}
-
-.map__facade {
-  height: 100%;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: var(--space-3);
-  padding: var(--space-6);
-  text-align: center;
-}
-
-.map__venue {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--fs-34);
-  color: var(--wine);
-}
-
-.map__address {
-  margin: 0;
-  font-size: var(--fs-16);
-}
-
-.map__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.75rem;
-  padding: 0 var(--space-6);
-  border: 1px solid var(--wine);
-  border-radius: 999px;
-  background: var(--wine);
-  color: var(--white);
-  font-size: var(--fs-16);
-  text-decoration: none;
-}
-
-.map__button--ghost {
-  background: transparent;
-  color: var(--wine);
 }

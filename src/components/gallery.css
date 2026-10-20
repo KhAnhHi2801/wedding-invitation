@@ -1,12 +1,13 @@
 .gallery {
-  padding-bottom: clamp(3rem, 8vw, 6rem);
+  padding-bottom: 0;
 }
 
 .gallery__stage {
   position: relative;
   display: grid;
   justify-items: center;
-  padding: clamp(3rem, 8vw, 6rem) var(--gutter);
+  /* Mẫu: khung ảnh cách mép trên 26px và cách mép dưới 165px (nền ảnh kéo dài xuống phần váy) */
+  padding: 6.2vw var(--gutter) 39vw;
   overflow: clip;
 }
 
@@ -40,13 +41,30 @@
   object-fit: cover;
 }
 
+/* Tiêu đề trắng ở mép trên khối ảnh: Arial ~16px, cách chữ 20px */
+.gallery__title {
+  position: absolute;
+  top: 0.8vw;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: clamp(0.75rem, 3.8vw, 1.1rem);
+  letter-spacing: 20px;
+  text-indent: 20px;
+  color: var(--white);
+}
+
 .gallery__side {
   position: absolute;
-  top: clamp(1.5rem, 6vw, 4rem);
+  top: clamp(2rem, 13vw, 5rem);
   margin: 0;
   font-family: var(--font-signature);
   font-size: var(--fs-70);
   line-height: 1;
+  letter-spacing: 6px;
   color: var(--wine);
 }
 
@@ -78,9 +96,10 @@
 }
 
 .gallery__caption {
-  margin-top: var(--space-8);
+  margin-top: 1rem;
   text-align: center;
   font-size: var(--o-12);
   line-height: 1.6;
-  letter-spacing: 0.07em;
+  letter-spacing: 1px;
+  color: var(--black);
 }

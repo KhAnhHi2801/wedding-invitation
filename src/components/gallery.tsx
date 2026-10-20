@@ -5,6 +5,7 @@ import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import "./gallery.css"
 
 const REVEAL: readonly RevealRule[] = [
+  { selector: ".gallery__title", preset: "fadeIn" },
   { selector: ".gallery__photo", preset: "fadeUp", stagger: 120 },
   { selector: ".gallery__side", preset: "fadeIn", delay: 300 },
   { selector: ".gallery__caption", preset: "fadeUp" },
@@ -30,6 +31,7 @@ export function Gallery() {
         <p className="gallery__side gallery__side--right vertical" aria-hidden="true">
           {gallery.verticalRight}
         </p>
+        <p className="gallery__title">{gallery.title}</p>
         <div className="gallery__stack">
           <Photo name={first} alt={alt} sizes="(min-width: 768px) 28rem, 70vw" className="gallery__photo" />
           <Photo name={second} alt="" sizes="(min-width: 768px) 28rem, 70vw" className="gallery__photo" />
