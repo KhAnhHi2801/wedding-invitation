@@ -36,6 +36,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* Thiếu chỗ thì mã QR xuống dưới phần thông tin, không ép cột chữ hẹp lại */
+  flex-wrap: wrap;
+  /* Khi QR xuống dưới thì căn giữa thẻ */
+  justify-content: center;
   gap: var(--space-4);
   padding: var(--space-6);
   border-radius: 2.5rem;
@@ -45,8 +49,8 @@
 }
 
 .gift__info {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 6.25rem;
+  min-width: 6.25rem;
 }
 
 /* Chỗ giữ sẵn cho mã QR để không dịch bố cục khi mã dựng xong */
@@ -136,8 +140,8 @@
   }
 
   .gift__qr {
-    width: 4.75rem;
-    height: 4.75rem;
+    width: 4.5rem;
+    height: 4.5rem;
   }
 
   /* Cột thông tin hẹp: nút gọn lại, chữ canh giữa xuống tối đa 2 dòng */
@@ -161,6 +165,6 @@
 
   .gift__bank {
     font-size: var(--fs-14);
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 }

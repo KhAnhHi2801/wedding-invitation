@@ -16,6 +16,8 @@ export interface Person {
   birthDate: string;
   hometown: string;
   photo: ImageKey;
+  /** Ảnh ngang thứ hai của mỗi người trong phần "About us" */
+  widePhoto: ImageKey;
 }
 
 export interface Family {
@@ -270,6 +272,7 @@ export const weddingConfig: WeddingConfig = {
       birthDate: "12/05/2000",
       hometown: "TP. Điện Biên",
       photo: "photos/photo-06",
+      widePhoto: "photos/photo-07",
     },
     groom: {
       name: "Quốc Huy",
@@ -277,6 +280,7 @@ export const weddingConfig: WeddingConfig = {
       birthDate: "05/08/1995",
       hometown: "TP. Hà Nội",
       photo: "photos/photo-05",
+      widePhoto: "photos/photo-04",
     },
     connector: "&",
   },

@@ -28,15 +28,15 @@
 .gallery__stack {
   position: relative;
   display: grid;
-  gap: var(--space-2);
-  width: min(100%, 28rem);
-  padding: var(--space-4);
+  gap: 0.4rem;
+  width: min(84%, 30rem);
+  padding: 4% 8%;
   background: color-mix(in srgb, var(--white) 55%, transparent);
 }
 
 .gallery__photo {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 17 / 10;
   object-fit: cover;
 }
 
@@ -59,9 +59,13 @@
   top: 28%;
 }
 
+.gallery__photo:first-child {
+  aspect-ratio: 3 / 2;
+}
+
 @media (max-width: 40rem) {
   .gallery__stage {
-    padding-inline: calc(var(--gutter) + 2.75rem);
+    padding-inline: 0;
   }
 
   .gallery__side {

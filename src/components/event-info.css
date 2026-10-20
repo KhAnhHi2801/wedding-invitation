@@ -4,8 +4,7 @@
   color: var(--ink);
 }
 
-.event__body p,
-.event__body h2 {
+:where(.event__body p, .event__body h2) {
   margin: 0;
 }
 
@@ -25,7 +24,7 @@
 }
 
 .event__title {
-  margin-top: var(--space-12) !important;
+  margin-top: var(--space-12);
   font-size: var(--o-20);
   font-weight: 700;
   letter-spacing: 0.02em;

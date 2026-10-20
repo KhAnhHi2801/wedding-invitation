@@ -43,8 +43,8 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
 
     const q = gsap.utils.selector(rootRef)
     if (prefersReducedMotion()) {
-      gsap.set(q(".envelope__flap"), { rotateX: -180, zIndex: 1 })
-      gsap.set(q(".envelope__card"), { yPercent: -50, zIndex: 3 })
+      gsap.set(q(".envelope__flap"), { rotateX: -180, zIndex: 0 })
+      gsap.set(q(".envelope__card"), { yPercent: -50 })
       finish()
       return
     }
@@ -56,8 +56,8 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
     gsap
       .timeline()
       .to(q(".envelope__flap"), { rotateX: -180, duration: 1.2, ease: "power1.out" }, 0)
-      .set(q(".envelope__flap"), { zIndex: 1 }, 0.6)
-      .set(q(".envelope__card"), { zIndex: 3 }, 0.6)
+      // Nắp đã lật lên thì nằm sau thẻ; thẻ luôn nằm dưới mặt trước phong bì nên ảnh trượt lên từ trong túi, không đè lên
+      .set(q(".envelope__flap"), { zIndex: 0 }, 0.6)
       .to(q(".envelope__card"), { yPercent: -50, duration: 1, ease: "power1.out" }, 0.6)
       .call(() => setState("fading"), [], 1.8)
       .call(finish, [], 2.6)

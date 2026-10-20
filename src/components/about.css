@@ -1,91 +1,157 @@
-.about__heading {
-  margin: 0 0 var(--space-8);
-  font-family: var(--font-signature);
-  font-weight: 400;
-  font-size: var(--fs-70);
-  color: var(--wine);
+/*
+ * "About us" theo trang mẫu. Mỗi người là một khung có cùng bề rộng với trang (container query); vị trí và kích thước
+ * tính theo bề rộng khung (% và cqw) lấy từ số đo của mẫu nên co giãn đúng tỷ lệ ở mọi màn hình.
+ */
+.about {
+  padding-block: 0;
 }
 
 .about__person {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
-  align-items: center;
-  gap: var(--space-4);
-  max-width: 52rem;
-  margin: 0 auto var(--space-12);
-  /* Chừa chỗ cho nhãn dọc Bride/Groom nằm trong khung, không tràn ra ngoài màn hình */
-  padding-inline: clamp(1.75rem, 6vw, 4rem);
+  container-type: inline-size;
+  width: min(100%, 44rem);
+  margin-inline: auto;
 }
 
-.about__card {
-  --fs-card: clamp(1.05rem, 0.55rem + 2.5vw, 2.125rem);
-  display: grid;
-  align-content: center;
-  gap: var(--space-3);
-  min-height: clamp(14rem, 40vw, 22rem);
-  padding: var(--space-6) var(--space-2);
-  border: 2px solid var(--blush);
-  /* Họ tên và ngày sinh dài hơn khung hẹp trên điện thoại: cho xuống dòng thay vì bị cắt */
-  overflow-wrap: anywhere;
-  text-align: center;
-  font-family: var(--font-hand);
-  color: var(--ink);
+.about__person > * {
+  position: absolute;
 }
 
-.about__name {
+/* Cô dâu: cao 146cqw; chú rể: cao 158cqw */
+.about__person--bride {
+  aspect-ratio: 100 / 146;
+}
+
+.about__person--groom {
+  aspect-ratio: 100 / 158;
+}
+
+.about__heading {
+  left: 2cqw;
+  top: 0;
   margin: 0;
+  font-family: var(--font-signature);
   font-weight: 400;
-  font-size: var(--fs-card);
+  font-size: var(--o-37);
   line-height: 1.2;
-}
-
-.about__detail {
-  margin: 0;
-  font-size: var(--fs-card);
-  line-height: 1.2;
+  color: var(--wine);
 }
 
 .about__photo {
-  width: 100%;
-  aspect-ratio: 3 / 4;
   object-fit: cover;
+  height: auto;
+}
+
+.about__card {
+  display: grid;
+  align-content: center;
+  gap: 1cqw;
+  padding: 2cqw 1cqw;
+  border: 1px solid color-mix(in srgb, var(--wine) 60%, transparent);
+  background: color-mix(in srgb, var(--rose) 14%, transparent);
+  text-align: center;
+  font-family: var(--font-hand);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  /* Thẻ nằm trên mép ảnh dọc (ảnh đè lên thẻ 4% bề rộng) */
+  z-index: 2;
+}
+
+.about__name,
+.about__detail {
+  margin: 0;
+  font-weight: 400;
+  /* Mẫu 18.7px ở 390px; tên dài phải vừa thẻ hẹp (33% bề rộng) */
+  font-size: clamp(1rem, 4.8vw, 1.5rem);
+  line-height: 1.3;
+}
+
+.about__frame {
+  border: 1px solid color-mix(in srgb, var(--wine) 60%, transparent);
+}
+
+.about__wide {
+  object-fit: cover;
+  height: auto;
 }
 
 .about__label {
-  position: absolute;
-  top: 0;
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: var(--fs-54);
-  letter-spacing: 0.15em;
+  font-weight: 700;
+  font-size: var(--o-24);
+  letter-spacing: 0.23em;
   color: var(--blush);
 }
 
-.about__person--bride .about__label {
-  right: 0;
+/* Cô dâu: ảnh dọc bên phải, thẻ bên trái; ảnh ngang bên trái, khung lệch sang phải; nhãn bên phải */
+.about__person--bride .about__photo {
+  left: 38cqw;
+  top: 13cqw;
+  width: 58cqw;
+  aspect-ratio: 58 / 77;
 }
 
-/* Chú rể: ảnh bên trái, thẻ bên phải */
-.about__person--groom {
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+.about__person--bride .about__card {
+  /* Ảnh dọc đè lên mép phải thẻ 4cqw: chừa chỗ để chữ viết tay không chui xuống dưới ảnh */
+  padding-right: 6cqw;
+  left: 9cqw;
+  top: 19cqw;
+  width: 33cqw;
+  height: 63cqw;
+}
+
+.about__person--bride .about__wide {
+  left: 4cqw;
+  top: 95cqw;
+  width: 74cqw;
+  aspect-ratio: 74 / 47;
+}
+
+.about__person--bride .about__frame {
+  left: 2cqw;
+  top: 99cqw;
+  width: 83cqw;
+  height: 46cqw;
+}
+
+.about__person--bride .about__label {
+  left: 81cqw;
+  top: 97cqw;
+}
+
+/* Chú rể: đối xứng; ảnh dọc bên trái, thẻ bên phải, ảnh ngang bên phải, khung lệch sang trái, nhãn bên trái */
+.about__person--groom .about__photo {
+  left: 8cqw;
+  top: 13cqw;
+  width: 61cqw;
+  aspect-ratio: 61 / 81;
 }
 
 .about__person--groom .about__card {
-  order: 2;
+  /* Ảnh dọc đè lên mép trái thẻ: chừa chỗ bên trái */
+  padding-left: 6cqw;
+  left: 64cqw;
+  top: 21cqw;
+  width: 33cqw;
+  height: 63cqw;
 }
 
-.about__person--groom .about__photo {
-  order: 1;
+.about__person--groom .about__wide {
+  left: 22cqw;
+  top: 107cqw;
+  width: 73cqw;
+  aspect-ratio: 73 / 47;
+}
+
+.about__person--groom .about__frame {
+  left: 15cqw;
+  top: 112cqw;
+  width: 74cqw;
+  height: 45cqw;
 }
 
 .about__person--groom .about__label {
-  left: 0;
-}
-
-@media (max-width: 34rem) {
-  .about__label {
-    display: none;
-  }
+  left: 4cqw;
+  top: 107cqw;
 }

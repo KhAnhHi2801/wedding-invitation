@@ -7,7 +7,7 @@
 
 .thanks__animation {
   display: block;
-  width: min(70vw, 22rem);
+  width: min(34%, 12rem);
 }
 
 .thanks__animation img {

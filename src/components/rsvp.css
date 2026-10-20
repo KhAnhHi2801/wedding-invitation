@@ -8,8 +8,8 @@
   display: grid;
   justify-items: center;
   gap: var(--space-3);
-  width: min(100% - 2 * var(--gutter), 32rem);
-  padding: clamp(6rem, 24vw, 10rem) var(--space-6) var(--space-12);
+  width: min(71%, 28rem);
+  padding: clamp(1.75rem, 8vw, 3rem) var(--space-6) var(--space-8);
   background: var(--rose);
   /* Bán kính lớn hơn nửa chiều rộng: CSS tự thu về đúng nửa vòng tròn */
   border-radius: 16rem 16rem 0 0;

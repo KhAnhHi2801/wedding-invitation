@@ -62,9 +62,17 @@
 .ceremony__families {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* 4 hàng: tên bên, ông, bà, nơi ở. Mỗi nhà dùng lưới con nên dòng nào dài xuống dòng thì hàng đó cao lên ở cả hai cột */
+  grid-template-rows: repeat(4, auto);
   gap: var(--space-6);
   margin-top: var(--space-12);
   text-align: center;
+}
+
+.ceremony__family {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
 }
 
 .ceremony__family-name {
@@ -77,6 +85,7 @@
 
 .ceremony__parent {
   margin: 0;
+  text-wrap: balance;
   font-size: var(--o-14);
   line-height: 1.4;
   color: var(--black);

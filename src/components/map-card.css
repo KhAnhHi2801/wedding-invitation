@@ -9,8 +9,8 @@
 }
 
 .map__card {
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  width: 90%;
+  aspect-ratio: 83 / 51;
   background: color-mix(in srgb, var(--rose) 35%, var(--paper));
   border: 1px solid var(--blush);
   overflow: hidden;
