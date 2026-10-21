@@ -1,8 +1,7 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
-import { weddingConfig } from "../config/wedding-config"
 import { GUESTS_MAX, NAME_MAX as RSVP_NAME_MAX, NOTE_MAX } from "./rsvp-validation"
-import { INKS } from "./wish-style"
+import { DEFAULT_INK } from "./wish-style"
 import { MESSAGE_MAX, MESSAGE_MIN, NAME_MAX, PROFANITY_WORDS } from "./wish-validation"
 
 /** Website và `apps-script/wishes.gs` giữ bản sao của các hằng số này: test này bắt trường hợp chỉ sửa một nơi. */
@@ -33,9 +32,8 @@ describe("hợp đồng website và wishes.gs", () => {
     expect([...listVar("PROFANITY")].sort()).toEqual([...PROFANITY_WORDS].sort())
   })
 
-  it("khóa màu chữ khớp nhau và đều có tên trong config", () => {
-    expect(listVar("INK_KEYS")).toEqual(INKS.map((ink) => ink.key))
-    for (const ink of INKS) expect(weddingConfig.garden.inkNames[ink.key], ink.key).toBeTruthy()
+  it("khóa màu mặc định gửi lên Sheet nằm trong danh sách script chấp nhận", () => {
+    expect(listVar("INK_KEYS")).toContain(DEFAULT_INK)
   })
 
   it("mọi mã lỗi script trả về đều được client xử lý (không rơi vào 'server' tạm thời)", () => {

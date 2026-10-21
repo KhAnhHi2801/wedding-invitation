@@ -94,9 +94,6 @@ export interface GardenText {
   nameLabel: string;
   messageLabel: string;
   suggestAnother: string;
-  inkLabel: string;
-  /** Tên từng màu chữ, theo khóa trong `src/lib/wish-style.ts` */
-  inkNames: Record<string, string>;
   send: string;
   sendSub: string;
   doneTitle: string;
@@ -136,7 +133,6 @@ export interface WishGalleryText {
   listLabel: string;
   close: string;
   flowerLabel: string;
-  inkLabel: string;
   /** Tên người gửi khi lời chúc thêm tay vào Sheet không có tên */
   anonymous: string;
 }
@@ -400,19 +396,6 @@ export const weddingConfig: WeddingConfig = {
     nameLabel: "Tên người gửi",
     messageLabel: "Lời chúc gửi đôi mình",
     suggestAnother: "Chọn một mầm hoa khác",
-    inkLabel: "Chọn sắc màu cho lời thương",
-    inkNames: {
-      brown: "Nâu mực",
-      navy: "Xanh mực",
-      forest: "Xanh rêu",
-      wine: "Đỏ rượu vang",
-      plum: "Tím mận",
-      teal: "Xanh ngọc",
-      earth: "Nâu đất",
-      rose: "Hồng mận trầm",
-      charcoal: "Xám than",
-      olive: "Xanh olive đậm",
-    },
     send: "Gieo lời thương",
     sendSub: "Một lời chúc nhỏ, một kỷ niệm dài lâu.",
     doneTitle: "Hoa của bạn đã nở",
@@ -446,7 +429,6 @@ export const weddingConfig: WeddingConfig = {
     listLabel: "Các lời chúc",
     close: "Đóng",
     flowerLabel: "Loài hoa",
-    inkLabel: "Màu mực",
     anonymous: "Một người bạn",
   },
   gift: {

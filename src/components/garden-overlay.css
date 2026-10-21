@@ -306,8 +306,7 @@
   margin-bottom: var(--space-4);
 }
 
-.gov__field-row label,
-.gov__inks legend {
+.gov__field-row label {
   padding: 0;
   font-size: var(--fs-14);
   font-weight: 700;
@@ -353,47 +352,6 @@
   color: var(--wine);
 }
 
-.gov__inks {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
-  gap: var(--space-2);
-  width: 100%;
-  min-width: 0;
-  margin: 0 0 var(--space-6);
-  padding: 0;
-  border: 0;
-}
-
-.gov__inks legend {
-  grid-column: 1 / -1;
-  line-height: 1.4;
-}
-
-.gov__ink {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  cursor: pointer;
-}
-
-.gov__ink-dot {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  border: 2px solid var(--white);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 30%, var(--paper));
-}
-
-.gov__ink:has(input:checked) .gov__ink-dot {
-  box-shadow: 0 0 0 3px var(--wine);
-}
-
-.gov__ink:has(input:focus-visible) .gov__ink-dot {
-  box-shadow: 0 0 0 3px var(--wine), 0 0 0 5px var(--paper);
-}
-
 .gov__body form .gov__button {
   display: flex;
   width: 100%;
@@ -427,7 +385,7 @@
   }
 }
 
-/* Mẩu giấy xem trước: giống một ô lời chúc trong sổ (hoa dán ở mép trên, chữ viết tay theo màu khách chọn) */
+/* Mẩu giấy xem trước: giống một ô lời chúc trong sổ (hoa dán ở mép trên, tên và lời chúc theo bộ màu chung của trang) */
 .gov__note {
   position: relative;
   margin: var(--space-6) auto var(--space-2);
@@ -457,14 +415,15 @@
   /* Allura nhỏ hơn các font khác cùng cỡ nên tăng thêm */
   font-size: calc(var(--fs-26) * 1.35);
   line-height: 1.2;
-  color: var(--wish-ink, var(--wine));
+  color: var(--wine);
 }
 
 .gov__note-text {
   margin: var(--space-1) 0 0;
+  font-family: var(--font-display);
   font-size: var(--fs-16);
   line-height: 1.5;
-  color: var(--wish-ink, var(--ink));
+  color: var(--ink);
   overflow-wrap: anywhere;
   /* Lời chúc dài chỉ hiện vài dòng đầu; bản đầy đủ nằm trong sổ */
   display: -webkit-box;

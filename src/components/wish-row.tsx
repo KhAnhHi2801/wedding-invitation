@@ -1,5 +1,4 @@
 import { weddingConfig } from "../config/wedding-config"
-import { inkColor } from "../lib/wish-style"
 import type { PublicWish } from "../lib/wishes-api"
 import { FlowerArt } from "./flower-art"
 
@@ -13,7 +12,7 @@ interface WishRowProps {
   onOpen: (wish: PublicWish, opener: HTMLElement) => void
 }
 
-/** Một dòng lời chúc: hoa nhỏ, tên, hai dòng đầu theo màu mực. Cả dòng là vùng bấm để mở chi tiết. */
+/** Một dòng lời chúc: hoa nhỏ, tên, hai dòng đầu lời chúc. Cả dòng là vùng bấm để mở chi tiết. */
 export function WishRow({ wish, onOpen }: WishRowProps) {
   const { wishGallery: text } = weddingConfig
   const name = wish.name || text.anonymous
@@ -31,7 +30,7 @@ export function WishRow({ wish, onOpen }: WishRowProps) {
         <span className="wish-gallery__row-name" translate="no">
           {name}
         </span>
-        <span className="wish-gallery__row-text" style={{ color: inkColor(wish.ink) }}>
+        <span className="wish-gallery__row-text">
           {wish.message}
         </span>
       </span>

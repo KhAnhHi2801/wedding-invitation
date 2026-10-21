@@ -4,7 +4,6 @@ import {
   useId,
   useRef,
   useState,
-  type CSSProperties,
   type FormEvent,
 } from "react";
 import { weddingConfig } from "../config/wedding-config";
@@ -18,7 +17,7 @@ import { FLOWER_ENTRIES } from "../lib/flower-entries";
 import { gardenOverlay } from "../lib/garden-overlay";
 import { getGuestName } from "../lib/guest";
 import { lockScroll } from "../lib/scroll-lock";
-import { INKS, inkColor } from "../lib/wish-style";
+import { DEFAULT_INK } from "../lib/wish-style";
 import {
   MESSAGE_MAX,
   NAME_MAX,
@@ -89,14 +88,12 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
   const [name, setName] = useState(initialName);
   const [message, setMessage] = useState("");
   const [placeholder, setPlaceholder] = useState("");
-  const [ink, setInk] = useState(INKS[0].key);
   const [errors, setErrors] = useState<WishErrors>({});
   const [reply, setReply] = useState("");
   // Lời chúc vừa gửi, để hiện mẩu giấy xem trước ở bước hoàn thành
   const [sent, setSent] = useState<{
     name: string;
     message: string;
-    ink: string;
   } | null>(null);
 
   const entry =
@@ -187,11 +184,11 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
       name: name.trim(),
       message: message.trim(),
       flower: entry.def.id,
-      ink,
+      ink: DEFAULT_INK,
     };
     submitWish(wish);
     addOwnWish(wish);
-    setSent({ name: wish.name, message: wish.message, ink: wish.ink });
+    setSent({ name: wish.name, message: wish.message });
     setReply(pickRandom(entry.wish.replies));
     setStep("done");
   };
@@ -388,29 +385,6 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
                 </button>
               </div>
 
-              <fieldset className="gov__inks">
-                <legend>{garden.inkLabel}</legend>
-                {INKS.map((item) => (
-                  <label
-                    key={item.key}
-                    className="gov__ink"
-                    title={garden.inkNames[item.key]}
-                  >
-                    <input
-                      type="radio"
-                      name={id("ink")}
-                      className="sr-only"
-                      checked={ink === item.key}
-                      onChange={() => setInk(item.key)}
-                    />
-                    <span
-                      className="gov__ink-dot"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <span className="sr-only">{garden.inkNames[item.key]}</span>
-                  </label>
-                ))}
-              </fieldset>
 
               <button type="submit" className="gov__button">
                 {garden.send}
@@ -424,7 +398,6 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
               {sent && (
                 <figure
                   className="gov__note"
-                  style={{ "--wish-ink": inkColor(sent.ink) } as CSSProperties}
                 >
                   <span className="gov__note-flower">
                     <FlowerArt id={entry.def.id} seed={entry.def.id} sizes="120px" />

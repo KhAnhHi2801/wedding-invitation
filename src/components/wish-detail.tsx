@@ -3,7 +3,6 @@ import { weddingConfig } from "../config/wedding-config"
 import { entryFor } from "../lib/flower-entries"
 import { lockScroll } from "../lib/scroll-lock"
 import type { PublicWish } from "../lib/wishes-api"
-import { inkColor } from "../lib/wish-style"
 import { FlowerArt } from "./flower-art"
 import "./wish-detail.css"
 
@@ -17,13 +16,12 @@ interface WishDetailProps {
  * chúc cần xem nên mở ngay khi dựng. Việc đóng đi qua `onClose` để nơi gọi đồng bộ với lịch sử trình duyệt (nút Back).
  */
 export function WishDetail({ wish, onClose }: WishDetailProps) {
-  const { wishGallery, garden } = weddingConfig
+  const { wishGallery } = weddingConfig
   const nameId = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
   // Chỉ coi là bấm ra ngoài khi cả nhấn xuống và nhả ra đều ở vùng nền (kéo bôi đen chữ ra ngoài không được đóng)
   const pressedOnBackdrop = useRef(false)
   const entry = entryFor(wish.flower, wish.name + wish.message)
-  const color = inkColor(wish.ink)
   const name = wish.name || wishGallery.anonymous
 
   useEffect(() => {
@@ -63,20 +61,13 @@ export function WishDetail({ wish, onClose }: WishDetailProps) {
         <h2 className="wd__name" id={nameId} translate="no">
           {name}
         </h2>
-        <p className="wd__message" style={{ color }} tabIndex={0} role="region" aria-labelledby={nameId}>
+        <p className="wd__message" tabIndex={0} role="region" aria-labelledby={nameId}>
           {wish.message}
         </p>
         <dl className="wd__meta">
           <div>
             <dt>{wishGallery.flowerLabel}</dt>
             <dd>{entry.wish.name}</dd>
-          </div>
-          <div>
-            <dt>{wishGallery.inkLabel}</dt>
-            <dd>
-              <span className="wd__dot" style={{ background: color ?? "var(--ink)" }} aria-hidden="true" />
-              {garden.inkNames[wish.ink] ?? garden.inkNames.brown}
-            </dd>
           </div>
         </dl>
         <button type="button" className="wd__close" onClick={onClose}>

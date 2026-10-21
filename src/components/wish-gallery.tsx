@@ -5,7 +5,6 @@ import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { gardenOverlay } from "../lib/garden-overlay"
 import type { ImageKey } from "../lib/images"
 import { fillText, WISH_PREVIEW } from "../lib/wish-list"
-import { inkColor } from "../lib/wish-style"
 import type { PublicWish } from "../lib/wishes-api"
 import { loadWishes, useWishes } from "../lib/wishes-store"
 import { Photo } from "./photo"
@@ -136,7 +135,7 @@ export function WishGallery() {
           <span className="wish-gallery__feature-flower">
             <WishFlower wish={featured} />
           </span>
-          <span className="wish-gallery__quote" style={{ color: inkColor(featured.ink) }}>
+          <span className="wish-gallery__quote">
             {featured.message}
           </span>
           <span className="wish-gallery__feature-name" translate="no">
