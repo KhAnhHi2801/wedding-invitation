@@ -12,7 +12,7 @@ import {
   BloomPlayer,
   type BloomMode,
 } from "../features/flower-bloom/BloomPlayer";
-import { FlowerMiniPreview } from "../features/flower-bloom/FlowerMiniPreview";
+import { FlowerArt } from "./flower-art";
 import { prefersReducedMotion } from "../lib/device-tier";
 import { FLOWER_ENTRIES } from "../lib/flower-entries";
 import { gardenOverlay } from "../lib/garden-overlay";
@@ -301,7 +301,7 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
                       }}
                     />
                     <span className="gov__card-icon">
-                      <FlowerMiniPreview flower={item.def} />
+                      <FlowerArt id={item.def.id} seed={item.def.id} sizes="96px" />
                     </span>
                     <span className="gov__card-name">{item.wish.name}</span>
                   </label>
@@ -427,7 +427,7 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
                   style={{ "--wish-ink": inkColor(sent.ink) } as CSSProperties}
                 >
                   <span className="gov__note-flower">
-                    <FlowerMiniPreview flower={entry.def} />
+                    <FlowerArt id={entry.def.id} seed={entry.def.id} sizes="120px" />
                   </span>
                   <figcaption className="gov__note-name">
                     {sent.name}

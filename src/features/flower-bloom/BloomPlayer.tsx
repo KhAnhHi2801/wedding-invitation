@@ -29,7 +29,7 @@ export function BloomPlayer({
   onGlowComplete,
   children,
 }: BloomPlayerProps) {
-  const { progress, stage, play } = useBloomProgress(onGrown);
+  const { progress, stage, play } = useBloomProgress(onGrown, flower.duration);
 
   // Layout effect: đặt lại tiến trình về 0 trước khi trình duyệt vẽ, khỏi chớp một khung hoa đã nở khi bắt đầu gieo lần nữa
   useLayoutEffect(() => {

@@ -1,22 +1,20 @@
 import React, { memo, type AnimationEvent, type CSSProperties } from 'react';
 import type { FlowerDefinition, GrowthStage } from '../../types/flower';
-import {
-  BabyBreathRenderer,
-  PeonyRenderer,
-  DaisyRenderer,
-  TulipRenderer,
-  SunflowerRenderer,
-  LavenderRenderer,
-  RoseRenderer,
-  CallaLilyRenderer,
-  LotusRenderer,
-  CherryBlossomRenderer,
-  OrchidRenderer,
-  CarnationRenderer,
-  HydrangeaRenderer,
-  MagnoliaRenderer,
-  CosmosRenderer,
-} from './FlowerSpeciesRenderers';
+import { DaisyBloom } from './daisy-renderer';
+import { SunflowerBloom } from './sunflower-renderer';
+import { CosmosBloom } from './cosmos-renderer';
+import { CherryBlossomBloom } from './cherry-renderer';
+import { TulipBloom } from './tulip-renderer';
+import { RoseBloom } from './rose-renderer';
+import { PeonyBloom } from './peony-renderer';
+import { LotusBloom } from './lotus-renderer';
+import { MagnoliaBloom } from './magnolia-renderer';
+import { CarnationBloom } from './carnation-renderer';
+import { CallaBloom } from './calla-renderer';
+import { OrchidBloom } from './orchid-renderer';
+import { HydrangeaBloom } from './hydrangea-renderer';
+import { BabyBreathBloom } from './baby-renderer';
+import { LavenderBloom } from './lavender-renderer';
 import './bloom.css';
 
 interface BotanicalFlowerEngineProps {
@@ -50,43 +48,41 @@ const POLLEN = [
  * - Quầng sáng là gradient tĩnh, không dùng filter blur.
  * - Không có will-change cố định.
  */
-export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(({ flower, stage, progress, bloomed = false, onGlowComplete, lite = false, showSeed = true }) => {
-  const props = { stage, progress, def: flower };
-
+export const BotanicalFlowerEngine: React.FC<BotanicalFlowerEngineProps> = memo(({ flower, progress, bloomed = false, onGlowComplete, lite = false, showSeed = true }) => {
   const renderSpeciesContent = () => {
     switch (flower.id) {
       case 'baby-breath':
-        return <BabyBreathRenderer {...props} />;
+        return <BabyBreathBloom progress={progress} def={flower} />;
       case 'peony':
-        return <PeonyRenderer {...props} />;
+        return <PeonyBloom progress={progress} def={flower} />;
       case 'daisy':
-        return <DaisyRenderer {...props} />;
+        return <DaisyBloom progress={progress} def={flower} />;
       case 'tulip':
-        return <TulipRenderer {...props} />;
+        return <TulipBloom progress={progress} def={flower} />;
       case 'sunflower':
-        return <SunflowerRenderer {...props} />;
+        return <SunflowerBloom progress={progress} def={flower} />;
       case 'lavender':
-        return <LavenderRenderer {...props} />;
+        return <LavenderBloom progress={progress} def={flower} />;
       case 'rose':
-        return <RoseRenderer {...props} />;
+        return <RoseBloom progress={progress} def={flower} />;
       case 'calla-lily':
-        return <CallaLilyRenderer {...props} />;
+        return <CallaBloom progress={progress} def={flower} />;
       case 'lotus':
-        return <LotusRenderer {...props} />;
+        return <LotusBloom progress={progress} def={flower} />;
       case 'cherry-blossom':
-        return <CherryBlossomRenderer {...props} />;
+        return <CherryBlossomBloom progress={progress} def={flower} />;
       case 'orchid':
-        return <OrchidRenderer {...props} />;
+        return <OrchidBloom progress={progress} def={flower} />;
       case 'carnation':
-        return <CarnationRenderer {...props} />;
+        return <CarnationBloom progress={progress} def={flower} />;
       case 'hydrangea':
-        return <HydrangeaRenderer {...props} />;
+        return <HydrangeaBloom progress={progress} def={flower} />;
       case 'magnolia':
-        return <MagnoliaRenderer {...props} />;
+        return <MagnoliaBloom progress={progress} def={flower} />;
       case 'cosmos':
-        return <CosmosRenderer {...props} />;
+        return <CosmosBloom progress={progress} def={flower} />;
       default:
-        return <TulipRenderer {...props} />;
+        return <TulipBloom progress={progress} def={flower} />;
     }
   };
 
