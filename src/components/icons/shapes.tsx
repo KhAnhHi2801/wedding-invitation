@@ -53,6 +53,50 @@ export const ToastIcon = (props: IconProps) => (
   </svg>
 )
 
+/* Ba hình minh họa thêm cho lịch trình lễ công giáo, cùng bảng màu và khung 64x40 với ba hình trên. */
+
+/** Nhà thờ có tháp chuông và thánh giá: dùng cho Thánh lễ hôn phối. */
+export const ChurchIcon = (props: IconProps) => (
+  <svg {...art} {...props}>
+    <rect x="8" y="22" width="19" height="16" fill="#fbdde4" />
+    <path d="M6 22l11.500-7L29 22z" fill="#f2a3b6" />
+    <rect x="37" y="22" width="19" height="16" fill="#fbdde4" />
+    <path d="M35 22l11.500-7L58 22z" fill="#f2a3b6" />
+    <rect x="26" y="12" width="12" height="26" fill="#fbdde4" />
+    <path d="M24 12l8-8 8 8z" fill="#f2a3b6" />
+    <path d="M32 0.500v5M29.800 2.600h4.400" stroke="#f7d56a" strokeWidth="1.500" strokeLinecap="round" />
+    <circle cx="32" cy="20" r="2.600" fill="#7fb3e6" />
+    <path d="M29 38v-6a3 3 0 0 1 6 0v6z" fill="#e58aa0" />
+    <rect x="13" y="27" width="4" height="6" rx="2" fill="#e58aa0" />
+    <rect x="47" y="27" width="4" height="6" rx="2" fill="#e58aa0" />
+    <path d="M2 38h60v2H2z" fill="#e58aa0" />
+  </svg>
+)
+
+/** Hộp quà thắt nơ vàng: dùng cho lễ ăn hỏi. */
+export const GiftBoxIcon = (props: IconProps) => (
+  <svg {...art} {...props}>
+    <rect x="16" y="18" width="32" height="20" rx="1.500" fill="#f2a3b6" />
+    <rect x="13" y="12" width="38" height="8" rx="1.500" fill="#e58aa0" />
+    <rect x="29" y="12" width="6" height="26" fill="#f7d56a" />
+    <path d="M32 12c-6-9-15-5-10 0 3 2.500 10 0 10 0z" fill="#fbe08a" stroke="#e8ad84" strokeWidth="1" />
+    <path d="M32 12c6-9 15-5 10 0-3 2.500-10 0-10 0z" fill="#fbe08a" stroke="#e8ad84" strokeWidth="1" />
+    <circle cx="32" cy="12" r="2" fill="#e8ad84" />
+    <path d="M2 38h60v2H2z" fill="#e58aa0" />
+  </svg>
+)
+
+/** Cặp nhẫn cưới lồng vào nhau, nhẫn trái gắn viên đá: dùng cho hôn lễ. */
+export const RingsIcon = (props: IconProps) => (
+  <svg {...art} {...props}>
+    <circle cx="38" cy="24" r="11" fill="none" stroke="#eec04f" strokeWidth="4" />
+    <circle cx="26" cy="24" r="11" fill="none" stroke="#f7d56a" strokeWidth="4" />
+    <path d="M29.760 13.660A11 11 0 0 1 33.780 16.220" fill="none" stroke="#f7d56a" strokeWidth="4" />
+    <path d="M26 4.500l4 4.500-4 5-4-5z" fill="#bfe3f5" stroke="#7fb3e6" strokeWidth="1" strokeLinejoin="round" />
+    <path d="M44 6v6M41 9h6" stroke="#f7d56a" strokeWidth="1.400" strokeLinecap="round" />
+  </svg>
+)
+
 export const ChairIcon = (props: IconProps) => (
   <svg {...base} {...props}>
     <path {...line} d="M22 8h20l2 24H20zM18 32h28M22 32v22M42 32v22M20 44h24" />

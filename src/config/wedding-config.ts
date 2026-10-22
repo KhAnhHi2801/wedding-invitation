@@ -30,7 +30,8 @@ export interface Family {
 export interface TimelineItem {
   time: string;
   label: string;
-  icon: "car" | "camera" | "toast";
+  /** car: đón dâu · camera: hai tay ôm tim (chụp ảnh, khoảnh khắc) · toast: khai tiệc · church: thánh lễ · gift: ăn hỏi · rings: hôn lễ */
+  icon: "car" | "camera" | "toast" | "church" | "gift" | "rings";
 }
 
 export interface EventInfo {
@@ -44,8 +45,10 @@ export interface EventInfo {
   mapsQuery: string;
 }
 
-/** Phần riêng của một bên (nhà trai/nhà gái): chỉ ghi trường khác `event`/`timeline` mặc định, trường bỏ trống lấy mặc định. */
-export type SideOverride = Partial<EventInfo> & { timeline?: TimelineItem[] };
+/** Thông tin đầy đủ của một bên (nhà trai/nhà gái): địa điểm, giờ tổ chức và lịch trình riêng. */
+export interface SideEvent extends EventInfo {
+  timeline: TimelineItem[];
+}
 
 export interface BankAccount {
   role: string;
@@ -124,7 +127,7 @@ export interface GardenText {
   };
 }
 
-/** Phần "Lời chúc": ảnh hoa, cuốn sổ lời chúc và chi tiết từng lời. `{n}` và `{name}` được thay khi hiển thị. */
+/** Phần "Lời chúc": cuốn sổ lưu bút lò xo và chi tiết từng lời. `{n}` và `{name}` được thay khi hiển thị. */
 export interface WishGalleryText {
   label: string;
   subtitle: string;
@@ -175,10 +178,12 @@ export interface WeddingConfig {
   couple: { bride: Person; groom: Person; connector: string };
   /** Tên query chọn bên, ví dụ `?from=bride` (nhà gái) hoặc `?from=groom` (nhà trai) */
   sideParam: string;
-  /** Mặc định khi link không có `from` hoặc `from` không hợp lệ */
-  event: EventInfo;
-  /** Mỗi bên có thể có địa điểm, giờ tổ chức và lịch trình riêng */
-  sides: { groom: SideOverride; bride: SideOverride };
+  /** ISO có múi giờ: mốc đếm ngược ở ảnh bìa, chung cho mọi bên (ngày đầu tiên của các lễ, không phụ thuộc `?from=`) */
+  countdownTo: string;
+  /** Bên được dùng khi link không có `from` hoặc `from` không hợp lệ */
+  defaultSide: "groom" | "bride";
+  /** Mỗi bên khai báo đủ địa điểm, giờ tổ chức và lịch trình của riêng mình */
+  sides: { groom: SideEvent; bride: SideEvent };
   invitation: { heading: string; lines: string[] };
   ceremony: {
     titleLines: string[];
@@ -200,7 +205,6 @@ export interface WeddingConfig {
   };
   about: { heading: string; brideLabel: string; groomLabel: string };
   saveTheDate: { heading: string; photo: ImageKey };
-  timeline: TimelineItem[];
   gallery: {
     /** Tiêu đề chữ trắng giãn rộng ở đầu khối ảnh */
     title: string;
@@ -253,11 +257,63 @@ export interface WeddingConfig {
   music: { src: string; autoplay: boolean; volume: number };
 }
 
+/*
+ * ===== DỮ LIỆU GỐC =====
+ * Mỗi thông tin chỉ ghi một lần ở đây; các phần trong `weddingConfig` bên dưới tự ghép lại từ các giá trị này
+ * (tên, địa chỉ, ngày, giờ, âm lịch). Đổi ở đây là cập nhật khắp thiệp.
+ */
+
+/** Cô dâu và chú rể: tên hiển thị, họ tên, ngày sinh, bố mẹ và nơi ở (thôn, xã). */
+const bride = {
+  name: "Ngọc Khánh",
+  fullName: "Nguyễn Thị Khánh",
+  birthDate: "28/01/2001",
+  father: "Nguyễn Vũ Cử",
+  mother: "Trần Thị Mỳ",
+  village: "Thôn Tiến Thắng",
+  commune: "Xã Yên Đồng",
+};
+const groom = {
+  name: "Quốc Tuân",
+  fullName: "Tạ Quốc Tuân",
+  birthDate: "30/04/1994",
+  father: "Tạ Văn Tuấn",
+  mother: "Phạm Thị Sáng",
+  village: "Thôn Yên Lâm",
+  commune: "Xã Yên Mạc",
+};
+
+const PROVINCE = "Ninh Bình";
+const CHURCH = "Nhà thờ Giáo xứ Vỉ Nhuế";
+
+type Home = { village: string; commune: string };
+/** "Thôn Yên Lâm, Xã Yên Mạc, Tỉnh Ninh Bình": quê quán, địa chỉ tiệc */
+const fullAddress = (home: Home) =>
+  `${home.village}, ${home.commune}, Tỉnh ${PROVINCE}`;
+/** "Thôn Yên Lâm, Xã Yên Mạc, Ninh Bình": nơi ở của gia đình, truy vấn bản đồ */
+const shortAddress = (home: Home) => `${home.commune}, ${PROVINCE}`;
+
+/** Ngày dương (yyyy-mm-dd) kèm âm lịch của hai ngày lễ: thứ Bảy ở nhà gái, Chủ nhật ở nhà trai. */
+const brideDay = {
+  date: "2026-11-28",
+  lunar: "(Tức ngày 20 tháng 10 năm Bính Ngọ)",
+};
+const groomDay = {
+  date: "2026-11-29",
+  lunar: "(Tức ngày 21 tháng 10 năm Bính Ngọ)",
+};
+
+/** Giờ từng mốc (hh:mm). Dùng cho cả lịch trình lẫn `startsAt`/`countdownTo`, nên đổi giờ một chỗ. */
+const brideTime = { engagement: "07:30", mass: "08:30", party: "10:00" };
+const groomTime = { pickup: "07:00", ceremony: "11:00" };
+
+/** ISO có múi giờ Việt Nam từ ngày và giờ ở trên. */
+const at = (date: string, time: string) => `${date}T${time}:00+07:00`;
+
 export const weddingConfig: WeddingConfig = {
   meta: {
-    title: "Thiệp cưới Mai Anh & Quốc Huy",
-    description:
-      "Trân trọng kính mời bạn đến dự lễ cưới của Mai Anh và Quốc Huy.",
+    title: `${bride.name} & ${groom.name}`,
+    description: `Trân trọng kính mời bạn đến dự lễ thành hôn của ${bride.name} và ${groom.name}.`,
     siteUrl: "",
     ogImage: "og.jpg",
     themeColor: "#8B2F30",
@@ -266,7 +322,7 @@ export const weddingConfig: WeddingConfig = {
     eyebrow: "WEDDING INVITATION",
     title: "THIỆP MỜI CƯỚI",
     photo: "hero/couple",
-    coverPhoto: "photos/photo-01",
+    coverPhoto: "hero/couple",
     yearPrefix: "NĂM",
     inviteLine: "TRÂN TRỌNG KÍNH MỜI",
     guestFallback: "Quý Khách",
@@ -275,44 +331,51 @@ export const weddingConfig: WeddingConfig = {
   sideParam: "from",
   couple: {
     bride: {
-      name: "Mai Anh",
-      fullName: "Nguyễn Mai Anh",
-      birthDate: "12/05/2000",
-      hometown: "TP. Điện Biên",
+      name: bride.name,
+      fullName: bride.fullName,
+      birthDate: bride.birthDate,
+      hometown: shortAddress(bride),
       photo: "photos/photo-06",
       widePhoto: "photos/photo-07",
     },
     groom: {
-      name: "Quốc Huy",
-      fullName: "Phạm Quốc Huy",
-      birthDate: "05/08/1995",
-      hometown: "TP. Hà Nội",
+      name: groom.name,
+      fullName: groom.fullName,
+      birthDate: groom.birthDate,
+      hometown: shortAddress(groom),
       photo: "photos/photo-05",
-      widePhoto: "photos/photo-04",
+      widePhoto: "photos/photo-08",
     },
     connector: "&",
   },
-  event: {
-    startsAt: "2026-12-24T10:30:00+07:00",
-    lunarText: "(Tức ngày 17 tháng 11 năm Bính Ngọ)",
-    venue: "TRỐNG ĐỒNG PALACE",
-    address: "(18A Lý Văn Phức, P. Ô Chợ Dừa, Tp Hà Nội)",
-    mapsQuery: "18A Lý Văn Phức, Ô Chợ Dừa, Đống Đa, Hà Nội",
-  },
+  // Lễ đầu tiên: ăn hỏi ở nhà gái, 7h30 sáng thứ Bảy 28/11
+  countdownTo: at(brideDay.date, brideTime.engagement),
+  defaultSide: "groom",
   sides: {
-    // Nhà trai dùng đúng thông tin mặc định ở `event` và `timeline`
-    groom: {},
-    // Ví dụ mẫu cho nhà gái (nội dung giả định, sửa lại cho đúng): link `?from=bride`
-    bride: {
-      startsAt: "2026-12-20T10:00:00+07:00",
-      lunarText: "(Tức ngày 13 tháng 11 năm Bính Ngọ)",
-      venue: "NHÀ VĂN HÓA THÀNH PHỐ ĐIỆN BIÊN",
-      address: "(Phường Mường Thanh, Tp Điện Biên Phủ)",
-      mapsQuery: "Nhà văn hóa thành phố Điện Biên Phủ",
+    // Nhà trai (link `?from=groom`): đón dâu 7h sáng Chủ nhật 29/11, hôn lễ tại tư gia 11h rồi đãi tiệc
+    groom: {
+      startsAt: at(groomDay.date, groomTime.ceremony),
+      lunarText: groomDay.lunar,
+      venue: "TƯ GIA NHÀ TRAI",
+      address: `(${fullAddress(groom)})`,
+      mapsQuery: fullAddress(groom),
       timeline: [
-        { time: "07:30", label: "Lễ Đón Dâu", icon: "car" },
-        { time: "09:00", label: "Chụp hình lưu niệm", icon: "camera" },
-        { time: "10:00", label: "Khai tiệc", icon: "toast" },
+        { time: groomTime.pickup, label: "Lễ Đón Dâu", icon: "car" },
+        { time: groomTime.ceremony, label: "Hôn Lễ tại tư gia", icon: "rings" },
+        { time: "Sau lễ", label: "Khai tiệc", icon: "toast" },
+      ],
+    },
+    // Nhà gái (link `?from=bride`): ăn hỏi 7h30, thánh lễ 8h30, tiệc 10h sáng thứ Bảy 28/11. Tư gia nhà gái nằm sát nhà thờ nên bản đồ chỉ về nhà thờ
+    bride: {
+      startsAt: at(brideDay.date, brideTime.party),
+      lunarText: brideDay.lunar,
+      venue: "TƯ GIA NHÀ GÁI",
+      address: `(Cạnh ${CHURCH}, ${fullAddress(bride)})`,
+      mapsQuery: `${CHURCH}, ${bride.commune}, ${PROVINCE}`,
+      timeline: [
+        { time: brideTime.engagement, label: "Lễ Ăn Hỏi", icon: "gift" },
+        { time: brideTime.mass, label: "Thánh Lễ Hôn Phối", icon: "church" },
+        { time: brideTime.party, label: "Khai tiệc", icon: "toast" },
       ],
     },
   },
@@ -328,15 +391,15 @@ export const weddingConfig: WeddingConfig = {
     titleLines: ["Lễ", "Thành", "Hôn"],
     groomFamily: {
       label: "Nhà Trai",
-      father: "Ông: Phạm Quang Hải",
-      mother: "Bà : Định Thị Mai",
-      place: "TP. Hà Nội",
+      father: `Ông: ${groom.father}`,
+      mother: `Bà: ${groom.mother}`,
+      place: fullAddress(groom),
     },
     brideFamily: {
       label: "Nhà Gái",
-      father: "Ông : Nguyễn Tiến Minh",
-      mother: "Bà : Lê Thị Hải Yến",
-      place: "TP. Điện Biên",
+      father: `Ông: ${bride.father}`,
+      mother: `Bà: ${bride.mother}`,
+      place: fullAddress(bride),
     },
   },
   party: {
@@ -350,22 +413,17 @@ export const weddingConfig: WeddingConfig = {
     eyebrow: "SWEET WEDDING",
     question: ["MARRY", "ME?"],
     answer: ["YES !", "I DO !"],
-    photos: ["photos/photo-04", "photos/photo-08", "photos/photo-03"],
+    photos: ["photos/photo-01", "photos/photo-04"],
   },
   about: { heading: "About us", brideLabel: "Bride", groomLabel: "Groom" },
   saveTheDate: { heading: "Save the date", photo: "photos/photo-07" },
-  timeline: [
-    { time: "08:00", label: "Lễ Rước Dâu", icon: "car" },
-    { time: "09:30", label: "Chụp hình lưu niệm", icon: "camera" },
-    { time: "10:30", label: "Khai tiệc", icon: "toast" },
-  ],
   gallery: {
     title: "INVITATION",
     verticalLeft: "I love you forever",
     verticalRight: "Nice to meet you",
     caption:
-      "Mình rất muốn được chụp chung với bạn những tấm hình kỷ niệm vì vậy hãy đến sớm hơn một chút bạn yêu nhé! Đám cưới của chúng mình sẽ trọn vẹn hơn khi có thêm lời chúc phúc và sự hiện diện của các bạn. Cuối thiệp có một khu vườn nhỏ, hãy gieo vào đó một lời chúc nhé.",
-    photos: ["photos/photo-03", "photos/photo-08", "photos/photo-04"],
+      "Mình rất muốn được chụp chung với bạn những tấm hình kỷ niệm vì vậy hãy đến sớm hơn một chút bạn yêu nhé! Đám cưới của chúng mình sẽ trọn vẹn hơn khi có thêm lời chúc phúc và sự hiện diện của các bạn. Cuối thiệp có một cuốn sổ lưu bút nhỏ, hãy ép vào đó một bông hoa cùng lời chúc nhé.",
+    photos: ["photos/photo-03", "photos/photo-04", "photos/photo-08"],
     background: "photos/photo-02",
   },
   rsvp: {
@@ -444,8 +502,8 @@ export const weddingConfig: WeddingConfig = {
   wishGallery: {
     label: "Lời chúc",
     subtitle:
-      "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu trong khu vườn của chúng mình.",
-    empty: "Hãy là người gieo bông hoa đầu tiên.",
+      "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu giữa những trang sổ của chúng mình.",
+    empty: "Hãy là người đầu tiên ép một bông hoa vào cuốn sổ này.",
     guide:
       "Chọn một loài hoa, viết vài dòng, bông hoa của bạn sẽ được ép vào cuốn sổ này.",
     more: "Đọc tiếp",
@@ -468,7 +526,7 @@ export const weddingConfig: WeddingConfig = {
     accounts: [
       {
         role: "Cô dâu",
-        holder: "Nguyễn Mai Anh",
+        holder: bride.fullName,
         bank: "TECHCOMBANK",
         bankBin: "970407",
         accountNumber: "19036592558012",
@@ -476,17 +534,17 @@ export const weddingConfig: WeddingConfig = {
       },
       {
         role: "Chú rể",
-        holder: "Phạm Quốc Huy",
+        holder: groom.fullName,
         bank: "TECHCOMBANK",
         bankBin: "970407",
-        accountNumber: "19036592558012",
+        accountNumber: "19034008735010",
         photo: "photos/photo-05",
       },
     ],
   },
   thankYou: {
     text: "Thank you",
-    note: "Cảm ơn {name} đã ở đây và gieo thêm một bông hoa cho khu vườn của chúng mình.",
+    note: "Cảm ơn {name} đã ở đây và ép thêm một bông hoa vào cuốn sổ lưu bút của chúng mình.",
     noteGuestFallback: "bạn",
     animation: "bride-groom-dancing.webp",
     still: "bride-groom-dancing-still.webp",

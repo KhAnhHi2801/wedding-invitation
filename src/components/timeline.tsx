@@ -1,7 +1,7 @@
 import type { ComponentType, SVGProps } from "react"
 import { getWeddingEvent } from "../lib/wedding-event"
 import type { TimelineItem } from "../config/wedding-config"
-import { CameraIcon, CarIcon, HeartIcon, ToastIcon } from "./icons/shapes"
+import { CameraIcon, CarIcon, ChurchIcon, GiftBoxIcon, HeartIcon, RingsIcon, ToastIcon } from "./icons/shapes"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { FloatingHearts } from "./floating-hearts"
 import "./timeline.css"
@@ -10,6 +10,9 @@ const ICONS: Record<TimelineItem["icon"], ComponentType<SVGProps<SVGSVGElement>>
   car: CarIcon,
   camera: CameraIcon,
   toast: ToastIcon,
+  church: ChurchIcon,
+  gift: GiftBoxIcon,
+  rings: RingsIcon,
 }
 
 const REVEAL: readonly RevealRule[] = [

@@ -1,7 +1,6 @@
 import { weddingConfig } from "../config/wedding-config"
 import { useCountdown } from "../hooks/use-countdown"
 import { getEventParts } from "../lib/event-date"
-import { getWeddingEvent } from "../lib/wedding-event"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { Photo } from "./photo"
 import "./cover.css"
@@ -30,8 +29,8 @@ const REVEAL: readonly RevealRule[] = [
 
 export function Cover() {
   const { hero, couple, ui, invitation } = weddingConfig
-  const { event } = getWeddingEvent()
-  const { startsAtMs } = getEventParts(event.startsAt)
+  // Đếm ngược tới lễ đầu tiên, chung cho cả hai bên (giờ tiệc của từng bên nằm ở phần "Tiệc mừng")
+  const { startsAtMs } = getEventParts(weddingConfig.countdownTo)
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
     <section className="cover" ref={ref}>
