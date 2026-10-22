@@ -40,8 +40,9 @@
   aspect-ratio: 1;
 }
 
+/* Thẻ thứ hai đối xứng đúng với thẻ đầu qua trục giữa (100 - 4.8 - 30 = 65.2) */
 .gift-card--flip .gift-card__avatar {
-  left: 66.8cqw;
+  left: 65.2cqw;
 }
 
 .gift-card__avatar img {
@@ -108,8 +109,7 @@
 }
 
 .gift-card--flip .gift-card__pill {
-  left: 4.2cqw;
-  width: 59.3cqw;
+  left: 4.5cqw;
   flex-direction: row-reverse;
 }
 
@@ -121,8 +121,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1.5cqw 1cqw;
-  text-align: center;
+  padding: 1.5cqw 0.4cqw;
+  text-align: left;
 }
 
 .gift-card__info > * {
@@ -132,7 +132,7 @@
 
 .gift-card__role,
 .gift-card__holder {
-  font-size: clamp(0.8125rem, 3.8cqw, 1.1rem);
+  font-size: clamp(0.875rem, 3.9cqw, 1.1rem);
   line-height: 4.8cqw;
   overflow-wrap: anywhere;
 }
@@ -140,7 +140,7 @@
 /* Họ tên thật dài hơn tên mẫu và phần chữ chỉ rộng ~33cqw: cỡ chữ nhỏ hơn vai trò một chút để vừa một dòng,
    tránh xuống hai dòng làm thẻ chật; chữ rất dài vẫn được phép xuống dòng */
 .gift-card__holder {
-  font-size: clamp(0.6875rem, 3.3cqw, 1.1rem);
+  font-size: clamp(0.8125rem, 3.5cqw, 1.1rem);
   line-height: 1.25;
   text-wrap: balance;
 }
@@ -151,7 +151,7 @@
 
 .gift-card__bank {
   margin-top: 1.4cqw;
-  font-size: clamp(0.6875rem, 2.8cqw, 0.85rem);
+  font-size: clamp(0.75rem, 3cqw, 0.9rem);
   line-height: 3.6cqw;
 }
 
@@ -160,7 +160,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.8cqw;
-  font-size: clamp(0.625rem, 2.9cqw, 0.9rem);
+  font-size: clamp(0.6875rem, 3cqw, 0.95rem);
   line-height: 3.6cqw;
   font-variant-numeric: lining-nums tabular-nums;
   /* Số tài khoản luôn một dòng, không bị bẻ giữa dãy số */
@@ -202,14 +202,14 @@
   flex: none;
   width: 20.5cqw;
   height: 20.5cqw;
-  margin: 3cqw 3.6cqw 0 0;
+  margin: 3cqw 2.8cqw 0 0;
   padding: 0.8cqw;
   border-radius: 2.4cqw;
   background: var(--white);
 }
 
 .gift-card--flip .gift-card__qr {
-  margin: 3cqw 0 0 2.5cqw;
+  margin: 3cqw 0 0 2.8cqw;
 }
 
 .gift-card__qr img {

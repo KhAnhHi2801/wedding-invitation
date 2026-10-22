@@ -360,9 +360,9 @@ export const weddingConfig: WeddingConfig = {
       address: `(${fullAddress(groom)})`,
       mapsQuery: fullAddress(groom),
       timeline: [
-        { time: groomTime.pickup, label: "Lễ Đón Dâu", icon: "car" },
-        { time: groomTime.ceremony, label: "Hôn Lễ tại tư gia", icon: "rings" },
-        { time: "Sau lễ", label: "Khai tiệc", icon: "toast" },
+        { time: groomTime.pickup, label: "Đón Dâu", icon: "car" },
+        { time: groomTime.ceremony, label: "Lễ Thành Hôn", icon: "rings" },
+        { time: "Sau lễ", label: "Khai Tiệc", icon: "toast" },
       ],
     },
     // Nhà gái (link `?from=bride`): ăn hỏi 7h30, thánh lễ 8h30, tiệc 10h sáng thứ Bảy 28/11. Tư gia nhà gái nằm sát nhà thờ nên bản đồ chỉ về nhà thờ
