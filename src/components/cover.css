@@ -82,15 +82,23 @@
   font-weight: 400;
 }
 
-/* Khung mờ chứa lời mời: ảnh vẫn thấy qua, bắt đầu từ 66% khung và lệch phải như mẫu */
+/* Khung chứa lời mời: ảnh vẫn thấy mờ qua nhưng đủ đặc (84% giấy + làm nhòe nền) để chữ rượu vang đạt tương phản trên cả ảnh sáng
+   lẫn ảnh nhiều hoa; bắt đầu từ 66% khung và lệch phải như mẫu */
 .cover__panel {
   position: relative;
   z-index: var(--z-raised);
   width: 89.6%;
   margin: 0 4% 6vw auto;
   padding: 16vw var(--space-4) var(--space-4);
-  background: color-mix(in srgb, var(--paper) 45%, transparent);
+  background: color-mix(in srgb, var(--paper) 84%, transparent);
+  backdrop-filter: blur(4px);
   color: var(--wine);
+}
+
+/* Máy yếu bỏ làm nhòe (nặng GPU), bù bằng nền đặc hơn */
+.lite .cover__panel {
+  backdrop-filter: none;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
 }
 
 .cover__title {

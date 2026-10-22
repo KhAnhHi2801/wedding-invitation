@@ -116,7 +116,12 @@
 .gift-card__info {
   flex: 1;
   min-width: 0;
-  padding: 4.3cqw 1cqw 0;
+  /* Nội dung căn giữa theo chiều dọc trong thẻ cao cố định: tên dài hay ngắn đều không dồn xuống mép dưới thẻ */
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5cqw 1cqw;
   text-align: center;
 }
 
@@ -132,8 +137,16 @@
   overflow-wrap: anywhere;
 }
 
+/* Họ tên thật dài hơn tên mẫu và phần chữ chỉ rộng ~33cqw: cỡ chữ nhỏ hơn vai trò một chút để vừa một dòng,
+   tránh xuống hai dòng làm thẻ chật; chữ rất dài vẫn được phép xuống dòng */
+.gift-card__holder {
+  font-size: clamp(0.6875rem, 3.3cqw, 1.1rem);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
 .gift-card__role {
-  margin-bottom: 2.6cqw;
+  margin-bottom: 1.6cqw;
 }
 
 .gift-card__bank {

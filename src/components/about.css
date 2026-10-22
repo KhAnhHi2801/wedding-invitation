@@ -69,7 +69,8 @@
   text-align: center;
   font-family: var(--font-hand);
   color: var(--ink);
-  overflow-wrap: anywhere;
+  /* Ngắt ở khoảng trắng; chỉ cắt giữa từ khi một từ dài hơn cả thẻ */
+  overflow-wrap: break-word;
   /* Thẻ nằm dưới ảnh dọc: ảnh đè lên mép thẻ 4% bề rộng nên viền và nền thẻ không chạy qua ảnh */
   z-index: 1;
 }
@@ -78,14 +79,10 @@
 .about__detail {
   margin: 0;
   font-weight: 700;
-  /* Mẫu 18.7px ở 390px; tên dài phải vừa thẻ hẹp (33% bề rộng) */
-  font-size: clamp(1rem, 4.8vw, 1.5rem);
+  /* Mẫu 18.7px ở 390px, nhưng tên thật dài hơn tên mẫu: tính theo bề rộng khung (cqw) để tên vừa phần thẻ không bị ảnh đè */
+  font-size: clamp(0.875rem, 4.3cqw, 1.5rem);
   line-height: 1.3;
-}
-
-/* Tên một dòng như mẫu (chữ đậm rộng hơn nên không để bẻ dòng) */
-.about__name {
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 /* Quê quán dùng font The Artisan 12.5px như mẫu */

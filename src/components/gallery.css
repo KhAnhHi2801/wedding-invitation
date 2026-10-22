@@ -23,7 +23,10 @@
 .gallery__veil {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--rose) 55%, transparent);
+  /* Mép trên sẫm dần để tiêu đề trắng đọc được trên mọi ảnh nền (kể cả ảnh sáng); phần còn lại là lớp hồng như cũ */
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--wine) 55%, transparent), transparent 16%),
+    color-mix(in srgb, var(--rose) 55%, transparent);
 }
 
 .gallery__stack {
@@ -66,6 +69,10 @@
   line-height: 1;
   letter-spacing: 6px;
   color: var(--wine);
+  /* Chữ viết tay nét mảnh nằm trên ảnh nền: quầng sáng quanh chữ để không chìm vào váy hồng nhạt */
+  text-shadow:
+    0 0 0.12em var(--white),
+    0 0 0.3em color-mix(in srgb, var(--white) 85%, transparent);
 }
 
 .gallery__side--left {
