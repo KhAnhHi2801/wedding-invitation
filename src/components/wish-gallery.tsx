@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
-import { useInView } from "../hooks/use-in-view"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { gardenOverlay } from "../lib/garden-overlay"
 import type { ImageKey } from "../lib/images"
 import { fillText, WISH_PREVIEW } from "../lib/wish-list"
 import type { PublicWish } from "../lib/wishes-api"
-import { loadWishes, useWishes } from "../lib/wishes-store"
+import { useWishes } from "../lib/wishes-store"
 import { Photo } from "./photo"
 import { WishDetail } from "./wish-detail"
 import { WishListDialog } from "./wish-list-dialog"
@@ -38,7 +37,6 @@ interface Layer {
 export function WishGallery() {
   const { wishGallery: text, garden } = weddingConfig
   const listId = useId()
-  const [ref, near] = useInView<HTMLElement>({ once: true, rootMargin: "600px" })
   const revealRef = useReveal<HTMLElement>(REVEAL)
   const { wishes, loaded } = useWishes()
   const [open, setOpen] = useState(false)
@@ -47,19 +45,6 @@ export function WishGallery() {
   const stack = useRef<Layer[]>([])
   const closing = useRef(false)
   const refocus = useRef<HTMLElement | null>(null)
-
-  // Đọc lời chúc từ Sheet khi sắp tới phần này (dùng chung kho với mini-game nên chỉ tải một lần)
-  useEffect(() => {
-    if (near) void loadWishes()
-  }, [near])
-
-  const setRefs = useCallback(
-    (node: HTMLElement | null) => {
-      ref.current = node
-      revealRef.current = node
-    },
-    [ref, revealRef],
-  )
 
   const popLayer = useCallback(() => {
     const top = stack.current.pop()
@@ -117,7 +102,7 @@ export function WishGallery() {
   const listOpen = layers.some((layer) => layer.kind === "list")
 
   return (
-    <section className="section wish-gallery" id="guestbook" ref={setRefs} aria-label={text.label}>
+    <section className="section wish-gallery" id="guestbook" ref={revealRef} aria-label={text.label}>
       <h2 className="wish-gallery__title">{text.label}</h2>
       <p className="wish-gallery__subtitle">{text.subtitle}</p>
 

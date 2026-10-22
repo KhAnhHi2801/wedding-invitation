@@ -208,7 +208,7 @@ if (typeof window !== "undefined" && ENDPOINT) {
 
 const PAGE_SIZE = 50
 const MAX_PAGES = 8 // tối đa 400 lời chúc; nhiều hơn thì chỉ lấy 400 lời mới nhất
-const READ_TIMEOUT_MS = 12_000
+const READ_TIMEOUT_MS = 20_000
 
 interface WishPage {
   ok?: boolean
@@ -218,11 +218,21 @@ interface WishPage {
 
 const asText = (value: unknown): string => (typeof value === "string" ? value : "")
 
+/** Một dòng lời chúc từ Sheet; thiếu tên hoặc nội dung thì bỏ. */
+function toWish(item: unknown): PublicWish | null {
+  const row = (item ?? {}) as Record<string, unknown>
+  const name = asText(row.name)
+  const message = asText(row.message)
+  if (!name || !message) return null
+  return { id: asText(row.id), name, message, flower: asText(row.flower), ink: asText(row.ink) }
+}
+
 /**
  * Toàn bộ lời chúc đang hiện công khai, mới nhất trước (đọc từng trang theo con trỏ của Apps Script).
  * Lỗi giữa chừng thì trả những gì đã đọc được; chưa nối Sheet thì trả danh sách rỗng.
+ * `onPage` được gọi với phần đã đọc được sau mỗi trang, để hiện lời chúc ngay khi trang đầu về (Apps Script có thể mất vài giây mỗi lượt).
  */
-export async function fetchWishes(): Promise<PublicWish[]> {
+export async function fetchWishes(onPage?: (wishes: readonly PublicWish[]) => void): Promise<PublicWish[]> {
   if (!ENDPOINT) return []
   const wishes: PublicWish[] = []
   let cursor = ""
@@ -239,12 +249,10 @@ export async function fetchWishes(): Promise<PublicWish[]> {
       }
       if (!data.ok || !Array.isArray(data.items)) break
       for (const item of data.items as Record<string, unknown>[]) {
-        const name = asText(item?.name)
-        const message = asText(item?.message)
-        if (name && message) {
-          wishes.push({ id: asText(item.id), name, message, flower: asText(item.flower), ink: asText(item.ink) })
-        }
+        const wish = toWish(item)
+        if (wish) wishes.push(wish)
       }
+      onPage?.([...wishes])
       if (typeof data.nextCursor !== "string" || !data.nextCursor) break
       cursor = data.nextCursor
     }
