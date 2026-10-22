@@ -225,6 +225,8 @@ export interface WeddingConfig {
   wishGallery: WishGalleryText;
   gift: {
     heading: string;
+    /** Lời dẫn dưới tiêu đề: quà là tuỳ tâm */
+    note: string;
     /** Nhãn đọc cho nút sao chép số tài khoản (nút chỉ có biểu tượng) */
     copyLabel: string;
     copied: string;
@@ -382,8 +384,8 @@ export const weddingConfig: WeddingConfig = {
   invitation: {
     heading: "INVITATION",
     lines: [
-      "Gửi đến gia đình và bạn bè thân mến,",
-      "Cảm ơn bạn đã dành thời gian quý báu để cùng chúng mình chung vui trong ngày đặc biệt này. Chúng mình vô cùng biết ơn vì luôn có sự đồng hành và ủng hộ của bạn, và thật vinh hạnh khi được chia sẻ niềm hạnh phúc của chúng mình cùng bạn.",
+      "Gửi gia đình và những người chúng mình thương quý,",
+      "Có những niềm vui sẽ trọn vẹn hơn khi được sẻ chia cùng người thân yêu. Chúng mình mong được đón bạn đến chung vui và cùng chứng kiến ngày chúng mình bắt đầu hành trình mới.",
       "Trân trọng kính mời bạn đến dự lễ cưới của chúng mình",
     ],
   },
@@ -420,9 +422,9 @@ export const weddingConfig: WeddingConfig = {
   gallery: {
     title: "INVITATION",
     verticalLeft: "I love you forever",
-    verticalRight: "Nice to meet you",
+    verticalRight: "So glad you're here",
     caption:
-      "Mình rất muốn được chụp chung với bạn những tấm hình kỷ niệm vì vậy hãy đến sớm hơn một chút bạn yêu nhé! Đám cưới của chúng mình sẽ trọn vẹn hơn khi có thêm lời chúc phúc và sự hiện diện của các bạn. Cuối thiệp có một cuốn sổ lưu bút nhỏ, hãy ép vào đó một bông hoa cùng lời chúc nhé.",
+      "Chúng mình muốn chụp vài tấm hình kỷ niệm cùng bạn, nên nếu có thể, bạn đến sớm một chút nhé. Và ở cuối thiệp có một cuốn sổ lưu bút nhỏ: hãy ép vào đó một bông hoa cùng đôi dòng chúc, như một kỷ niệm bạn để lại cho chúng mình.",
     photos: ["photos/photo-03", "photos/photo-04", "photos/photo-08"],
     background: "photos/photo-02",
   },
@@ -430,7 +432,7 @@ export const weddingConfig: WeddingConfig = {
     eyebrow: "R.S.V.P.",
     title: "Xác nhận tham dự",
     description:
-      "Vui lòng xác nhận tham dự để chúng mình chuẩn bị lễ cưới được thuận lợi và trọn vẹn nhất.",
+      "Để chúng mình chuẩn bị chu đáo cho ngày vui, bạn xác nhận giúp chúng mình sự tham dự nhé.",
     button: "Gửi xác nhận",
     form: {
       title: "Xác nhận tham dự",
@@ -519,6 +521,7 @@ export const weddingConfig: WeddingConfig = {
   },
   gift: {
     heading: "GỬI QUÀ MỪNG",
+    note: "Sự hiện diện của bạn đã là món quà quý nhất. Nếu muốn gửi thêm chút yêu thương, thông tin mừng cưới ở ngay bên dưới.",
     copyLabel: "Sao chép số tài khoản",
     copied: "Đã sao chép số tài khoản",
     copyFailed: "Chưa sao chép được, bạn giữ vào số tài khoản để chép nhé",
@@ -544,7 +547,7 @@ export const weddingConfig: WeddingConfig = {
   },
   thankYou: {
     text: "Thank you",
-    note: "Cảm ơn {name} đã ở đây và ép thêm một bông hoa vào cuốn sổ lưu bút của chúng mình.",
+    note: "Cảm ơn {name} đã đến với ngày vui của chúng mình. Hẹn gặp bạn, và chúc bạn một ngày thật nhiều niềm vui.",
     noteGuestFallback: "bạn",
     animation: "bride-groom-dancing.webp",
     still: "bride-groom-dancing-still.webp",

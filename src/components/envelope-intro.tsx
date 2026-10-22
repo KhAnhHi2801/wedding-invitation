@@ -140,6 +140,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
             <button
               type="button"
               className="envelope__seal"
+              aria-label={weddingConfig.ui.openEnvelope}
               onClick={open}
               disabled={state !== "closed"}
             >
