@@ -11,9 +11,11 @@ import {
   BloomPlayer,
   type BloomMode,
 } from "../features/flower-bloom/BloomPlayer";
+import { DriftingPetals } from "./drifting-petals";
 import { FlowerArt } from "./flower-art";
 import { prefersReducedMotion } from "../lib/device-tier";
 import { FLOWER_ENTRIES } from "../lib/flower-entries";
+import { bookFlight } from "../lib/book-flight";
 import { gardenOverlay } from "../lib/garden-overlay";
 import { getGuestName } from "../lib/guest";
 import { lockScroll } from "../lib/scroll-lock";
@@ -54,10 +56,10 @@ function initialName(): string {
 }
 
 /** Cuộn tới lời chúc của khách trong phần "Lời chúc" (lời mới nhất đứng đầu); chưa dựng thì cuộn tới đầu phần. */
-function scrollToWishes() {
+function scrollToWishes(behavior: ScrollBehavior = prefersReducedMotion() ? "auto" : "smooth") {
   const section = document.getElementById("guestbook");
-  (section?.querySelector(".wish-gallery__feature") ?? section)?.scrollIntoView({
-    behavior: prefersReducedMotion() ? "auto" : "smooth",
+  (section?.querySelector(".gb") ?? section)?.scrollIntoView({
+    behavior,
     block: "center",
   });
 }
@@ -194,9 +196,19 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
   };
 
   const seeWishes = () => {
+    // Vị trí bông hoa trên mẩu giấy xem trước, để hoa bay từ đúng chỗ đó vào sổ
+    const from = document.querySelector(".gov__note-flower")?.getBoundingClientRect();
     gardenOverlay.close();
     // Chờ hộp thoại đóng xong và nhả khóa cuộn rồi mới cuộn
-    window.setTimeout(scrollToWishes, 80);
+    window.setTimeout(() => {
+      if (from && !prefersReducedMotion()) {
+        // Cuộn ngay (không mượt) để vị trí đích đứng yên khi hoa bay
+        scrollToWishes("auto");
+        bookFlight.request({ from, flower: entry.def.id });
+      } else {
+        scrollToWishes();
+      }
+    }, 80);
   };
 
   const bloomMode: BloomMode =
@@ -235,6 +247,7 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
       }}
     >
       <div className="gov__panel" data-step={step}>
+        <DriftingPetals />
         <header className="gov__head">
           {/* <h2 className="gov__title" id={id("title")}>
             {title}

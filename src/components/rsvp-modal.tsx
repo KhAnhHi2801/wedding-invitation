@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from "react"
 import { weddingConfig } from "../config/wedding-config"
+import { gardenOverlay } from "../lib/garden-overlay"
 import { getGuestName } from "../lib/guest"
 import { lockScroll } from "../lib/scroll-lock"
 import { validateRsvp, GUESTS_MAX, NAME_MAX, NOTE_MAX, type RsvpErrors, type RsvpField, type RsvpValues } from "../lib/rsvp-validation"
@@ -140,7 +141,18 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
               {text.successTitle}
             </h2>
             <p>{values.attending === "no" ? text.successNo : text.successYes}</p>
-            <button type="button" className="rsvp-modal__submit" onClick={handleClose}>
+            <p>{text.successWish}</p>
+            <button
+              type="button"
+              className="rsvp-modal__submit"
+              onClick={() => {
+                handleClose()
+                gardenOverlay.open()
+              }}
+            >
+              {text.wishButton}
+            </button>
+            <button type="button" className="rsvp-modal__later" onClick={handleClose}>
               {text.close}
             </button>
           </div>

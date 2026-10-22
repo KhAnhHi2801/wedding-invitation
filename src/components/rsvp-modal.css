@@ -133,6 +133,16 @@
   cursor: progress;
 }
 
+/* Nút phụ ở màn thành công: chữ rượu vang, không nền, vẫn đủ vùng bấm 44px */
+.rsvp-modal__later {
+  min-height: 2.75rem;
+  border: 0;
+  background: none;
+  color: var(--wine);
+  font-size: var(--fs-16);
+  font-weight: 700;
+}
+
 .rsvp-modal__done {
   display: grid;
   gap: var(--space-4);

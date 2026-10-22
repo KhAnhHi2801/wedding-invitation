@@ -1,0 +1,413 @@
+/* Sổ lưu bút học trò: gáy lò xo ở trên, giấy kẻ dòng có lề đỏ, các trang xếp chồng, lật trang kiểu giở lên. */
+.gb {
+  position: relative;
+  width: min(100% - 2 * var(--gutter), 24rem);
+  margin: var(--space-8) auto 0;
+}
+
+/* Ánh sáng hồng dịu sau cuốn sổ, thở rất chậm (chỉ opacity/transform) */
+.gb::before {
+  content: "";
+  position: absolute;
+  inset: -12% -18%;
+  z-index: -1;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--rose) 45%, transparent), transparent);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gb::before {
+    animation: gb-glow 7s ease-in-out infinite alternate;
+  }
+
+  .lite .gb::before {
+    animation: none;
+  }
+}
+
+@keyframes gb-glow {
+  from {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.gb__book {
+  position: relative;
+  display: grid;
+  margin-top: 0.75rem;
+  perspective: 1400px;
+  touch-action: pan-y;
+  /* Mép các trang bên dưới ló ra phía dưới và bên phải như xấp giấy dày */
+  border-radius: 0.25rem 0.25rem 0.75rem 0.75rem;
+  box-shadow:
+    0.2rem 0.2rem 0 -0.02rem color-mix(in srgb, var(--wine) 12%, var(--paper)),
+    0.4rem 0.4rem 0 -0.04rem var(--paper),
+    0.45rem 0.45rem 0 -0.03rem color-mix(in srgb, var(--wine) 18%, transparent),
+    0 1.25rem 2rem color-mix(in srgb, var(--wine) 14%, transparent);
+}
+
+/* Gáy lò xo: các vòng kim loại vắt qua mép trên, trên các trang */
+.gb__rings {
+  position: absolute;
+  top: -0.75rem;
+  right: 1.25rem;
+  left: 1.25rem;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.gb__rings span {
+  width: 0.5rem;
+  height: 1.6rem;
+  border: 2px solid var(--wine);
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  box-shadow: 0 0.15rem 0.2rem rgba(0, 0, 0, 0.18);
+}
+
+/* Ruy-băng đánh dấu trang: thả từ giữa sổ xuống dưới mép, nằm trên các trang */
+.gb__ribbon {
+  position: absolute;
+  right: 3.25rem;
+  bottom: -1.5rem;
+  z-index: 9;
+  width: 0.9rem;
+  height: 3.25rem;
+  background: linear-gradient(90deg, var(--wine-2), var(--wine) 45%, var(--wine-2));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  filter: drop-shadow(0 0.15rem 0.15rem rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+}
+
+.gb__track {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Mỗi trang là tờ giấy kẻ dòng, đủ đặc để che trang nằm dưới */
+.gb__page {
+  position: relative;
+  grid-area: 1 / 1;
+  min-height: 23rem;
+  border: 1px solid color-mix(in srgb, var(--wine) 14%, transparent);
+  border-radius: 0.25rem 0.25rem 0.75rem 0.75rem;
+  background:
+    linear-gradient(90deg, transparent 2.9rem, color-mix(in srgb, var(--coral) 55%, transparent) 2.9rem 2.95rem, transparent 2.95rem),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 calc(1.75rem - 1px),
+      color-mix(in srgb, #4a6fa5 22%, transparent) calc(1.75rem - 1px) 1.75rem
+    ),
+    var(--paper);
+  /* Mọi khoảng cách dọc trong trang là bội của bước kẻ (1.75rem), chữ lời chúc có cỡ cố định, nên dòng kẻ luôn nằm
+     ngay dưới chân chữ: 1rem = vị trí chân chữ đo được trong dòng cao 1.75rem, cộng khoảng hở dưới chân */
+  background-position: 0 0, 0 1rem, 0 0;
+  background-repeat: no-repeat, repeat, no-repeat;
+  backface-visibility: hidden;
+  transform-origin: top center;
+  visibility: hidden;
+  /* Góc dưới bên phải gập lại */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
+}
+
+/* Mặt trong của góc gập: tam giác sẫm hơn giấy, đổ bóng nhẹ theo cạnh gập */
+.gb__page::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: linear-gradient(315deg, transparent 50%, color-mix(in srgb, var(--wine) 12%, var(--paper)) 50%);
+  filter: drop-shadow(-0.1rem -0.1rem 0.15rem rgba(0, 0, 0, 0.15));
+  pointer-events: none;
+}
+
+.gb__page.is-near {
+  visibility: visible;
+}
+
+.gb__page.is-current {
+  z-index: 2;
+}
+
+.gb__page.is-under {
+  z-index: 1;
+}
+
+/* Trang đã lật: giở lên và ra sau gáy. Phải nằm trên trang vừa lộ ra, nếu không trang kế che mất cú lật */
+.gb__page.is-turned {
+  z-index: 3;
+  transform: rotateX(-170deg);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gb__page {
+    transition: transform 1100ms cubic-bezier(0.45, 0.05, 0.2, 1);
+  }
+
+  .gb__book.is-instant .gb__page {
+    transition: none;
+  }
+}
+
+/* Giảm chuyển động: không xoay, trang đã lật biến mất */
+@media (prefers-reduced-motion: reduce) {
+  .gb__page.is-turned {
+    transform: none;
+    visibility: hidden;
+  }
+}
+
+.gb__page-button {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "mine flower"
+    "quote quote"
+    "more name";
+  align-items: start;
+  /* Không chia đều phần chiều cao thừa cho các hàng, nếu không lời chúc trôi khỏi dòng kẻ */
+  align-content: start;
+  gap: 0 var(--space-3);
+  width: 100%;
+  height: 100%;
+  /* 2 dòng kẻ đệm trên + hàng hoa cao 3 dòng: lời chúc bắt đầu đúng đầu dòng kẻ thứ 5 */
+  padding: 3.5rem var(--space-4) 2.25rem 3.5rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.gb__mine {
+  grid-area: mine;
+  align-self: center;
+  font-size: var(--fs-14);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--wine);
+}
+
+/* Hoa ép dán góc trang bằng băng giấy */
+/* Nét vẽ nguệch ngoạc nằm ở hàng nhãn, cao đúng một dòng kẻ */
+.gb__doodle {
+  grid-area: mine;
+  align-self: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: none;
+  stroke: var(--wine);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+  transform: rotate(-9deg);
+}
+
+/* Số trang viết tay ở chân trang, cạnh lề */
+.gb__no {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 3.5rem;
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--wine) 65%, transparent);
+}
+
+.gb__flower {
+  position: relative;
+  grid-area: flower;
+  justify-self: end;
+  width: 5.25rem;
+  height: 5.25rem;
+  filter: drop-shadow(0 0.2rem 0.3rem rgba(0, 0, 0, 0.2));
+  transform: rotate(7deg);
+}
+
+.gb__flower::before {
+  content: "";
+  position: absolute;
+  top: -0.35rem;
+  left: 50%;
+  z-index: 1;
+  width: 3.25rem;
+  height: 1rem;
+  background: color-mix(in srgb, var(--rose) 75%, transparent);
+  transform: translateX(-50%) rotate(-5deg);
+}
+
+.gb__flower svg,
+.gb__flower img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Hoa đang bay tới: giữ chỗ nhưng chưa hiện, tránh hai bông cùng lúc */
+.gb__flower.is-pending {
+  opacity: 0;
+}
+
+/* Hoa của khách vừa hạ xuống: ép xuống giấy một nhịp */
+@media (prefers-reduced-motion: no-preference) {
+  .gb__flower.is-pressed {
+    animation: gb-press 520ms var(--ease-out);
+  }
+}
+
+@keyframes gb-press {
+  from {
+    transform: rotate(7deg) scale(1.18);
+    filter: drop-shadow(0 0.75rem 0.75rem rgba(0, 0, 0, 0.22));
+  }
+}
+
+/* Chữ viết tay nằm đúng trên dòng kẻ: cao dòng bằng đúng bước kẻ */
+.gb__quote {
+  grid-area: quote;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-style: italic;
+  /* Cỡ cố định (không dùng clamp) để chân chữ luôn khớp dòng kẻ */
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.gb__name {
+  grid-area: name;
+  justify-self: end;
+  max-width: 100%;
+  font-family: var(--font-hand);
+  font-size: var(--fs-name, clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem));
+  line-height: 1.75rem;
+  /* Chữ ký to hơn nên chân chữ nằm thấp hơn; kéo lên theo cỡ chữ để đứng cùng dòng kẻ với lời chúc */
+  position: relative;
+  top: -0.295em;
+  color: var(--wine);
+  overflow-wrap: anywhere;
+}
+
+.gb__more {
+  grid-area: more;
+  align-self: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-16);
+  color: var(--wine);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.gb__page-button:active {
+  opacity: 0.7;
+}
+
+.gb__page-button:focus-visible,
+.gb__arrow:focus-visible,
+.gb__dot:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
+}
+
+/* Hàng điều khiển: nút trước, chấm trang, nút sau. Mỗi nút giữ vùng bấm 44px */
+.gb__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.gb__arrow {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--wine);
+}
+
+.gb__arrow svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.gb__arrow:disabled {
+  opacity: 0.3;
+}
+
+.gb__counter {
+  min-width: 4.5rem;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  font-size: var(--fs-16);
+  color: var(--wine);
+}
+
+.gb__dots {
+  display: flex;
+}
+
+.gb__dot {
+  position: relative;
+  width: 1.5rem;
+  height: 2.75rem;
+  border: 0;
+  background: none;
+}
+
+.gb__dot::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--wine) 28%, transparent);
+  transform: translate(-50%, -50%);
+  transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.gb__dot[aria-current="true"]::after {
+  background: var(--wine);
+  transform: translate(-50%, -50%) scale(1.4);
+}
+
+/* Hoa đang bay: nằm trên mọi lớp, không chặn thao tác */
+.gb__flyer {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  filter: drop-shadow(0 0.5rem 0.75rem rgba(0, 0, 0, 0.25));
+}
+
+.gb__flyer svg,
+.gb__flyer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

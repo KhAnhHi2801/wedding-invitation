@@ -2,62 +2,53 @@ import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { gardenOverlay } from "../lib/garden-overlay"
-import type { ImageKey } from "../lib/images"
-import { fillText, WISH_PREVIEW } from "../lib/wish-list"
 import type { PublicWish } from "../lib/wishes-api"
 import { useWishes } from "../lib/wishes-store"
-import { Photo } from "./photo"
+import { DriftingPetals } from "./drifting-petals"
+import { GuestBook } from "./guest-book"
 import { WishDetail } from "./wish-detail"
-import { WishListDialog } from "./wish-list-dialog"
-import { WishFlower, WishRow } from "./wish-row"
 import "./wish-gallery.css"
-
-/** Ảnh botanical chủ đạo (khóa trong image-manifest). Nếu để null thì vùng ảnh vẫn giữ đúng tỉ lệ, nền kem, không hiện gì thêm. */
-const ART: ImageKey | null = "hero/wish-botanical"
 
 const REVEAL: readonly RevealRule[] = [
   { selector: ".wish-gallery__title", preset: "fadeUp" },
-  { selector: ".wish-gallery__art", preset: "fadeIn", delay: 120 },
-  { selector: ".wish-gallery__feature", preset: "fadeUp", delay: 200 },
+  { selector: ".gb", preset: "fadeUp", delay: 200 },
 ]
 
-/** Một lớp đang mở (danh sách đầy đủ hoặc chi tiết) và phần tử đã mở nó, để trả tiêu điểm khi đóng. */
+/** Lời đang mở chi tiết và phần tử đã mở nó, để trả tiêu điểm khi đóng. */
 interface Layer {
-  kind: "list" | "detail"
   opener: HTMLElement | null
-  wish?: PublicWish
+  wish: PublicWish
 }
 
 /**
- * Phần "Lời chúc": ảnh botanical làm điểm nhấn, một lời tiêu biểu (lời mới nhất, lời của khách vừa gửi nếu có), nút mở
- * bốn lời kế tiếp ngay trong trang, "Xem tất cả" mở lớp danh sách riêng, và nút gieo hoa. Bấm một lời mở chi tiết.
- * Mỗi lớp đang mở giữ đúng một mục lịch sử: nút Back của điện thoại đóng lớp trên cùng (chi tiết trước, rồi danh sách)
+ * Phần "Lời chúc": cuốn sổ lưu bút lò xo làm điểm nhấn (mỗi lời một trang, lật hết được cả sổ), và nút gieo hoa.
+ * Bấm một trang mở chi tiết lời đó. Lớp chi tiết giữ đúng một mục lịch sử: nút Back của điện thoại đóng lớp
  * thay vì rời trang.
  */
 export function WishGallery() {
   const { wishGallery: text, garden } = weddingConfig
-  const listId = useId()
+  const titleId = useId()
   const revealRef = useReveal<HTMLElement>(REVEAL)
   const { wishes, loaded } = useWishes()
-  const [open, setOpen] = useState(false)
-  const [layers, setLayers] = useState<readonly Layer[]>([])
-  // Bản sao đồng bộ của `layers` cho trình xử lý popstate (không đọc state cũ); mỗi phần tử ứng với một mục lịch sử đã đẩy
-  const stack = useRef<Layer[]>([])
+  const [layer, setLayer] = useState<Layer | null>(null)
+  // Bản sao đồng bộ của `layer` cho trình xử lý popstate (không đọc state cũ); có giá trị nghĩa là đang giữ một mục lịch sử
+  const current = useRef<Layer | null>(null)
   const closing = useRef(false)
   const refocus = useRef<HTMLElement | null>(null)
 
   const popLayer = useCallback(() => {
-    const top = stack.current.pop()
+    const top = current.current
+    current.current = null
     closing.current = false
     if (!top) return
     refocus.current = top.opener
-    setLayers([...stack.current])
+    setLayer(null)
   }, [])
 
-  // Nút Back của điện thoại: chỉ đóng lớp trên cùng đang mở, không rời trang
+  // Nút Back của điện thoại: chỉ đóng lớp chi tiết đang mở, không rời trang
   useEffect(() => {
     const onPop = () => {
-      if (stack.current.length) popLayer()
+      if (current.current) popLayer()
     }
     window.addEventListener("popstate", onPop)
     return () => window.removeEventListener("popstate", onPop)
@@ -69,110 +60,45 @@ export function WishGallery() {
       refocus.current.focus({ preventScroll: true })
       refocus.current = null
     }
-  }, [layers])
-
-  const pushLayer = (layer: Layer) => {
-    history.pushState({ wishLayer: layer.kind }, "")
-    stack.current.push(layer)
-    setLayers([...stack.current])
-  }
-
-  const openList = (opener: HTMLElement) => {
-    if (stack.current.some((layer) => layer.kind === "list")) return
-    pushLayer({ kind: "list", opener })
-  }
+  }, [layer])
 
   const openDetail = (wish: PublicWish, opener: HTMLElement) => {
-    if (stack.current.some((layer) => layer.kind === "detail")) return
-    pushLayer({ kind: "detail", opener, wish })
+    if (current.current) return
+    history.pushState({ wishLayer: "detail" }, "")
+    current.current = { opener, wish }
+    setLayer(current.current)
   }
 
-  // Đóng lớp trên cùng bằng cách trả đúng mục lịch sử đã thêm; popstate sẽ gỡ lớp. Bấm Đóng hai lần liên tiếp không được lùi hai mục
-  const closeTop = () => {
-    if (closing.current || !stack.current.length) return
+  // Đóng bằng cách trả đúng mục lịch sử đã thêm; popstate sẽ gỡ lớp. Bấm Đóng hai lần liên tiếp không được lùi hai mục
+  const closeDetail = () => {
+    if (closing.current || !current.current) return
     closing.current = true
     history.back()
   }
 
-  const total = wishes.length
-  const featured = wishes[0]
-  // Lời đầu đã hiện ở phần tiêu biểu nên danh sách trong trang bắt đầu từ lời thứ hai
-  const preview = wishes.slice(1, 1 + WISH_PREVIEW)
-  const detail = layers.find((layer) => layer.kind === "detail")
-  const listOpen = layers.some((layer) => layer.kind === "list")
-
   return (
-    <section className="section wish-gallery" id="guestbook" ref={revealRef} aria-label={text.label}>
-      <h2 className="wish-gallery__title">{text.label}</h2>
+    <section className="section wish-gallery" id="guestbook" ref={revealRef} aria-labelledby={titleId}>
+      <DriftingPetals />
+      <h2 className="wish-gallery__title" id={titleId}>
+        {text.label}
+      </h2>
       <p className="wish-gallery__subtitle">{text.subtitle}</p>
 
-      <div className="wish-gallery__art" aria-hidden="true">
-        {ART && <Photo name={ART} alt="" sizes="(min-width: 768px) 26rem, 86vw" />}
-      </div>
-
-      {featured ? (
-        <button
-          type="button"
-          className="wish-gallery__feature"
-          aria-haspopup="dialog"
-          onClick={(event) => openDetail(featured, event.currentTarget)}
-        >
-          <span className="wish-gallery__feature-flower">
-            <WishFlower wish={featured} />
-          </span>
-          <span className="wish-gallery__quote">
-            {featured.message}
-          </span>
-          <span className="wish-gallery__feature-name" translate="no">
-            {featured.name || text.anonymous}
-          </span>
-        </button>
+      {wishes.length ? (
+        <GuestBook wishes={wishes} onOpen={openDetail} />
       ) : (
         // Chưa tải xong (hoặc tải lỗi) thì chưa nói "chưa có lời chúc nào"
         loaded && <p className="wish-gallery__empty">{text.empty}</p>
       )}
 
       <div className="wish-gallery__actions">
-        {total > 1 && (
-          <button
-            type="button"
-            className="wish-gallery__button wish-gallery__button--ghost"
-            aria-expanded={open}
-            aria-controls={open ? listId : undefined}
-            onClick={() => setOpen((value) => !value)}
-          >
-            {open ? text.hide : `${text.view} (${total})`}
-          </button>
-        )}
+        <p className="wish-gallery__guide">{text.guide}</p>
         <button type="button" className="wish-gallery__button" onClick={gardenOverlay.open}>
           {garden.open}
         </button>
       </div>
 
-      {open && total > 1 && (
-        <div className="wish-gallery__list-wrap" id={listId}>
-          <ol className="wish-gallery__list" aria-label={text.listLabel}>
-            {preview.map((wish, index) => (
-              <li key={`${wish.id}|${wish.name}|${index}`}>
-                <WishRow wish={wish} onOpen={openDetail} />
-              </li>
-            ))}
-          </ol>
-          {total > 1 + WISH_PREVIEW && (
-            <button
-              type="button"
-              className="wish-gallery__button wish-gallery__button--ghost"
-              aria-haspopup="dialog"
-              onClick={(event) => openList(event.currentTarget)}
-            >
-              {fillText(text.viewAll, { n: total })}
-            </button>
-          )}
-        </div>
-      )}
-
-      {listOpen && <WishListDialog wishes={wishes} onOpenWish={openDetail} onClose={closeTop} />}
-      {detail?.wish && <WishDetail wish={detail.wish} onClose={closeTop} />}
+      {layer && <WishDetail wish={layer.wish} onClose={closeDetail} />}
     </section>
   )
 }

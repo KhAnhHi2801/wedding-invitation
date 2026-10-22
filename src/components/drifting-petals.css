@@ -1,0 +1,53 @@
+.petals {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petals__petal {
+  position: absolute;
+  top: -2rem;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  opacity: 0;
+  animation: petals-fall var(--duration) linear var(--delay) infinite;
+  animation-play-state: paused;
+}
+
+.petals[data-active="true"] .petals__petal {
+  animation-play-state: running;
+}
+
+/* Rơi xuống, lắc sang một bên và xoay dần; mờ vào lúc đầu và mờ ra lúc cuối */
+@keyframes petals-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  12% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(var(--sway), 22rem, 0) rotate(140deg);
+  }
+  85% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--sway) * -0.4), 46rem, 0) rotate(300deg);
+  }
+}
+
+.lite .petals {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petals {
+    display: none;
+  }
+}

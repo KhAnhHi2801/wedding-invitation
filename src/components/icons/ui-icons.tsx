@@ -49,3 +49,15 @@ export const CopyIcon = (props: IconProps) => (
     <path {...line} d="M5 15V6a2 2 0 0 1 2-2h9" />
   </svg>
 )
+
+export const ChevronLeftIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path {...line} d="M14.5 6l-6 6 6 6" />
+  </svg>
+)
+
+export const ChevronRightIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path {...line} d="M9.5 6l6 6-6 6" />
+  </svg>
+)

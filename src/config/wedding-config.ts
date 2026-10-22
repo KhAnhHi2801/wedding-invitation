@@ -71,6 +71,9 @@ export interface RsvpFormText {
   successTitle: string;
   successYes: string;
   successNo: string;
+  /** Lời mời gieo lời chúc ở màn thành công, kèm nút mở lớp phủ gieo hoa */
+  successWish: string;
+  wishButton: string;
   errors: {
     name: string;
     attending: string;
@@ -121,15 +124,24 @@ export interface GardenText {
   };
 }
 
-/** Phần "Lời chúc": ảnh hoa, lời tiêu biểu, danh sách và chi tiết từng lời. `{n}` và `{name}` được thay khi hiển thị. */
+/** Phần "Lời chúc": ảnh hoa, cuốn sổ lời chúc và chi tiết từng lời. `{n}` và `{name}` được thay khi hiển thị. */
 export interface WishGalleryText {
   label: string;
   subtitle: string;
   /** Hiện khi chưa có lời chúc nào */
   empty: string;
-  view: string;
-  hide: string;
-  viewAll: string;
+  /** Dòng hướng dẫn trên nút gieo hoa: khách cần làm gì */
+  guide: string;
+  /** Dấu hiệu bấm được khi lời trên trang sổ bị cắt bớt */
+  more: string;
+  /** Nhãn trên trang sổ chứa lời khách vừa gieo */
+  mine: string;
+  /** Nút trước/sau và nhãn mỗi trang sổ; `{n}` và `{total}` được thay khi hiển thị */
+  prev: string;
+  next: string;
+  slideLabel: string;
+  /** Số trang đang xem khi sổ dày quá để hiện chấm; `{n}` và `{total}` được thay khi hiển thị */
+  counter: string;
   listLabel: string;
   close: string;
   flowerLabel: string;
@@ -217,7 +229,14 @@ export interface WeddingConfig {
     accounts: BankAccount[];
   };
   /** `animation`: WebP động, `still`: ảnh tĩnh cho người giảm chuyển động (tạo bởi `npm run images`) */
-  thankYou: { text: string; animation: string; still: string; alt: string };
+  thankYou: {
+    text: string;
+    note: string;
+    noteGuestFallback: string;
+    animation: string;
+    still: string;
+    alt: string;
+  };
   /** Nhãn giao diện cố định */
   ui: {
     countdownUnits: [string, string, string, string];
@@ -345,7 +364,7 @@ export const weddingConfig: WeddingConfig = {
     verticalLeft: "I love you forever",
     verticalRight: "Nice to meet you",
     caption:
-      "Mình rất muốn được chụp chung với bạn những tấm hình kỷ niệm vì vậy hãy đến sớm hơn một chút bạn yêu nhé! Đám cưới của chúng mình sẽ trọn vẹn hơn khi có thêm lời chúc phúc và sự hiện diện của các bạn",
+      "Mình rất muốn được chụp chung với bạn những tấm hình kỷ niệm vì vậy hãy đến sớm hơn một chút bạn yêu nhé! Đám cưới của chúng mình sẽ trọn vẹn hơn khi có thêm lời chúc phúc và sự hiện diện của các bạn. Cuối thiệp có một khu vườn nhỏ, hãy gieo vào đó một lời chúc nhé.",
     photos: ["photos/photo-03", "photos/photo-08", "photos/photo-04"],
     background: "photos/photo-02",
   },
@@ -371,6 +390,9 @@ export const weddingConfig: WeddingConfig = {
         "Chúng mình đã nhận được xác nhận của bạn. Hẹn gặp bạn ở lễ cưới nhé!",
       successNo:
         "Chúng mình đã nhận được. Tiếc là không có bạn, mong sớm gặp lại!",
+      successWish:
+        "Còn một điều nữa: bạn gieo cho chúng mình một lời chúc nhé?",
+      wishButton: "Gieo một lời chúc",
       errors: {
         name: "Bạn cho chúng mình biết tên nhé.",
         attending: "Bạn chọn giúp chúng mình có đến hay không nhé.",
@@ -396,7 +418,7 @@ export const weddingConfig: WeddingConfig = {
     nameLabel: "Tên người gửi",
     messageLabel: "Lời chúc gửi đôi mình",
     suggestAnother: "Chọn một mầm hoa khác",
-    send: "Gieo lời thương",
+    send: "Gieo lời chúc",
     sendSub: "Một lời chúc nhỏ, một kỷ niệm dài lâu.",
     doneTitle: "Hoa của bạn đã nở",
     plantAnother: "Gieo thêm một bông",
@@ -407,8 +429,8 @@ export const weddingConfig: WeddingConfig = {
     chooseTitle: "Chọn loài hoa của bạn",
     sowing: "Hạt đang rơi xuống chậu…",
     close: "Đóng",
-    seeWishes: "Xem lời chúc của bạn",
-    noteCaption: "Lời chúc này sẽ nằm trong phần Lời chúc của chúng mình",
+    seeWishes: "Ép hoa vào sổ lưu bút",
+    noteCaption: "Bông hoa này sẽ được ép vào sổ lưu bút của chúng mình",
     errors: {
       nameRequired: "Bạn cho chúng mình biết tên của bạn nhé.",
       nameTooLong:
@@ -421,11 +443,17 @@ export const weddingConfig: WeddingConfig = {
   },
   wishGallery: {
     label: "Lời chúc",
-    subtitle: "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu trong khu vườn của chúng mình.",
+    subtitle:
+      "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu trong khu vườn của chúng mình.",
     empty: "Hãy là người gieo bông hoa đầu tiên.",
-    view: "Xem lời chúc",
-    hide: "Thu gọn",
-    viewAll: "Xem tất cả ({n})",
+    guide:
+      "Chọn một loài hoa, viết vài dòng, bông hoa của bạn sẽ được ép vào cuốn sổ này.",
+    more: "Đọc tiếp",
+    mine: "Lời chúc của bạn",
+    prev: "Trang trước",
+    next: "Trang sau",
+    slideLabel: "Trang {n} trên {total}",
+    counter: "{n} / {total}",
     listLabel: "Các lời chúc",
     close: "Đóng",
     flowerLabel: "Loài hoa",
@@ -458,6 +486,8 @@ export const weddingConfig: WeddingConfig = {
   },
   thankYou: {
     text: "Thank you",
+    note: "Cảm ơn {name} đã ở đây và gieo thêm một bông hoa cho khu vườn của chúng mình.",
+    noteGuestFallback: "bạn",
     animation: "bride-groom-dancing.webp",
     still: "bride-groom-dancing-still.webp",
     alt: "Cô dâu chú rể nhảy múa",
@@ -467,7 +497,7 @@ export const weddingConfig: WeddingConfig = {
     mapTitle: "Bản đồ địa điểm tổ chức",
     weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
     openEnvelope: "Mở thiệp",
-    fabWish: "Gửi lời chúc…",
+    fabWish: "Gieo lời chúc",
     fabGift: "Gửi quà mừng",
     fabRsvp: "Xác nhận tham dự",
     musicLabel: "Nhạc nền",
