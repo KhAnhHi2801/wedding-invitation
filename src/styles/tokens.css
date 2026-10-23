@@ -4,7 +4,7 @@
   --paper: #fcfcfc;
   --ink: #3b3232;
   --wine: #8b2f30;
-  --wine-2: #834343;
+  --wine-2: var(--wine);
   --blush: #dfbaba;
   --rose: #e0b9be;
   --envelope: #a33b3b;
@@ -17,7 +17,8 @@
   --gray-600: #666666;
   --mist: #ededed;
   --white: #ffffff;
-  --black: #000000;
+  /* Chữ không dùng đen tuyền: gom về màu mực ấm của thiệp để toàn trang cùng tông */
+  --black: var(--ink);
 
   /* Font */
   --font-hero-script: "Wedding Edwardian", "Pinyon Script", "Allura", cursive;
@@ -26,10 +27,11 @@
   --font-display: "Belinda Avenue", "Baskerville Book", "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-heading: "Wedding Playfair Display", "Playfair Display", Georgia, serif;
   --font-body: "Wedding Quicksand", "Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-label: Arial, Helvetica, sans-serif;
+  /* Nhãn chữ hoa giãn chữ và chữ giao diện dùng chung font thân Quicksand, không dùng Arial/Noto Sans riêng nữa */
+  --font-label: var(--font-body);
   /* Tên khách ("Quý Khách") và chữ "Thank you" dùng font riêng của mẫu; thiếu glyph thì rơi về font dự phòng */
   /* Khối RSVP và nút "Gửi lời chúc…" của mẫu dùng Noto Sans */
-  --font-ui: "Wedding Noto Sans", "Noto Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: var(--font-body);
   --font-guest: "Soul Note Display", var(--font-display);
   --font-thanks: "The Hamstter", var(--font-signature);
 

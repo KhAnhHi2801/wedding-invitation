@@ -46,6 +46,9 @@ export function Cover() {
         priority="low"
         className="cover__photo"
       />
+      <p className="cover__names" aria-hidden="true">
+        {couple.bride.name} {couple.connector} {couple.groom.name}
+      </p>
       <CountdownBoxes targetMs={startsAtMs} units={ui.countdownUnits} />
       {/* Lời mời nằm ngay trên ảnh bìa, cùng một khung như bản gốc, không tách thành section riêng */}
       <div className="cover__panel reading">

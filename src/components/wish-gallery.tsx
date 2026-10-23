@@ -11,7 +11,10 @@ import "./wish-gallery.css"
 
 const REVEAL: readonly RevealRule[] = [
   { selector: ".wish-gallery__title", preset: "fadeUp" },
-  { selector: ".gb", preset: "fadeUp", delay: 200 },
+  { selector: ".wish-gallery__subtitle", preset: "fadeUp", delay: 100 },
+  // Bọc cuốn sổ trong khung luôn có mặt: bản thân sổ chỉ dựng sau khi tải xong lời chúc, lúc đó hook đã quét xong nên không gắn được hiệu ứng
+  { selector: ".wish-gallery__book", preset: "fadeUp", delay: 200 },
+  { selector: ".wish-gallery__actions", preset: "fadeUp", delay: 300 },
 ]
 
 /** Lời đang mở chi tiết và phần tử đã mở nó, để trả tiêu điểm khi đóng. */
@@ -84,12 +87,14 @@ export function WishGallery() {
       </h2>
       <p className="wish-gallery__subtitle">{text.subtitle}</p>
 
-      {wishes.length ? (
-        <GuestBook wishes={wishes} onOpen={openDetail} />
-      ) : (
-        // Chưa tải xong (hoặc tải lỗi) thì chưa nói "chưa có lời chúc nào"
-        loaded && <p className="wish-gallery__empty">{text.empty}</p>
-      )}
+      <div className="wish-gallery__book">
+        {wishes.length ? (
+          <GuestBook wishes={wishes} onOpen={openDetail} />
+        ) : (
+          // Chưa tải xong (hoặc tải lỗi) thì chưa nói "chưa có lời chúc nào"
+          loaded && <p className="wish-gallery__empty">{text.empty}</p>
+        )}
+      </div>
 
       <div className="wish-gallery__actions">
         <p className="wish-gallery__guide">{text.guide}</p>

@@ -50,14 +50,21 @@ export default function App() {
       <main ref={mainRef} tabIndex={-1} inert={!opened} className={opened ? "is-open" : "is-pending"}>
         <Cover />
         <Ceremony />
-        <EventInfo />
-        <MapCard />
-        <MarryMe />
-        <About />
-        <SaveTheDate />
-        <Timeline />
-        <Gallery />
-        <Rsvp onOpen={openRsvp} />
+        {/* Các nhóm chỉ để bố cục desktop xếp hai cột; ở mobile là khối thường nên thứ tự và giao diện không đổi */}
+        <div className="pair">
+          <EventInfo />
+          <MapCard />
+        </div>
+        <div className="story">
+          <MarryMe />
+          <About />
+          <SaveTheDate />
+        </div>
+        <div className="finale">
+          <Timeline />
+          <Gallery />
+          <Rsvp onOpen={openRsvp} />
+        </div>
         <Gift />
         <WishGallery />
         <ThankYou />

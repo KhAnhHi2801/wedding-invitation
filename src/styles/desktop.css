@@ -1,0 +1,448 @@
+/*
+ * Bố cục desktop và tablet. Mobile giữ nguyên bản gốc. Hero, Lễ thành hôn, Timeline ngang và Gallery áp dụng từ 768px; các cặp hai cột từ 896px.
+ * Trang dựng trên lưới 12 cột, container tối đa 80rem. Từ 1024px thang chữ lớn dần tới +30% để cân với ảnh.
+ * Mỗi khối "tranh" (Marry me, About, Gift...) tự co theo bề rộng của chính nó nên đặt vào ô lưới là khớp.
+ */
+
+/* Tên cô dâu chú rể trên ảnh bìa chỉ hiện ở màn rộng */
+.cover__names {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --page: 80rem;
+    /* Khoảng cách dọc chung giữa các khối lớn, để nhịp trang đều */
+    --band: clamp(3.5rem, 6vw, 6rem);
+  }
+
+  /* Hero: ảnh phủ toàn chiều rộng, tên và đếm ngược nằm trên ảnh, lời mời là một khối chữ gọn bên dưới */
+  .cover {
+    --hero-h: min(80svh, 54rem);
+    padding-top: var(--hero-h);
+  }
+
+  .cover::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    height: var(--hero-h);
+    /* Chân ảnh sẫm dần để chữ trắng và ô đếm ngược đọc được trên cả phần váy và áo sáng */
+    background: linear-gradient(to bottom, transparent 35%, color-mix(in srgb, color-mix(in srgb, var(--wine) 60%, #000) 88%, transparent) 100%);
+  }
+
+  .cover__photo {
+    height: var(--hero-h);
+    object-position: 50% 25%;
+  }
+
+  .cover__names {
+    display: block;
+    position: absolute;
+    z-index: calc(var(--z-raised) + 1);
+    left: max(var(--gutter), calc(50% - var(--page) / 2));
+    top: calc(var(--hero-h) - 2rem);
+    transform: translateY(-100%);
+    margin: 0;
+    font-family: var(--font-signature);
+    font-size: clamp(2.5rem, 1.6rem + 3vw, 4.75rem);
+    line-height: 1;
+    color: var(--white);
+    text-shadow: 0 0.04em 0.2em rgba(0, 0, 0, 0.5);
+  }
+
+  .cover .cover__count {
+    position: absolute;
+    top: calc(var(--hero-h) - 2rem);
+    right: max(var(--gutter), calc(50% - var(--page) / 2));
+    transform: translateY(-100%);
+    width: min(24rem, 42%);
+    margin: 0;
+  }
+
+  .cover .cover__unit {
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    color: var(--wine);
+  }
+
+  .cover .cover__number {
+    font-size: var(--o-24);
+    font-weight: 500;
+  }
+
+  .cover .cover__panel {
+    width: min(100% - 2 * var(--gutter), 46rem);
+    margin: var(--space-12) auto 0;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  /* Lễ thành hôn: tiêu đề ngang, hai tên một hàng, hai họ cách nhau một đường kẻ */
+  .cover {
+    padding-bottom: var(--band);
+  }
+
+  .ceremony {
+    padding-block: 0 var(--band);
+  }
+
+  .ceremony .container {
+    max-width: 60rem;
+  }
+
+  .ceremony__top {
+    container-type: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .ceremony__top > * {
+    grid-area: auto;
+  }
+
+  .ceremony__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    justify-self: center;
+  }
+
+  .ceremony__rule,
+  .ceremony__rule--faint {
+    width: clamp(3rem, 8vw, 6rem);
+    height: 5px;
+    border-inline: 0;
+    border-block: 1px solid var(--wine);
+  }
+
+  .ceremony__names {
+    position: static;
+    top: auto;
+    height: auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--space-8);
+  }
+
+  .ceremony__names > * {
+    position: static;
+    width: auto;
+  }
+
+  .ceremony__families {
+    max-width: 52rem;
+    margin: var(--space-12) auto 0;
+    column-gap: 0;
+  }
+
+  .ceremony__family {
+    padding-inline: var(--space-6);
+  }
+
+  .ceremony__family--bride {
+    border-left: 1px solid color-mix(in srgb, var(--wine) 40%, var(--paper));
+  }
+
+}
+
+@media (min-width: 56rem) {
+  /* Sự kiện | Bản đồ: bản đồ cao bằng cột chữ */
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    column-gap: var(--space-8);
+    width: min(100% - 2 * var(--gutter), var(--page));
+    margin: 0 auto var(--band);
+  }
+
+  .pair > .section {
+    padding-block: 0;
+  }
+
+  .pair .map,
+  .pair .map__inner {
+    height: 100%;
+  }
+
+  .pair .map__inner {
+    justify-items: stretch;
+  }
+
+  .pair .map__card {
+    width: 100%;
+    height: 100%;
+    min-height: 22rem;
+    aspect-ratio: auto;
+  }
+
+  /* Marry me | Save the date, rồi cô dâu | chú rể (About tan vào lưới để hai người nằm hai cột) */
+  .story {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    column-gap: var(--space-8);
+    row-gap: var(--space-12);
+    width: min(100% - 2 * var(--gutter), var(--page));
+    margin: 0 auto var(--band);
+  }
+
+  .story .marry {
+    order: 1;
+  }
+
+  .story .save {
+    order: 2;
+  }
+
+  .story .about {
+    display: contents;
+  }
+
+  .story .about__person {
+    order: 3;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  /* Hai người cùng chiều cao khung để hai bên đối xứng */
+  .story .about__person--bride {
+    aspect-ratio: 100 / 158;
+  }
+
+  .story .save .container {
+    width: 100%;
+  }
+
+  .story .save__photo-wrap {
+    margin-right: 0;
+  }
+
+  /* Timeline (8 cột) | RSVP (4 cột), Gallery rộng hết bề ngang bên dưới */
+  .finale {
+    display: grid;
+    grid-template-columns:
+      minmax(var(--gutter), 1fr)
+      repeat(12, minmax(0, calc(var(--page) / 12)))
+      minmax(var(--gutter), 1fr);
+    align-items: center;
+  }
+
+  .finale .timeline {
+    grid-column: 2 / 10;
+    grid-row: 1;
+  }
+
+  .finale .rsvp {
+    grid-column: 10 / 14;
+    grid-row: 1;
+    padding-top: 0;
+  }
+
+  .finale .gallery {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: var(--band);
+  }
+
+  .finale .timeline .container {
+    width: 100%;
+  }
+
+  .finale .rsvp__arch {
+    width: 100%;
+    max-width: 22rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  /* Timeline nằm ngang: icon trên, tim nằm trên đường kẻ, chữ dưới */
+  .timeline__list {
+    left: 0;
+    max-width: none;
+  }
+
+  .timeline__axis {
+    display: none;
+  }
+
+  .timeline__rows {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .timeline__row {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    row-gap: var(--space-3);
+    padding-block: 0;
+    text-align: center;
+  }
+
+  .timeline__row::before {
+    content: "";
+    grid-area: 2 / 1;
+    align-self: center;
+    justify-self: stretch;
+    height: 2px;
+    background: color-mix(in srgb, var(--ink) 55%, var(--paper));
+  }
+
+  .timeline__row:first-child::before {
+    clip-path: inset(0 0 0 50%);
+  }
+
+  .timeline__row:last-child::before {
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .timeline__icon {
+    grid-area: 1 / 1;
+    justify-self: center;
+    width: 4rem;
+  }
+
+  .timeline__heart {
+    grid-area: 2 / 1;
+  }
+
+  .timeline__text {
+    grid-area: 3 / 1;
+  }
+
+  /* Gallery: ba ảnh so le, ảnh giữa cao hơn và nâng lên */
+  .gallery__stage {
+    padding: 4.5rem var(--gutter) 9rem;
+  }
+
+  .gallery__stack {
+    grid-template-columns: 1fr 1.15fr 1fr;
+    align-items: end;
+    gap: var(--space-4);
+    /* Chừa chỗ hai bên cho chữ viết tay dọc */
+    width: min(100% - 10rem, 64rem);
+    padding: 2.5rem;
+  }
+
+  .gallery__stack > .gallery__photo,
+  .gallery__stack > .gallery__photo:first-child {
+    aspect-ratio: 3 / 4;
+  }
+
+  .gallery__stack > .gallery__photo:nth-child(2) {
+    aspect-ratio: 3 / 4.2;
+    margin-bottom: 3rem;
+  }
+
+  .gallery__title {
+    top: 1.25rem;
+  }
+
+  .gallery__side {
+    white-space: nowrap;
+    font-size: clamp(2.25rem, 1.2rem + 2.4vw, 4.25rem);
+  }
+
+  .gallery__side--left {
+    left: max(var(--gutter), calc(50% - 41rem));
+  }
+
+  .gallery__side--right {
+    right: max(var(--gutter), calc(50% - 41rem));
+  }
+
+}
+
+@media (min-width: 56rem) {
+  /* Quà mừng: hai thẻ cạnh nhau, mỗi thẻ là một container riêng nên kích thước bên trong theo bề rộng thẻ */
+  .gift {
+    padding-block: var(--band) 0;
+  }
+
+  .gift__column {
+    width: min(100% - 2 * var(--gutter), 72rem);
+  }
+
+  .gift__list {
+    container-type: normal;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .gift-card {
+    container-type: inline-size;
+    height: auto;
+    aspect-ratio: 100 / 30.2;
+  }
+}
+
+@media (min-width: 48rem) {
+  .gb {
+    width: min(100% - 2 * var(--gutter), 36rem);
+  }
+
+  .wish-gallery__subtitle {
+    max-width: 30rem;
+  }
+
+  .wish-gallery {
+    padding-block: var(--band) 0;
+  }
+
+  .thanks {
+    padding-block: var(--band) 8rem;
+  }
+}
+
+/* Tablet: tên và đếm ngược xếp giữa, hai hàng, vì chưa đủ chỗ đứng cạnh nhau */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .cover__names {
+    left: 0;
+    right: 0;
+    top: calc(var(--hero-h) - 2rem - 6rem);
+    text-align: center;
+  }
+
+  .cover .cover__count {
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -100%);
+    width: min(24rem, 70%);
+  }
+}
+
+/* Từ 1024px: thang chữ lớn dần tới +30% so với mobile, tính trong main để hộp thoại không bị đổi */
+@media (min-width: 64rem) {
+  main {
+    --fs-12: clamp(0.875rem, calc(0.575rem + 0.625vw), 1.137rem);
+    --fs-14: clamp(0.9375rem, calc(0.616rem + 0.669vw), 1.219rem);
+    --fs-16: clamp(1.0625rem, calc(0.698rem + 0.759vw), 1.381rem);
+    --fs-22: clamp(1.25rem, calc(0.821rem + 0.892vw), 1.625rem);
+    --fs-26: clamp(1.5rem, calc(0.986rem + 1.071vw), 1.950rem);
+    --fs-34: clamp(2rem, calc(1.314rem + 1.428vw), 2.600rem);
+    --fs-54: clamp(3.25rem, calc(2.135rem + 2.321vw), 4.225rem);
+    --fs-70: clamp(4.25rem, calc(2.792rem + 3.034vw), 5.525rem);
+    --o-11: clamp(0.9375rem, calc(0.616rem + 0.669vw), 1.219rem);
+    --o-12: clamp(1rem, calc(0.657rem + 0.714vw), 1.300rem);
+    --o-13: clamp(1.0625rem, calc(0.698rem + 0.759vw), 1.381rem);
+    --o-14: clamp(1.125rem, calc(0.739rem + 0.803vw), 1.463rem);
+    --o-15: clamp(1.1875rem, calc(0.780rem + 0.848vw), 1.544rem);
+    --o-16: clamp(1.3rem, calc(0.854rem + 0.928vw), 1.690rem);
+    --o-18: clamp(1.4375rem, calc(0.944rem + 1.026vw), 1.869rem);
+    --o-20: clamp(1.625rem, calc(1.068rem + 1.160vw), 2.113rem);
+    --o-22: clamp(1.75rem, calc(1.150rem + 1.249vw), 2.275rem);
+    --o-24: clamp(1.875rem, calc(1.232rem + 1.339vw), 2.438rem);
+    --o-25: clamp(2rem, calc(1.314rem + 1.428vw), 2.600rem);
+    --o-29: clamp(2.25rem, calc(1.478rem + 1.607vw), 2.925rem);
+    --o-37: clamp(3.25rem, calc(2.135rem + 2.321vw), 4.225rem);
+    --o-66: clamp(5.5rem, calc(3.614rem + 3.927vw), 7.150rem);
+    --o-78: clamp(7.5rem, calc(4.928rem + 5.355vw), 9.750rem);
+  }
+}

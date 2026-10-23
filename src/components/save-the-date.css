@@ -12,9 +12,10 @@
   white-space: nowrap;
   margin: 0 0 var(--space-8) 59%;
   translate: -50% 0;
-  font-family: var(--font-heading);
-  font-weight: 500;
-  font-size: clamp(1.5rem, 7vw, 2.75rem);
+  /* Cùng chữ viết tay và cỡ với các tiêu đề script khác (About us, Lời chúc) */
+  font-family: var(--font-signature);
+  font-weight: 400;
+  font-size: var(--o-37);
   color: var(--wine);
 }
 
