@@ -25,7 +25,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Bình yên và bền lâu",
     plant: "baby-breath",
     message:
-      "Hoa baby kết thành những chùm li ti như sương sớm đọng trên cành, mong manh mà làm cả bó hoa trở nên bồng bềnh, dịu nhẹ. Sắc trắng tinh khôi và dáng hoa nhỏ xinh khiến baby thường được ví như vẻ đẹp của những điều giản dị — không cần đứng riêng vẫn đủ sức làm nền cho cả một miền thương nhớ.",
+      "Baby’s breath — hoa baby — mang vẻ đẹp mong manh với những chùm hoa trắng li ti, tựa những đám mây nhỏ vương trên cành lá. Không rực rỡ hay phô trương, loài hoa vẫn khiến người ta nhớ mãi bởi nét tinh khôi, dịu dàng và ý nghĩa về những tình cảm chân thành, thuần khiết.",
     prompts: [
       "Gửi hai bạn một lời chúc dịu dàng, mong bình yên ở lại trong từng ngày chung đôi.",
       "Mong mái nhà mai sau luôn ấm ánh đèn, đầy tiếng cười và những điều thân quen.",
@@ -55,7 +55,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Hạnh phúc viên mãn",
     plant: "peony",
     message:
-      "Mẫu đơn nổi bật với những lớp cánh dày, xếp nở thành đóa lớn mềm mại và rực rỡ. Khi bung nở, hoa vừa có nét kiêu sa vừa mang vẻ đầy đặn, sung túc; mỗi cánh hoa như mở rộng thêm một vòng sắc hương, khiến mẫu đơn từ lâu gắn với hình ảnh phú quý và vẻ đẹp viên mãn.",
+      "Mẫu đơn cuốn hút bởi những lớp cánh mềm mại xếp chồng lên nhau, tạo thành đóa hoa tròn đầy và kiêu sa. Từ lâu, loài hoa này đã gắn với vẻ đẹp phú quý, thịnh vượng và sự viên mãn, như một nét rực rỡ mà thiên nhiên dành riêng cho những điều đáng trân trọng.",
     prompts: [
       "Chúc hai bạn một đời đủ đầy, lòng luôn an vui và nhà luôn ấm áp.",
       "Mong những ước mơ chung được vun trồng, rồi một ngày nở hoa như ý.",
@@ -85,7 +85,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Niềm vui giản dị",
     plant: "daisy",
     message:
-      "Cúc họa mi có những cánh trắng mảnh xếp quanh nhụy vàng nhỏ, giản dị như một vầng nắng vừa chạm xuống đồng cỏ. Hoa không cầu kỳ về dáng vẻ, nhưng chính nét thanh khiết, tươi sáng ấy làm nên sức hút riêng — dịu dàng, trong trẻo và khiến những ngày se lạnh cũng như sáng hơn.",
+      "Cúc họa mi có những cánh hoa trắng mảnh khẽ xòe quanh nhụy vàng, nhỏ bé mà sáng trong giữa những ngày cuối thu. Vẻ đẹp mộc mạc của loài hoa gợi nhắc đến sự giản dị, thuần khiết và niềm vui bình yên vẫn nở ra từ những điều đời thường nhất.",
     prompts: [
       "Chúc hai bạn giữ mãi tiếng cười trong veo giữa những ngày bình thường.",
       "Mong bữa cơm giản dị nào cũng có chuyện vui để kể cùng nhau.",
@@ -115,7 +115,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Tình yêu chân thành",
     plant: "tulip",
     message:
-      "Tulip chẳng cần phô trương vẫn mang vẻ thanh nhã trong dáng hoa gọn gàng và những cánh mềm ôm lấy nhau. Qua bao sắc màu, tulip giữ nét đẹp vừa giản dị vừa kiêu hãnh; đường cong kín đáo của cánh hoa và sắc màu thuần khiết khiến người ta liên tưởng đến những rung động chân thành, không cần nói thành lời.",
+      "Những cánh tulip ôm lấy nhau thành dáng hoa thanh nhã, đường nét giản đơn mà vẫn đầy sức sống. Mỗi sắc hoa mang một vẻ riêng: trắng tinh khôi, hồng dịu dàng hay đỏ nồng nàn; tất cả cùng làm nên biểu tượng của tình yêu, sự duyên dáng và những cảm xúc được nâng niu.",
     prompts: [
       "Chúc hai bạn luôn chọn nhau bằng sự chân thành, qua tháng ngày và đổi thay.",
       "Mong hai người biết lắng nghe, tôn trọng và dịu dàng với những khác biệt.",
@@ -145,7 +145,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Lạc quan và đồng hành",
     plant: "sunflower",
     message:
-      "Hướng dương mang chiếc nhụy tròn lớn được bao quanh bởi những cánh vàng tỏa rộng như tia nắng. Thân hoa vươn cao, sắc vàng rực rỡ và dáng vẻ luôn gợi về ánh sáng khiến loài hoa này trở thành biểu tượng của niềm tin, sự lạc quan và tinh thần hướng về những điều tươi sáng.",
+      "Hướng dương nổi bật với những cánh vàng rực rỡ bao quanh nhụy nâu, dáng hoa luôn gợi về ánh mặt trời ấm áp. Bởi sức sống mạnh mẽ và hình ảnh hướng về phía sáng, loài hoa thường tượng trưng cho niềm tin, sự lạc quan và lòng kiên định trước những đổi thay.",
     prompts: [
       "Chúc hai bạn luôn là ánh nắng, tiếp thêm can đảm cho nhau trên đường dài.",
       "Mong những ước mơ chung được chăm chút mỗi ngày rồi một ngày thành hoa.",
@@ -175,7 +175,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Thấu hiểu và sẻ chia",
     plant: "lavender",
     message:
-      "Lavender nở thành từng bông nhỏ li ti dọc theo những cành mảnh, tạo nên sắc tím bảng lảng và hương thơm dịu đặc trưng. Những luống hoa đung đưa trong gió mang vẻ bình yên rất riêng, không rực rỡ lấn át mà lặng lẽ lưu lại trong ký ức bằng màu sắc trầm êm và mùi hương thư thái.",
+      "Oải hương mang sắc tím dịu trên những bông hoa nhỏ kết thành từng nhành dài, cùng hương thơm thoang thoảng rất riêng. Vẻ đẹp trầm lắng ấy khiến lavender thường được gắn với sự bình yên, lòng thủy chung và những ký ức dịu dàng còn vương lại theo năm tháng.",
     prompts: [
       "Chúc hai bạn nghe được cả những điều chưa kịp nói thành lời.",
       "Mong lòng bao dung luôn rộng hơn những giận hờn thoáng qua.",
@@ -205,7 +205,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Tình yêu và lãng mạn",
     plant: "rose",
     message:
-      "Hoa hồng cuộn những cánh mềm quanh tâm hoa, lớp nọ nâng lớp kia, khi e ấp như nụ vừa hé, khi nở rộ đầy đặn và nồng nàn. Sắc hồng, đỏ, trắng hay vàng đem đến những sắc thái khác nhau, nhưng vẻ quyến rũ cùng hương thơm đặc trưng đã khiến hoa hồng trở thành hình ảnh vượt thời gian của tình yêu và vẻ đẹp.",
+      "Hoa hồng quyến rũ bởi những lớp cánh mềm cuộn vào nhau, vừa mong manh vừa rực rỡ, như cất giữ một điều chưa nói giữa lòng hoa. Qua bao thế hệ, hoa hồng vẫn là biểu tượng quen thuộc của tình yêu và đam mê; mỗi sắc hoa lại mang một cung bậc riêng của những rung động trong lòng người.",
     prompts: [
       "Chúc tình yêu qua năm tháng vẫn ngọt ngào như buổi đầu gặp gỡ.",
       "Mong những điều lãng mạn nhỏ bé luôn tìm được chỗ trong ngày thường.",
@@ -235,7 +235,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Thanh lịch và khởi đầu mới",
     plant: "calla-lily",
     message:
-      "Rum có dáng hoa thanh thoát với một mo hoa uốn cong như chiếc loa mềm, ôm lấy trụ hoa nhỏ ở giữa. Những đường nét tối giản, bề mặt mượt mà và thân vươn thẳng tạo nên vẻ sang trọng tĩnh lặng; rum không cần nhiều lớp cánh vẫn cuốn hút bởi sự tinh tế trong từng đường cong.",
+      "Rum trắng gây ấn tượng bởi dáng hoa uốn cong thanh thoát, một cánh hoa lớn ôm lấy nhụy vàng như nét vẽ mềm trên nền xanh của lá. Không cần nhiều lớp cánh hay sắc màu cầu kỳ, loài hoa vẫn toát lên vẻ tinh giản, thanh lịch và thường gợi liên tưởng đến sự thuần khiết, cao quý.",
     prompts: [
       "Chúc chương mới mở ra thật êm đềm, nhiều cơ hội và đầy niềm vui.",
       "Mong mỗi bước chân chung đều đưa hai bạn đến gần hơn với ước mơ.",
@@ -265,7 +265,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "An nhiên và bền vững",
     plant: "lotus",
     message:
-      "Sen vươn lên từ mặt nước với những lớp cánh xếp đều, sắc hoa dịu và chiếc lá rộng nâng đỡ những giọt sương trong veo. Vẻ đẹp của sen nằm ở sự hài hòa giữa nét mềm mại và dáng đứng vững vàng; từ bùn nước, hoa vẫn giữ được vẻ thanh sạch, vì thế sen thường gợi nhắc đến sự an nhiên và phẩm chất trong sáng.",
+      "Hoa sen vươn lên từ mặt nước, những lớp cánh hồng hoặc trắng xếp quanh nhụy vàng, thanh sạch và tĩnh tại giữa sắc xanh của lá. Trong văn hóa Việt Nam, sen là biểu tượng của sự thuần khiết, phẩm giá và sức sống bền bỉ — vẻ đẹp vẫn giữ được nét trong lành dù đi qua bùn sâu.",
     prompts: [
       "Chúc hai bạn giữ lòng an nhiên giữa những đổi thay của cuộc đời.",
       "Mong sự bao dung luôn nở hoa trong mái nhà chung của hai người.",
@@ -295,7 +295,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Khởi đầu và trân trọng hiện tại",
     plant: "cherry-blossom",
     message:
-      "Hoa anh đào nở thành từng chùm mỏng nhẹ, những cánh hoa phớt hồng rung rinh trên cành khi gió vừa ghé qua. Mùa hoa thường ngắn, sắc hoa lại mong manh, khiến mỗi lần nở đều giống một khoảnh khắc đẹp cần được ngắm nhìn thật chậm — vẻ đẹp dịu dàng càng đáng nhớ bởi không ở lại mãi.",
+      "Hoa anh đào nở thành từng chùm mỏng nhẹ, sắc hồng phớt phủ lên cành cây như làn mây nhỏ giữa trời xuân. Mùa hoa đến rồi đi trong khoảng thời gian ngắn ngủi, khiến loài hoa trở thành biểu tượng của vẻ đẹp mong manh, sự khởi đầu mới và lời nhắc dịu dàng về những khoảnh khắc đáng nâng niu.",
     prompts: [
       "Chúc hai bạn trân quý hôm nay và cùng nhau mong đợi những mùa sau.",
       "Mong mỗi năm đi qua đều để lại một miền ký ức đẹp trong tim.",
@@ -325,7 +325,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Tinh tế và bền bỉ",
     plant: "orchid",
     message:
-      "Lan mang dáng vẻ riêng biệt với cánh hoa cân xứng, đường nét tinh xảo và nhiều hình thái phong phú từ thanh mảnh đến kiêu kỳ. Hoa thường bền lâu, sắc độ sâu và dáng nở đầy chủ ý, tạo nên vẻ sang trọng không phô trương; càng ngắm kỹ càng thấy sự tinh tế ẩn trong cấu trúc tưởng như mong manh.",
+      "Phong lan có dáng hoa thanh thoát, những cánh hoa cân đối mở ra với đường nét tinh xảo và sắc màu phong phú. Không phô trương mà vẫn đầy cuốn hút, phong lan từ lâu gắn với vẻ đẹp quý phái, sự tinh tế và nét duyên bền bỉ vượt qua những mùa nở tàn.",
     prompts: [
       "Chúc hai bạn càng đi lâu càng hiểu, càng hiểu càng trân trọng nhau.",
       "Mong mỗi người được là chính mình mà vẫn có người đồng hành bên cạnh.",
@@ -355,7 +355,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Quan tâm và gắn bó",
     plant: "carnation",
     message:
-      "Cẩm chướng gây ấn tượng bởi những cánh hoa viền lượn, xếp tầng thành dáng hoa bồng nhẹ như những nếp ren. Màu sắc phong phú, độ bền tốt và vẻ dịu dàng khiến hoa vừa gần gũi vừa duyên dáng; phía sau những cánh hoa mềm mại ấy là ý nghĩa về sự trìu mến, lòng biết ơn và tình cảm được nâng niu.",
+      "Cẩm chướng mang những cánh hoa viền lượn mềm mại, xếp dày thành đóa nhỏ xinh với sắc hồng, đỏ, trắng hay kem dịu mắt. Loài hoa thường gắn với lòng biết ơn, sự trìu mến và tình cảm bền lâu — những điều đôi khi không cần nói thành lời vẫn đủ sức chạm đến trái tim.",
     prompts: [
       "Chúc hai bạn luôn nhớ hỏi han nhau giữa những ngày bận rộn.",
       "Mong yêu thương hiện diện trong từng việc nhỏ, chẳng cần nói thành lời.",
@@ -385,7 +385,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Biết ơn và thấu hiểu",
     plant: "hydrangea",
     message:
-      "Cẩm tú cầu được tạo nên từ vô số bông nhỏ tụ lại thành một khối tròn đầy, như những chấm màu cùng nhau dệt nên một vòm hoa. Tùy giống và điều kiện đất, sắc hoa có thể chuyển giữa xanh, hồng, tím hay trắng; vẻ đẹp nằm ở sự phong phú của từng bông nhỏ khi đứng cạnh nhau, tạo thành một tổng thể hài hòa.",
+      "Cẩm tú cầu kết từ vô vàn bông hoa nhỏ, tụ lại thành khối tròn đầy như một đám mây mềm trên nền lá xanh. Sắc hoa có thể chuyển từ xanh sang hồng, tím tùy giống và điều kiện đất, tạo nên vẻ đẹp biến chuyển đầy thi vị; loài hoa cũng thường tượng trưng cho lòng biết ơn và những cảm xúc chân thành.",
     prompts: [
       "Chúc hai bạn luôn lắng nghe bằng trái tim và đáp lời bằng sự tôn trọng.",
       "Mong lời cảm ơn, lời xin lỗi luôn được nói ra đúng lúc, thật lòng.",
@@ -415,7 +415,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Trưởng thành và khởi sắc",
     plant: "magnolia",
     message:
-      "Mộc lan có những cánh hoa lớn, dày và mượt, nở rộng trên cành với vẻ thanh cao, điềm tĩnh. Hoa thường xuất hiện khi cành còn thưa lá, khiến từng đóa nổi bật giữa khoảng trời thoáng; vẻ đẹp vừa mạnh mẽ vừa tinh khiết ấy gợi cảm giác trưởng thành, phẩm giá và một khởi đầu đang dần hé mở.",
+      "Mộc lan nở những đóa hoa lớn với cánh dày, mượt mà, đường nét thanh nhã và hương thơm nhẹ nhàng. Vẻ đẹp vừa mạnh mẽ vừa tinh tế khiến loài hoa thường được gắn với phẩm giá, sự cao quý và sức sống bền bỉ, như nét đẹp lặng thầm mà không dễ phai mờ.",
     prompts: [
       "Chúc hai bạn cùng trưởng thành mà vẫn giữ nguyên những điều làm mình đặc biệt.",
       "Mong ước mơ riêng được tôn trọng, ước mơ chung được cùng nhau vun trồng.",
@@ -445,7 +445,7 @@ export const flowerWishes: FlowerWish[] = [
     theme: "Tự do và niềm vui",
     plant: "cosmos",
     message:
-      "Hoa cánh bướm có những cánh mỏng xòe rộng quanh nhụy nhỏ, thân cao thanh mảnh và sắc hoa nhẹ như được gió mang đến. Khi nở thành từng vạt, hoa tạo nên một vẻ tự nhiên, phóng khoáng và đầy chuyển động; không quá cầu kỳ, cánh bướm đẹp bởi sự tự do, tươi vui và nét duyên dáng rất đỗi đời thường.",
+      "Cánh bướm — cosmos — có những cánh hoa mảnh xòe rộng quanh nhụy vàng, rung rinh nhẹ nhàng trên thân cây thanh mảnh. Vẻ đẹp tự nhiên, phóng khoáng của loài hoa gợi lên sự hài hòa, nét hồn nhiên và niềm vui tự do, như một khoảng trời trong trẻo giữa khu vườn đầy nắng.",
     prompts: [
       "Chúc hai bạn luôn là chính mình và vẫn vui lòng đi cùng nhau thật xa.",
       "Mong cuộc sống chung đầy tiếng cười, những ý tưởng bất chợt và chuyến đi vui.",

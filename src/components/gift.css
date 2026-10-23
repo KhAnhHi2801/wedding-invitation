@@ -12,7 +12,7 @@
 }
 
 .gift__heading {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 clamp(2.5rem, 11vw, 4.5rem);
   text-align: center;
   font-family: var(--font-label);
   font-weight: 500;
@@ -20,14 +20,6 @@
   color: var(--wine);
 }
 
-.gift__note {
-  margin: 0 auto clamp(2.5rem, 11vw, 4.5rem);
-  max-width: 22rem;
-  text-align: center;
-  font-size: var(--o-13);
-  line-height: 1.6;
-  color: var(--ink);
-}
 
 .gift__list {
   container-type: inline-size;
@@ -149,7 +141,7 @@
 /* Họ tên thật dài hơn tên mẫu và phần chữ chỉ rộng ~33cqw: cỡ chữ nhỏ hơn vai trò một chút để vừa một dòng,
    tránh xuống hai dòng làm thẻ chật; chữ rất dài vẫn được phép xuống dòng */
 .gift-card__holder {
-  font-size: clamp(0.8125rem, 3.5cqw, 1.1rem);
+  font-size: clamp(0.8125rem, 3.9cqw, 1.1rem);
   line-height: 1.25;
   text-wrap: balance;
 }
@@ -160,7 +152,7 @@
 
 .gift-card__bank {
   margin-top: 1.4cqw;
-  font-size: clamp(0.75rem, 3cqw, 0.9rem);
+  font-size: clamp(0.75rem, 3.5cqw, 0.9rem);
   line-height: 3.6cqw;
 }
 
@@ -169,7 +161,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.8cqw;
-  font-size: clamp(0.6875rem, 3cqw, 0.95rem);
+  font-size: clamp(0.6875rem, 3.5cqw, 0.95rem);
   line-height: 3.6cqw;
   font-variant-numeric: lining-nums tabular-nums;
   /* Số tài khoản luôn một dòng, không bị bẻ giữa dãy số */

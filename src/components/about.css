@@ -60,10 +60,10 @@
 
 .about__card {
   display: grid;
-  align-content: start;
-  gap: 1.2cqw;
-  /* Chữ nằm cao trong thẻ như mẫu: tên cách mép trên ~11cqw */
-  padding: 11.4cqw 1cqw 2cqw;
+  /* Khối chữ nằm giữa thẻ theo chiều dọc: tên một dòng hay hai dòng, hai thẻ vẫn cân nhau */
+  align-content: center;
+  gap: 2.4cqw;
+  padding: 4cqw 2cqw;
   border: 1.5px solid var(--wine);
   background: color-mix(in srgb, var(--rose) 14%, var(--paper));
   text-align: center;
@@ -75,21 +75,22 @@
   z-index: 1;
 }
 
+/* Cả ba dòng (tên, ngày sinh, quê quán) cùng một kiểu chữ viết tay, cùng độ đậm, cỡ tính theo bề rộng khung (cqw)
+   để vừa phần thẻ không bị ảnh đè; chữ viết tay có x-height thấp nên cỡ lớn hơn chữ in. Dòng dài tự xuống dòng cân nhau. */
 .about__name,
 .about__detail {
   margin: 0;
   font-weight: 700;
-  /* Mẫu 18.7px ở 390px, nhưng tên thật dài hơn tên mẫu: tính theo bề rộng khung (cqw) để tên vừa phần thẻ không bị ảnh đè */
-  font-size: clamp(0.875rem, 4.3cqw, 1.5rem);
   line-height: 1.3;
   text-wrap: balance;
 }
 
-/* Quê quán dùng font The Artisan 12.5px như mẫu */
-.about__detail:last-child {
-  margin-top: 3.3cqw;
-  font-family: "The Artisan", var(--font-hand);
-  font-size: var(--o-13);
+.about__name {
+  font-size: clamp(1.0625rem, 5.4cqw, 1.7rem);
+}
+
+.about__detail {
+  font-size: clamp(0.9375rem, 4.9cqw, 1.5rem);
 }
 
 .about__frame {

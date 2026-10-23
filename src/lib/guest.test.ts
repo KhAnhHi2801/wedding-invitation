@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { getGuestName } from "./guest"
+import { getGuestName, getNamedGuest } from "./guest"
 
 const withQuery = (search: string) => vi.stubGlobal("window", { location: { search } })
 
@@ -36,5 +36,19 @@ describe("getGuestName", () => {
   it("giữ nguyên thẻ HTML như văn bản thuần (React sẽ tự escape khi hiển thị)", () => {
     withQuery(`?to=${encodeURIComponent("<img src=x onerror=1>")}`)
     expect(getGuestName("to", "Quý Khách")).toBe("<img src=x onerror=1>")
+  })
+})
+
+describe("getNamedGuest", () => {
+  it("có tên trong link thì trả đúng tên", () => {
+    withQuery("?to=Anh%20Nam")
+    expect(getNamedGuest("to")).toBe("Anh Nam")
+  })
+
+  it("không có tên hoặc chỉ khoảng trắng thì trả chuỗi rỗng, kể cả khi tên trùng chữ mặc định", () => {
+    withQuery("")
+    expect(getNamedGuest("to")).toBe("")
+    withQuery("?to=%20%20")
+    expect(getNamedGuest("to")).toBe("")
   })
 })

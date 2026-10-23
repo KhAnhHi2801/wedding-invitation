@@ -17,7 +17,7 @@ import { prefersReducedMotion } from "../lib/device-tier";
 import { FLOWER_ENTRIES } from "../lib/flower-entries";
 import { bookFlight } from "../lib/book-flight";
 import { gardenOverlay } from "../lib/garden-overlay";
-import { getGuestName } from "../lib/guest";
+import { getNamedGuest } from "../lib/guest";
 import { lockScroll } from "../lib/scroll-lock";
 import { DEFAULT_INK } from "../lib/wish-style";
 import {
@@ -50,9 +50,7 @@ const pickRandom = <T,>(items: readonly T[], not?: T): T => {
 
 /** Tên khách có sẵn trong link mời (`?to=`) thì điền sẵn vào ô tên; không có thì để trống. */
 function initialName(): string {
-  const { guestParam, hero } = weddingConfig;
-  const guest = getGuestName(guestParam, "");
-  return guest === hero.guestFallback ? "" : guest;
+  return getNamedGuest(weddingConfig.guestParam);
 }
 
 /** Cuộn tới lời chúc của khách trong phần "Lời chúc" (lời mới nhất đứng đầu); chưa dựng thì cuộn tới đầu phần. */
@@ -69,7 +67,7 @@ interface GardenOverlayProps {
 }
 
 /**
- * Lớp phủ toàn màn hình của mini-game "Gieo một lời chúc": chọn hoa, nhấn giữ để gieo hạt vào chậu, xem hoa nở, viết lời
+ * Lớp phủ toàn màn hình của mini-game "Gieo lời chúc": chọn hoa, nhấn giữ để gieo hạt vào chậu, xem hoa nở, viết lời
  * chúc, rồi xuống phần "Lời chúc" xem lời chúc của mình. Mỗi lúc chỉ hiện một bước. Lời chúc gửi ngầm lên Google Sheet
  * (hàng đợi + thử lại), lời chúc của khách hiện ngay trong phần "Lời chúc" không chờ máy chủ.
  */

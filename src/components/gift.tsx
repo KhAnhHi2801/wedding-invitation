@@ -30,7 +30,6 @@ export function Gift() {
     <section className="section gift" id="gift">
       <div className="gift__column" ref={ref}>
         <h2 className="gift__heading">{gift.heading}</h2>
-        <p className="gift__note">{gift.note}</p>
         <div className="gift__list">
           {gift.accounts.map((account, index) => (
             <article className={`gift-card${index % 2 === 1 ? " gift-card--flip" : ""}`} key={account.role}>

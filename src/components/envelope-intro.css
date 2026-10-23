@@ -33,7 +33,8 @@
 .intro__eyebrow,
 .intro__title,
 .intro__name,
-.intro__amp {
+.intro__amp,
+.intro__guest {
   position: absolute;
   margin: 0;
   text-align: center;
@@ -103,6 +104,20 @@
   top: 38cqw;
   width: 11cqw;
   height: auto;
+}
+
+/* Lời gọi riêng khách (chỉ có khi link mời có ?to=), nằm dưới biểu tượng song hỷ */
+.intro__guest {
+  left: 4cqw;
+  top: 51.5cqw;
+  width: 92cqw;
+  white-space: normal;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: 3.6cqw;
+  line-height: 1.3;
+  color: var(--wine);
+  overflow-wrap: anywhere;
 }
 
 /* Sân khấu: phong bì, bóng, dòng gợi ý và trái tim nằm trong khung 86% bề rộng, cách đỉnh 58% */
@@ -261,7 +276,8 @@
  * phong bì hiện lên trễ 0.3s rồi lơ lửng; dòng gợi ý hiện chậm (1.6s, trễ 0.4s).
  */
 .intro__eyebrow,
-.intro__title {
+.intro__title,
+.intro__guest {
   animation: intro-up 1.3s ease-out both;
 }
 
@@ -335,6 +351,7 @@
   .envelope,
   .intro__eyebrow,
   .intro__title,
+  .intro__guest,
   .intro__name,
   .intro__amp,
   .intro__shadow,

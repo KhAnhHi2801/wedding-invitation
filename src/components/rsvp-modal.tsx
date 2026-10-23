@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from "react"
 import { weddingConfig } from "../config/wedding-config"
 import { gardenOverlay } from "../lib/garden-overlay"
-import { getGuestName } from "../lib/guest"
+import { getGuestName, getNamedGuest } from "../lib/guest"
 import { lockScroll } from "../lib/scroll-lock"
 import { validateRsvp, GUESTS_MAX, NAME_MAX, NOTE_MAX, type RsvpErrors, type RsvpField, type RsvpValues } from "../lib/rsvp-validation"
 import { ApiError, sendRsvp } from "../lib/wishes-api"
@@ -15,7 +15,13 @@ interface RsvpModalProps {
 
 type Status = "idle" | "sending" | "done"
 
-const EMPTY: RsvpValues = { name: "", attending: "", guests: "1", note: "" }
+/** Form mới; link có tên khách (?to=) thì điền sẵn ô tên, khách vẫn sửa được */
+const emptyValues = (): RsvpValues => ({
+  name: getNamedGuest(weddingConfig.guestParam),
+  attending: "",
+  guests: "1",
+  note: "",
+})
 const GUEST_OPTIONS = Array.from({ length: GUESTS_MAX }, (_, i) => i + 1)
 
 export function RsvpModal({ open, onClose }: RsvpModalProps) {
@@ -29,7 +35,7 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
   const id = (field: string) => `${uid}-${field}`
   const nameFieldId = id("name")
 
-  const [values, setValues] = useState<RsvpValues>(EMPTY)
+  const [values, setValues] = useState<RsvpValues>(emptyValues)
   const [trap, setTrap] = useState("")
   const [errors, setErrors] = useState<RsvpErrors>({})
   const [serverError, setServerError] = useState("")
@@ -52,7 +58,7 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
   // Đóng sau khi đã gửi xong thì lần mở sau là một form mới
   const handleClose = () => {
     if (status === "done") {
-      setValues(EMPTY)
+      setValues(emptyValues())
       setStatus("idle")
     }
     onClose()

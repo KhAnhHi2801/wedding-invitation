@@ -1,6 +1,8 @@
 import { weddingConfig } from "../config/wedding-config"
 import { useCountdown } from "../hooks/use-countdown"
 import { getEventParts } from "../lib/event-date"
+import { getNamedGuest } from "../lib/guest"
+import { fillText } from "../lib/wish-list"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { Photo } from "./photo"
 import "./cover.css"
@@ -28,7 +30,10 @@ const REVEAL: readonly RevealRule[] = [
 ]
 
 export function Cover() {
-  const { hero, couple, ui, invitation } = weddingConfig
+  const { hero, couple, ui, invitation, guestParam } = weddingConfig
+  // Link có tên khách (?to=) thì lời mời mở đầu gọi đúng tên; không có thì giữ lời chào chung
+  const named = getNamedGuest(guestParam)
+  const lines = named ? [fillText(invitation.greetingNamed, { name: named }), ...invitation.lines.slice(1)] : invitation.lines
   // Đếm ngược tới lễ đầu tiên, chung cho cả hai bên (giờ tiệc của từng bên nằm ở phần "Tiệc mừng")
   const { startsAtMs } = getEventParts(weddingConfig.countdownTo)
   const ref = useReveal<HTMLElement>(REVEAL)
@@ -45,7 +50,7 @@ export function Cover() {
       {/* Lời mời nằm ngay trên ảnh bìa, cùng một khung như bản gốc, không tách thành section riêng */}
       <div className="cover__panel reading">
         <h2 className="cover__title label">{invitation.heading}</h2>
-        {invitation.lines.map((line, i) => (
+        {lines.map((line, i) => (
           <p key={i} className="cover__line">
             {line}
           </p>

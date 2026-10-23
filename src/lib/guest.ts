@@ -5,8 +5,13 @@ const MAX_LENGTH = 40
  * Chỉ dùng làm văn bản (React tự escape), không bao giờ chèn như HTML.
  */
 export function getGuestName(param: string, fallback: string): string {
+  return getNamedGuest(param) || fallback
+}
+
+/** Như `getGuestName` nhưng trả chuỗi rỗng khi link không có tên khách (để phân biệt với tên mặc định). */
+export function getNamedGuest(param: string): string {
   const raw = new URLSearchParams(window.location.search).get(param) ?? ""
-  const cleaned = Array.from(
+  return Array.from(
     raw
     .normalize("NFC")
     // eslint-disable-next-line no-control-regex
@@ -16,5 +21,4 @@ export function getGuestName(param: string, fallback: string): string {
   )
     .slice(0, MAX_LENGTH)
     .join("")
-  return cleaned || fallback
 }

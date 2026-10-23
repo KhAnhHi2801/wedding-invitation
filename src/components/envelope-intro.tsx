@@ -3,6 +3,8 @@ import { weddingConfig } from "../config/wedding-config";
 import { assetUrl } from "../lib/asset-url";
 import { prefersReducedMotion } from "../lib/device-tier";
 import { gsap, useGSAP } from "../lib/gsap";
+import { getNamedGuest } from "../lib/guest";
+import { fillText } from "../lib/wish-list";
 import "./envelope-intro.css";
 import { DoubleHappiness } from "./icons/double-happiness";
 import { HeartIcon } from "./icons/shapes";
@@ -18,7 +20,8 @@ interface EnvelopeIntroProps {
 const HEARTS = [0, 1, 2];
 
 export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
-  const { hero, couple } = weddingConfig;
+  const { hero, couple, guestParam } = weddingConfig;
+  const guest = getNamedGuest(guestParam);
   const rootRef = useRef<HTMLElement>(null);
   const [state, setState] = useState<
     "closed" | "opening" | "fading" | "hidden"
@@ -120,6 +123,7 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
             <span className="intro__name">{couple.groom.name}</span>
           </p>
           <DoubleHappiness className="intro__logo" />
+          {guest && <p className="intro__guest">{fillText(hero.guestEnvelopeLine, { name: guest })}</p>}
         </header>
 
         <div className="intro__stage">

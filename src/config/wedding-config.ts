@@ -172,6 +172,8 @@ export interface WeddingConfig {
     yearPrefix: string;
     inviteLine: string;
     guestFallback: string;
+    /** Dòng riêng trên phong bì khi link có tên khách; `{name}` là tên khách */
+    guestEnvelopeLine: string;
   };
   /** Tên khách lấy từ query này, ví dụ `?to=Anh%20Nam` */
   guestParam: string;
@@ -184,7 +186,8 @@ export interface WeddingConfig {
   defaultSide: "groom" | "bride";
   /** Mỗi bên khai báo đủ địa điểm, giờ tổ chức và lịch trình của riêng mình */
   sides: { groom: SideEvent; bride: SideEvent };
-  invitation: { heading: string; lines: string[] };
+  /** `greetingNamed` thay cho dòng đầu của `lines` khi link có tên khách; `{name}` là tên khách */
+  invitation: { heading: string; greetingNamed: string; lines: string[] };
   ceremony: {
     titleLines: string[];
     groomFamily: Family;
@@ -225,8 +228,6 @@ export interface WeddingConfig {
   wishGallery: WishGalleryText;
   gift: {
     heading: string;
-    /** Lời dẫn dưới tiêu đề: quà là tuỳ tâm */
-    note: string;
     /** Nhãn đọc cho nút sao chép số tài khoản (nút chỉ có biểu tượng) */
     copyLabel: string;
     copied: string;
@@ -328,6 +329,7 @@ export const weddingConfig: WeddingConfig = {
     yearPrefix: "NĂM",
     inviteLine: "TRÂN TRỌNG KÍNH MỜI",
     guestFallback: "Quý Khách",
+    guestEnvelopeLine: "Dành tặng {name}",
   },
   guestParam: "to",
   sideParam: "from",
@@ -383,10 +385,11 @@ export const weddingConfig: WeddingConfig = {
   },
   invitation: {
     heading: "INVITATION",
+    greetingNamed: "{name} thân mến,",
     lines: [
-      "Gửi gia đình và những người chúng mình thương quý,",
-      "Có những niềm vui sẽ trọn vẹn hơn khi được sẻ chia cùng người thân yêu. Chúng mình mong được đón bạn đến chung vui và cùng chứng kiến ngày chúng mình bắt đầu hành trình mới.",
-      "Trân trọng kính mời bạn đến dự lễ cưới của chúng mình",
+      "Thân gửi bạn,",
+      "Trong ngày vui của chúng mình, rất mong được đón bạn đến chung vui, cùng sẻ chia niềm hạnh phúc và lưu giữ thêm một kỷ niệm đẹp bên nhau.",
+      "Thân mời bạn đến dự lễ cưới của chúng mình.",
     ],
   },
   ceremony: {
@@ -452,7 +455,7 @@ export const weddingConfig: WeddingConfig = {
         "Chúng mình đã nhận được. Tiếc là không có bạn, mong sớm gặp lại!",
       successWish:
         "Còn một điều nữa: bạn gieo cho chúng mình một lời chúc nhé?",
-      wishButton: "Gieo một lời chúc",
+      wishButton: "Gieo lời chúc",
       errors: {
         name: "Bạn cho chúng mình biết tên nhé.",
         attending: "Bạn chọn giúp chúng mình có đến hay không nhé.",
@@ -469,20 +472,20 @@ export const weddingConfig: WeddingConfig = {
     },
   },
   garden: {
-    title: "Gieo một lời chúc",
+    title: "Gieo lời chúc",
     carouselLabel: "Các loài hoa",
     plant: "Gieo hoa này",
     growing: "Hạt đang nảy mầm…",
     skipGrowing: "Bỏ qua",
     writeTitle: "Viết lời chúc",
-    nameLabel: "Tên người gửi",
-    messageLabel: "Lời chúc gửi đôi mình",
-    suggestAnother: "Chọn một mầm hoa khác",
+    nameLabel: "Tên của bạn",
+    messageLabel: "Lời chúc dành cho cô dâu chú rể",
+    suggestAnother: "Chọn loài hoa khác",
     send: "Gieo lời chúc",
     sendSub: "Một lời chúc nhỏ, một kỷ niệm dài lâu.",
     doneTitle: "Hoa của bạn đã nở",
     plantAnother: "Gieo thêm một bông",
-    open: "Gieo một lời chúc",
+    open: "Gieo lời chúc",
     hold: "Chạm giữ để gieo hạt",
     holdHint: "Giữ ngón tay khoảng một giây",
     holdKeyboard: "Gieo hạt ngay",
@@ -521,7 +524,6 @@ export const weddingConfig: WeddingConfig = {
   },
   gift: {
     heading: "GỬI QUÀ MỪNG",
-    note: "Sự hiện diện của bạn đã là món quà quý nhất. Nếu muốn gửi thêm chút yêu thương, thông tin mừng cưới ở ngay bên dưới.",
     copyLabel: "Sao chép số tài khoản",
     copied: "Đã sao chép số tài khoản",
     copyFailed: "Chưa sao chép được, bạn giữ vào số tài khoản để chép nhé",
