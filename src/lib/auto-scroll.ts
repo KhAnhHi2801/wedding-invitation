@@ -2,8 +2,7 @@ import { useSyncExternalStore } from "react"
 import { weddingConfig } from "../config/wedding-config"
 
 /**
- * Tự cuộn trang xuống chậm như các thiệp cưới online. Dừng hẳn ngay khi khách thao tác (lăn, chạm, bấm, gõ phím)
- * hoặc tự cuộn lệch khỏi vị trí đã đặt; bật lại bằng nút. Tạm nghỉ (không dừng) khi tab ẩn hoặc đang có modal.
+ * Tự cuộn trang xuống chậm như các thiệp cưới online. Dừng hẳn ngay khi khách thao tác (lăn, chạm, bấm, gõ phím); bật lại bằng nút. Tạm nghỉ (không dừng) khi tab ẩn hoặc đang có modal.
  */
 let running = false
 let raf = 0
@@ -13,7 +12,8 @@ const listeners = new Set<() => void>()
 
 /** Phần tử có thuộc tính này tự xử lý bật/tắt, nên thao tác lên nó không bị coi là "khách muốn dừng" */
 const KEEP_ATTR = "data-keep-auto-scroll"
-const USER_EVENTS = ["wheel", "touchstart", "pointerdown", "keydown"] as const
+// touchmove thay vì touchstart: chạm hờ hay đặt ngón tay lên màn hình không làm dừng, chỉ vuốt thật mới dừng
+const USER_EVENTS = ["wheel", "touchmove", "pointerdown", "keydown"] as const
 /** Sai lệch cho phép giữa vị trí đã đặt và scrollY (trình duyệt làm tròn theo pixel thiết bị) */
 const DRIFT_PX = 2
 const MAX_DT_MS = 64
@@ -24,9 +24,15 @@ function setRunning(next: boolean) {
   listeners.forEach((listener) => listener())
 }
 
+/** Có phải thao tác thật của khách muốn tự điều khiển trang không (bỏ qua nút bật/tắt và cú chạm ngón tay, vì cảm ứng đã có touchmove) */
+function isDeliberateInput(event: Event): boolean {
+  if (event.target instanceof Element && event.target.closest(`[${KEEP_ATTR}]`)) return false
+  if (event.type === "pointerdown" && (event as PointerEvent).pointerType === "touch") return false
+  return true
+}
+
 function onUserInput(event: Event) {
-  if (event.target instanceof Element && event.target.closest(`[${KEEP_ATTR}]`)) return
-  stop()
+  if (isDeliberateInput(event)) stop()
 }
 
 function tick(time: number) {
@@ -36,7 +42,8 @@ function tick(time: number) {
     lastTime = 0
     position = window.scrollY
   } else {
-    if (Math.abs(window.scrollY - position) > DRIFT_PX && lastTime !== 0) return stop()
+    // Trang bị dịch mà không do khách (ảnh/phông tải xong làm nội dung phía trên đổi cao, trình duyệt tự bù scrollY): cuộn tiếp từ vị trí mới
+    if (Math.abs(window.scrollY - position) > DRIFT_PX) position = window.scrollY
     const dt = lastTime === 0 ? 0 : Math.min(time - lastTime, MAX_DT_MS)
     lastTime = time
     position += (weddingConfig.autoScroll.speed * dt) / 1000
@@ -45,7 +52,12 @@ function tick(time: number) {
       window.scrollTo({ top: max, behavior: "instant" })
       return stop()
     }
-    window.scrollTo({ top: position, behavior: "instant" })
+    try {
+      window.scrollTo({ top: position, behavior: "instant" })
+    } catch {
+      // Trình duyệt cũ không nhận "instant": rơi về kiểu gọi cũ thay vì làm vòng lặp chết
+      window.scrollTo(0, position)
+    }
   }
   raf = requestAnimationFrame(tick)
 }
@@ -71,7 +83,7 @@ function stop() {
  */
 function startAfter(delayMs: number): () => void {
   const cancel = (event?: Event) => {
-    if (event?.target instanceof Element && event.target.closest(`[${KEEP_ATTR}]`)) return
+    if (event && !isDeliberateInput(event)) return
     window.clearTimeout(timer)
     USER_EVENTS.forEach((type) => window.removeEventListener(type, cancel))
   }

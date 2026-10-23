@@ -58,7 +58,7 @@ describe("autoScroll", () => {
     expect(autoScroll.getSnapshot()).toBe(true)
   })
 
-  it("dừng khi khách tự cuộn lệch vị trí", async () => {
+  it("trang bị dịch không do khách (nội dung đổi cao) thì cuộn tiếp từ vị trí mới, không dừng", async () => {
     const env = setup()
     const autoScroll = await load()
     autoScroll.start()
@@ -66,8 +66,10 @@ describe("autoScroll", () => {
     env.step(1016)
     env.win.scrollY = 400
     env.step(1032)
-    expect(autoScroll.getSnapshot()).toBe(false)
-    expect(env.hasFrame()).toBe(false)
+    env.step(1048)
+    expect(autoScroll.getSnapshot()).toBe(true)
+    expect(env.win.scrollY).toBeGreaterThan(400)
+    expect(env.win.scrollY).toBeLessThan(402)
   })
 
   it("dừng ở cuối trang", async () => {
@@ -104,6 +106,17 @@ describe("autoScroll", () => {
     vi.advanceTimersByTime(2000)
     expect(autoScroll.getSnapshot()).toBe(false)
     vi.useRealTimers()
+  })
+
+  it("chạm ngón tay (pointerdown cảm ứng) không dừng, vuốt (touchmove) thì dừng", async () => {
+    const env = setup()
+    const autoScroll = await load()
+    autoScroll.start()
+    const on = (type: string) => env.win.addEventListener.mock.calls.find(([t]) => t === type)![1] as (e: unknown) => void
+    on("pointerdown")({ type: "pointerdown", pointerType: "touch", target: {} })
+    expect(autoScroll.getSnapshot()).toBe(true)
+    on("touchmove")({ type: "touchmove", target: {} })
+    expect(autoScroll.getSnapshot()).toBe(false)
   })
 
   it("thao tác của khách dừng hẳn, trừ nút bật/tắt", async () => {

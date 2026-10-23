@@ -48,7 +48,11 @@ export function SiteNav() {
               type="button"
               className="sitenav__link"
               aria-current={current === item.id ? "location" : undefined}
-              onClick={() => scrollToSection(item.id)}
+              onClick={() => {
+                // Khách chủ động nhảy mục: tự cuộn dừng hẳn như mọi thao tác khác
+                autoScroll.stop()
+                scrollToSection(item.id)
+              }}
             >
               {item.label}
             </button>
