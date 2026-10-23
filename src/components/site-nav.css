@@ -1,94 +1,105 @@
+/* Thanh điều hướng: một "viên thuốc" nổi bo tròn ở đầu trang, chỉ để đi tới các phần của thiệp.
+   Hành động (gieo lời chúc, tham dự, nhạc) nằm ở nút nổi phía dưới. */
 .sitenav {
+  --nav-pill-h: 3rem;
   position: fixed;
-  inset: 0 0 auto;
+  top: calc(env(safe-area-inset-top) + 0.75rem);
+  inset-inline: 0;
   z-index: var(--z-nav);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  height: calc(var(--nav-h) + env(safe-area-inset-top));
-  padding: env(safe-area-inset-top) max(0.5rem, env(safe-area-inset-right)) 0 max(0.5rem, env(safe-area-inset-left));
-  /* Nền giấy gần đặc, không dùng backdrop-filter: làm mờ phần nội dung đang trôi phía sau phải vẽ lại mỗi khung hình khi tự cuộn, gây giật trên điện thoại */
-  background: color-mix(in srgb, var(--paper) 94%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: calc(100% - 1.5rem);
+  max-width: 100%;
+  height: var(--nav-pill-h);
+  margin-inline: auto;
+  padding: 0 0.4rem 0 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--rose) 70%, var(--paper));
+  border-radius: 999px;
+  /* Nền giấy gần đặc, không dùng backdrop-filter: làm mờ nội dung đang trôi phía sau phải vẽ lại mỗi khung hình khi tự cuộn, gây giật trên điện thoại */
+  background: color-mix(in srgb, var(--paper) 95%, transparent);
+  box-shadow: 0 0.5rem 1.5rem rgba(139, 47, 48, 0.14);
   font-family: var(--font-ui);
 }
 
-.sitenav__list {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: stretch;
-  height: var(--nav-h);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow-x: auto;
-  scrollbar-width: none;
+.sitenav__brand {
+  flex: none;
+  color: var(--wine);
+  font-family: var(--font-signature);
+  font-size: 2.1rem;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-.sitenav__list::-webkit-scrollbar {
+/* Nút Menu (màn hẹp): viên đỏ rượu đặc có chữ, nhận ra ngay đây là điều hướng */
+.sitenav__menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.5rem;
+  padding: 0 1rem 0 0.85rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--white);
+  font: inherit;
+  font-size: var(--fs-14);
+  cursor: pointer;
+}
+
+.sitenav__menu svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Màn hẹp: danh sách là một thẻ bo tròn rơi xuống dưới thanh */
+.sitenav__list {
+  position: absolute;
+  inset: calc(100% + 0.5rem) 0 auto;
   display: none;
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+  border: 1px solid color-mix(in srgb, var(--rose) 70%, var(--paper));
+  border-radius: 1.5rem;
+  background: var(--paper);
+  box-shadow: 0 0.75rem 2rem rgba(139, 47, 48, 0.18);
+}
+
+.sitenav__list[data-open="true"] {
+  display: block;
 }
 
 .sitenav__link {
-  position: relative;
-  height: 100%;
-  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 1rem;
   border: 0;
+  border-radius: 999px;
   background: none;
   color: var(--ink);
   font: inherit;
-  font-size: var(--fs-14);
-  white-space: nowrap;
+  font-size: var(--fs-16);
+  text-align: left;
   cursor: pointer;
 }
 
-.sitenav__link::after {
-  content: "";
-  position: absolute;
-  inset: auto 0.75rem 0.5rem;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transition: transform var(--dur-base) var(--ease-out);
+/* Mục hiện tại: viên đỏ rượu đặc, chữ trắng (không chỉ dựa vào màu: nền đặc và chữ đậm hơn) */
+.sitenav__link[aria-current="location"] {
+  background: var(--wine);
+  color: var(--white);
+  font-weight: 700;
 }
 
-.sitenav__link[aria-current="location"]::after {
-  transform: scaleX(1);
-}
-
-.sitenav__link:focus-visible,
-.sitenav__tool:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: -2px;
-}
-
-.sitenav__tools {
-  display: flex;
-  flex: none;
-}
-
-.sitenav__tool {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.sitenav__tool svg {
-  width: 1.3rem;
-  height: 1.3rem;
-}
-
-/* Nút đang bật: nền ink nhạt để không chỉ dựa vào hình icon */
-.sitenav__tool[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--ink) 10%, transparent);
+.sitenav__brand:focus-visible,
+.sitenav__menu:focus-visible,
+.sitenav__link:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
 }
 
 /* Chừa chỗ cho thanh nav khi cuộn tới section (trừ đầu trang) */
@@ -102,23 +113,43 @@
   scroll-margin-top: var(--nav-h);
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 62rem) {
   .sitenav {
-    justify-content: center;
-    padding-inline: max(1rem, env(safe-area-inset-left));
+    width: fit-content;
+    max-width: calc(100% - 3rem);
+    gap: 1.75rem;
+    padding: 0 0.4rem 0 1.75rem;
   }
 
+  .sitenav__menu {
+    display: none;
+  }
+
+  /* Màn rộng: các mục thành một hàng viên thuốc nhỏ */
   .sitenav__list {
-    flex: none;
-    max-width: 100%;
+    position: static;
+    display: flex;
+    gap: 0.15rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
 
   .sitenav__link {
-    padding: 0 1.1rem;
-    font-size: var(--fs-16);
+    width: auto;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    font-size: var(--fs-14);
+    white-space: nowrap;
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
   }
 
-  .sitenav__link::after {
-    inset-inline: 1.1rem;
+  .sitenav__link:hover:not([aria-current="location"]) {
+    background: color-mix(in srgb, var(--rose) 28%, var(--paper));
+    color: var(--wine);
   }
 }

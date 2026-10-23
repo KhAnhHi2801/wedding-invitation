@@ -252,17 +252,17 @@ export interface WeddingConfig {
     weekdays: string[];
     openEnvelope: string;
     fabWish: string;
-    fabGift: string;
     fabRsvp: string;
+    /** Nhãn ngắn của nút nổi xác nhận tham dự */
+    fabRsvpShort: string;
     musicLabel: string;
-    autoScrollLabel: string;
     navLabel: string;
+    menuLabel: string;
     /** Thanh điều hướng cố định: `id` là id của section đích */
     nav: { id: string; label: string }[];
   };
   /** `src` là file trong `public/` (không có "/" đầu). */
-  /** `duckRatio`: nhạc nhỏ còn bao nhiêu lần `volume` khi nhường chỗ cho hiệu ứng gieo hạt (0 = tắt hẳn) */
-  music: { src: string; autoplay: boolean; volume: number; duckRatio: number };
+    music: { src: string; autoplay: boolean; volume: number };
   /** Tự cuộn trang: `speed` px/giây, `delayMs` chờ sau khi mở thiệp */
   autoScroll: { speed: number; delayMs: number };
 }
@@ -568,20 +568,21 @@ export const weddingConfig: WeddingConfig = {
     weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
     openEnvelope: "Mở thiệp",
     fabWish: "Gieo lời chúc",
-    fabGift: "Gửi quà mừng",
     fabRsvp: "Xác nhận tham dự",
+    fabRsvpShort: "Tham dự",
     musicLabel: "Nhạc nền",
-    autoScrollLabel: "Tự cuộn trang",
     navLabel: "Điều hướng nhanh",
+    menuLabel: "Menu",
     nav: [
       { id: "cover", label: "Trang chủ" },
       { id: "ceremony", label: "Sự kiện" },
       { id: "story", label: "Câu chuyện" },
       { id: "timeline", label: "Hành trình" },
       { id: "gallery", label: "Album" },
+      { id: "gift", label: "Quà mừng" },
       { id: "guestbook", label: "Lời chúc" },
     ],
   },
-  music: { src: "musics/romantic.mp3", autoplay: true, volume: 0.35, duckRatio: 0.3 },
+  music: { src: "musics/romantic.mp3", autoplay: true, volume: 0.35 },
   autoScroll: { speed: 45, delayMs: 1500 },
 };

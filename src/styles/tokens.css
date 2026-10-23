@@ -86,7 +86,7 @@
   --dur-slow: 700ms;
 
   /* Chiều cao thanh nav cố định (cũng là scroll-margin-top của các section đích) */
-  --nav-h: 3rem;
+  --nav-h: 4.5rem;
 
   /* Lớp xếp chồng */
   --z-base: 0;

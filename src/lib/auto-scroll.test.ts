@@ -55,7 +55,7 @@ describe("autoScroll", () => {
     expect(env.win.scrollY).toBeCloseTo((45 * 32) / 1000, 1)
     // html có scroll-behavior: smooth nên phải ép tức thời, nếu không mỗi khung hình khởi động lại một animation
     expect(env.win.scrollTo).toHaveBeenLastCalledWith(expect.objectContaining({ behavior: "instant" }))
-    expect(autoScroll.getSnapshot()).toBe(true)
+    expect(autoScroll.isRunning()).toBe(true)
   })
 
   it("trang bị dịch không do khách (nội dung đổi cao) thì cuộn tiếp từ vị trí mới, không dừng", async () => {
@@ -67,7 +67,7 @@ describe("autoScroll", () => {
     env.win.scrollY = 400
     env.step(1032)
     env.step(1048)
-    expect(autoScroll.getSnapshot()).toBe(true)
+    expect(autoScroll.isRunning()).toBe(true)
     expect(env.win.scrollY).toBeGreaterThan(400)
     expect(env.win.scrollY).toBeLessThan(402)
   })
@@ -80,7 +80,7 @@ describe("autoScroll", () => {
     env.step(1000)
     env.step(1016)
     expect(env.win.scrollY).toBe(4200)
-    expect(autoScroll.getSnapshot()).toBe(false)
+    expect(autoScroll.isRunning()).toBe(false)
   })
 
   it("nghỉ khi có modal (is-locked) mà không dừng", async () => {
@@ -93,7 +93,7 @@ describe("autoScroll", () => {
     env.step(1016)
     env.step(1032)
     expect(env.win.scrollTo).not.toHaveBeenCalled()
-    expect(autoScroll.getSnapshot()).toBe(true)
+    expect(autoScroll.isRunning()).toBe(true)
   })
 
   it("khách thao tác trong lúc chờ thì không tự bắt đầu", async () => {
@@ -104,7 +104,7 @@ describe("autoScroll", () => {
     const handler = env.win.addEventListener.mock.calls.find(([type]) => type === "wheel")![1] as (e?: unknown) => void
     handler({ target: {} })
     vi.advanceTimersByTime(2000)
-    expect(autoScroll.getSnapshot()).toBe(false)
+    expect(autoScroll.isRunning()).toBe(false)
     vi.useRealTimers()
   })
 
@@ -114,23 +114,17 @@ describe("autoScroll", () => {
     autoScroll.start()
     const on = (type: string) => env.win.addEventListener.mock.calls.find(([t]) => t === type)![1] as (e: unknown) => void
     on("pointerdown")({ type: "pointerdown", pointerType: "touch", target: {} })
-    expect(autoScroll.getSnapshot()).toBe(true)
+    expect(autoScroll.isRunning()).toBe(true)
     on("touchmove")({ type: "touchmove", target: {} })
-    expect(autoScroll.getSnapshot()).toBe(false)
+    expect(autoScroll.isRunning()).toBe(false)
   })
 
-  it("thao tác của khách dừng hẳn, trừ nút bật/tắt", async () => {
+  it("thao tác của khách (lăn) dừng hẳn", async () => {
     const env = setup()
     const autoScroll = await load()
     autoScroll.start()
     const handler = env.win.addEventListener.mock.calls.find(([type]) => type === "wheel")![1] as (e: unknown) => void
-    class FakeElement {
-      closest = () => ({})
-    }
-    vi.stubGlobal("Element", FakeElement)
-    handler({ target: new FakeElement() })
-    expect(autoScroll.getSnapshot()).toBe(true)
-    handler({ target: {} })
-    expect(autoScroll.getSnapshot()).toBe(false)
+    handler({ type: "wheel", target: {} })
+    expect(autoScroll.isRunning()).toBe(false)
   })
 })

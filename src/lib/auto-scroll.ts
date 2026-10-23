@@ -1,8 +1,7 @@
-import { useSyncExternalStore } from "react"
 import { weddingConfig } from "../config/wedding-config"
 
 /**
- * Tự cuộn trang xuống chậm như các thiệp cưới online. Dừng hẳn ngay khi khách thao tác (lăn, chạm, bấm, gõ phím); bật lại bằng nút. Tạm nghỉ (không dừng) khi tab ẩn hoặc đang có modal.
+ * Tự cuộn trang xuống chậm như các thiệp cưới online. Dừng hẳn ngay khi khách thao tác (lăn, vuốt, bấm, gõ phím); không có nút bật lại. Tạm nghỉ (không dừng) khi tab ẩn hoặc đang có modal.
  */
 let running = false
 let raf = 0
@@ -11,24 +10,18 @@ let lastTime = 0
 // Vị trí cuộn tối đa lưu sẵn: đọc scrollHeight mỗi khung hình ép trình duyệt tính lại layout ngay giữa lúc đang có animation, rất nặng trên điện thoại
 let maxScroll = 0
 let sizeObserver: ResizeObserver | null = null
-const listeners = new Set<() => void>()
 
-/** Phần tử có thuộc tính này tự xử lý bật/tắt, nên thao tác lên nó không bị coi là "khách muốn dừng" */
-const KEEP_ATTR = "data-keep-auto-scroll"
 // touchmove thay vì touchstart: chạm hờ hay đặt ngón tay lên màn hình không làm dừng, chỉ vuốt thật mới dừng
 const USER_EVENTS = ["wheel", "touchmove", "pointerdown", "keydown"] as const
 /** Sai lệch cho phép giữa vị trí đã đặt và scrollY (trình duyệt làm tròn theo pixel thiết bị) */
 const DRIFT_PX = 2
 const MAX_DT_MS = 64
 function setRunning(next: boolean) {
-  if (running === next) return
   running = next
-  listeners.forEach((listener) => listener())
 }
 
-/** Có phải thao tác thật của khách muốn tự điều khiển trang không (bỏ qua nút bật/tắt và cú chạm ngón tay, vì cảm ứng đã có touchmove) */
+/** Có phải thao tác thật của khách muốn tự điều khiển trang không (bỏ qua cú chạm ngón tay, vì cảm ứng đã có touchmove) */
 function isDeliberateInput(event: Event): boolean {
-  if (event.target instanceof Element && event.target.closest(`[${KEEP_ATTR}]`)) return false
   if (event.type === "pointerdown" && (event as PointerEvent).pointerType === "touch") return false
   return true
 }
@@ -113,13 +106,5 @@ export const autoScroll = {
   start,
   startAfter,
   stop,
-  toggle: () => (running ? stop() : start()),
-  subscribe(listener: () => void) {
-    listeners.add(listener)
-    return () => listeners.delete(listener)
-  },
-  getSnapshot: () => running,
-  keepAttr: KEEP_ATTR,
+  isRunning: () => running,
 }
-
-export const useAutoScrolling = (): boolean => useSyncExternalStore(autoScroll.subscribe, autoScroll.getSnapshot)
