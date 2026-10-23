@@ -16,7 +16,7 @@ function setup() {
     setTimeout: (...args: Parameters<typeof setTimeout>) => setTimeout(...args),
     clearTimeout: (id: Parameters<typeof clearTimeout>[0]) => clearTimeout(id),
   }
-  const doc = { hidden: false, documentElement: { scrollHeight: 5000, classList: new Set<string>() } }
+  const doc = { hidden: false,  documentElement: { scrollHeight: 5000, classList: new Set<string>() } }
   Object.assign(doc.documentElement.classList, { contains: (name: string) => doc.documentElement.classList.has(name) })
   vi.stubGlobal("Element", class {})
   vi.stubGlobal("window", win)

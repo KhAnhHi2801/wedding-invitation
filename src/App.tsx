@@ -22,6 +22,7 @@ import { weddingConfig } from "./config/wedding-config"
 import { autoScroll } from "./lib/auto-scroll"
 import { prefersReducedMotion } from "./lib/device-tier"
 import { music } from "./lib/music"
+import { loadAllImagesAfterPageLoad } from "./lib/preload-images"
 import { lockScroll } from "./lib/scroll-lock"
 
 export default function App() {
@@ -31,6 +32,9 @@ export default function App() {
 
   // Trước khi mở phong bì thì khóa cuộn (khóa có đếm, dùng chung với modal)
   useEffect(() => (opened ? undefined : lockScroll()), [opened])
+
+  // Tải sớm các ảnh lazy trong lúc khách còn ở phong bì, để cuộn tới là đã có ảnh
+  useEffect(() => loadAllImagesAfterPageLoad(), [])
 
   // Mở xong: về đầu trang và chuyển tiêu điểm sang nội dung để bàn phím và trình đọc màn hình đi tiếp
   useEffect(() => {

@@ -11,11 +11,16 @@ export type MusicState = "idle" | "playing" | "paused" | "unavailable"
 let audio: HTMLAudioElement | null = null
 let state: MusicState = "idle"
 let resumeAfterHidden = false
-// Đang hạ nhạc để nhường chỗ cho hiệu ứng khác (gieo hạt nảy mầm): nhạc vẫn chạy ngầm ở volume 0
+// Đang hạ nhạc để nhường chỗ cho hiệu ứng khác (gieo hạt nảy mầm): nhạc vẫn chạy, chỉ nhỏ xuống `duckRatio` chứ không tắt hẳn
 let ducked = false
 let fadeTimer = 0
-const FADE_MS = 400
+// Nhỏ xuống nhanh vừa phải, lớn lại chậm hơn để nhạc "trở về" nhẹ nhàng, không giật mình
+const DUCK_MS = 1200
+const RELEASE_MS = 2400
 const FADE_STEP_MS = 40
+// Âm lượng qua GainNode: iOS Safari bỏ qua `HTMLMediaElement.volume` nên chỉ cách này mới nhỏ/lớn dần được trên iPhone
+let ctx: AudioContext | null = null
+let gain: GainNode | null = null
 const listeners = new Set<() => void>()
 
 function setState(next: MusicState) {
@@ -24,23 +29,43 @@ function setState(next: MusicState) {
   listeners.forEach((listener) => listener())
 }
 
-const targetVolume = () => (ducked ? 0 : weddingConfig.music.volume)
+const targetVolume = () => weddingConfig.music.volume * (ducked ? weddingConfig.music.duckRatio : 1)
 
-/**
- * Đưa volume về mức đích từ từ trong FADE_MS rồi đặt đúng giá trị cuối; số bước cố định nên không bao giờ chạy mãi.
- * Hạ nhạc thật sự dựa vào `muted` vì iOS Safari bỏ qua `volume` (fade chỉ có tác dụng ở nơi volume ghi được).
- * Nhạc không dừng phát nên phát lại không cần thao tác chạm mới.
- */
+/** Nối <audio> qua GainNode (tạo trong thao tác của khách để được phép phát); không có Web Audio thì dùng `volume` của phần tử. */
+function connectGain(element: HTMLAudioElement) {
+  try {
+    const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!Ctor) return
+    const context = new Ctor()
+    const node = context.createGain()
+    node.gain.value = targetVolume()
+    context.createMediaElementSource(element).connect(node)
+    node.connect(context.destination)
+    element.volume = 1
+    ctx = context
+    gain = node
+  } catch {
+    ctx = null
+    gain = null
+  }
+}
+
+/** Đưa âm lượng về mức đích từ từ (nhỏ dần khi hạ, lớn dần khi trả); số bước cố định nên không bao giờ chạy mãi. */
 function fadeToTarget() {
   window.clearInterval(fadeTimer)
+  const ms = ducked ? DUCK_MS : RELEASE_MS
+  if (gain && ctx) {
+    const now = ctx.currentTime
+    gain.gain.cancelScheduledValues(now)
+    gain.gain.setValueAtTime(gain.gain.value, now)
+    gain.gain.linearRampToValueAtTime(targetVolume(), now + ms / 1000)
+    return
+  }
   if (!audio) return
   const element = audio
   const goal = targetVolume()
-  // Tắt tiếng ngay khi duck; bật lại trước khi nhạc fade lên
-  if (ducked) element.muted = true
-  else element.muted = false
   const from = element.volume
-  const steps = Math.round(FADE_MS / FADE_STEP_MS)
+  const steps = Math.round(ms / FADE_STEP_MS)
   let tick = 0
   fadeTimer = window.setInterval(() => {
     tick += 1
@@ -55,7 +80,7 @@ function ensureAudio(): HTMLAudioElement {
   element.loop = true
   element.preload = "none"
   element.volume = targetVolume()
-  element.muted = ducked
+  connectGain(element)
   // File nhạc thiếu hoặc hỏng: ẩn nút nhạc, không báo lỗi cho khách
   element.addEventListener("error", () => setState("unavailable"))
   // Hệ điều hành có thể tự dừng nhạc (cuộc gọi, Control Center): nút luôn phản ánh trạng thái thật
@@ -72,6 +97,8 @@ function ensureAudio(): HTMLAudioElement {
 /** Gọi trực tiếp trong handler của thao tác người dùng (click/tap), nếu không iOS sẽ từ chối. */
 function play() {
   if (state === "unavailable") return
+  // iOS giữ AudioContext ở trạng thái treo cho tới khi có thao tác của khách
+  void ctx?.resume()
   ensureAudio()
     .play()
     .then(() => setState("playing"))

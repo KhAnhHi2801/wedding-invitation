@@ -261,7 +261,8 @@ export interface WeddingConfig {
     nav: { id: string; label: string }[];
   };
   /** `src` là file trong `public/` (không có "/" đầu). */
-  music: { src: string; autoplay: boolean; volume: number };
+  /** `duckRatio`: nhạc nhỏ còn bao nhiêu lần `volume` khi nhường chỗ cho hiệu ứng gieo hạt (0 = tắt hẳn) */
+  music: { src: string; autoplay: boolean; volume: number; duckRatio: number };
   /** Tự cuộn trang: `speed` px/giây, `delayMs` chờ sau khi mở thiệp */
   autoScroll: { speed: number; delayMs: number };
 }
@@ -581,6 +582,6 @@ export const weddingConfig: WeddingConfig = {
       { id: "guestbook", label: "Lời chúc" },
     ],
   },
-  music: { src: "musics/romantic.mp3", autoplay: true, volume: 0.35 },
+  music: { src: "musics/romantic.mp3", autoplay: true, volume: 0.35, duckRatio: 0.3 },
   autoScroll: { speed: 45, delayMs: 1500 },
 };

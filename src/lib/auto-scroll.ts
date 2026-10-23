@@ -20,7 +20,6 @@ const USER_EVENTS = ["wheel", "touchmove", "pointerdown", "keydown"] as const
 /** Sai lệch cho phép giữa vị trí đã đặt và scrollY (trình duyệt làm tròn theo pixel thiết bị) */
 const DRIFT_PX = 2
 const MAX_DT_MS = 64
-
 function setRunning(next: boolean) {
   if (running === next) return
   running = next
