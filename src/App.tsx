@@ -42,8 +42,15 @@ export default function App() {
   // Mở xong thì chờ một nhịp rồi tự cuộn nhẹ xuống; ai bật giảm chuyển động thì không tự chạy (vẫn bật được bằng nút)
   useEffect(() => {
     if (!opened || prefersReducedMotion()) return
-    const cancel = autoScroll.startAfter(weddingConfig.autoScroll.delayMs)
+    // Chờ font tải xong: chữ đổi font giữa lúc đang cuộn sẽ làm trang dồn và giật
+    let cancel = () => {}
+    let active = true
+    const ready = document.fonts?.ready ?? Promise.resolve()
+    void ready.then(() => {
+      if (active) cancel = autoScroll.startAfter(weddingConfig.autoScroll.delayMs)
+    })
     return () => {
+      active = false
       cancel()
       autoScroll.stop()
     }

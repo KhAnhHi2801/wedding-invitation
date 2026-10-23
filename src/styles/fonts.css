@@ -1,3 +1,5 @@
+/* Font tự host dùng font-display: block (chữ ẩn ngắn rồi hiện đúng font, không hiện font dự phòng rồi đổi hình làm dồn layout);
+   các file được preload trong index.html nên khoảng ẩn gần như không thấy. */
 /* Google-font subsets dự phòng các ký tự tiếng Việt còn thiếu. */
 @import "@fontsource/pinyon-script/latin-400.css";
 @import "@fontsource/pinyon-script/vietnamese-400.css";
@@ -21,7 +23,7 @@
   src: url("/fonts/edwardianscriptregular.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -29,7 +31,7 @@
   src: url("/fonts/hoatay1.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -37,7 +39,7 @@
   src: url("/fonts/carlytte.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -45,7 +47,7 @@
   src: url("/fonts/the-artisan.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -53,7 +55,7 @@
   src: url("/fonts/belinda-avenue.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -61,7 +63,7 @@
   src: url("/fonts/baskervillebook.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -69,7 +71,7 @@
   src: url("/fonts/playfairdisplay.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -77,7 +79,7 @@
   src: url("/fonts/quicksand.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -85,7 +87,7 @@
   src: url("/fonts/soul-note-display.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -93,7 +95,7 @@
   src: url("/fonts/the-hamstter.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -101,5 +103,5 @@
   src: url("/fonts/noto-sans.woff2") format("woff2");
   font-style: normal;
   font-weight: 100 900;
-  font-display: swap;
+  font-display: block;
 }

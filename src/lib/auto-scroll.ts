@@ -8,6 +8,9 @@ let running = false
 let raf = 0
 let position = 0
 let lastTime = 0
+// Vị trí cuộn tối đa lưu sẵn: đọc scrollHeight mỗi khung hình ép trình duyệt tính lại layout ngay giữa lúc đang có animation, rất nặng trên điện thoại
+let maxScroll = 0
+let sizeObserver: ResizeObserver | null = null
 const listeners = new Set<() => void>()
 
 /** Phần tử có thuộc tính này tự xử lý bật/tắt, nên thao tác lên nó không bị coi là "khách muốn dừng" */
@@ -35,6 +38,8 @@ function onUserInput(event: Event) {
   if (isDeliberateInput(event)) stop()
 }
 
+const readMaxScroll = () => document.documentElement.scrollHeight - window.innerHeight
+
 function tick(time: number) {
   const paused = document.hidden || document.documentElement.classList.contains("is-locked")
   if (paused) {
@@ -47,7 +52,7 @@ function tick(time: number) {
     const dt = lastTime === 0 ? 0 : Math.min(time - lastTime, MAX_DT_MS)
     lastTime = time
     position += (weddingConfig.autoScroll.speed * dt) / 1000
-    const max = document.documentElement.scrollHeight - window.innerHeight
+    const max = maxScroll
     if (position >= max - 1) {
       window.scrollTo({ top: max, behavior: "instant" })
       return stop()
@@ -66,6 +71,14 @@ function start() {
   if (running) return
   position = window.scrollY
   lastTime = 0
+  maxScroll = readMaxScroll()
+  // Chiều cao trang đổi (ảnh tải xong, xoay màn hình, thanh địa chỉ co giãn) thì cập nhật, không đọc mỗi khung hình
+  if (typeof ResizeObserver !== "undefined") {
+    sizeObserver = new ResizeObserver(() => {
+      maxScroll = readMaxScroll()
+    })
+    sizeObserver.observe(document.documentElement)
+  }
   setRunning(true)
   USER_EVENTS.forEach((type) => window.addEventListener(type, onUserInput, { passive: true }))
   raf = requestAnimationFrame(tick)
@@ -73,6 +86,8 @@ function start() {
 
 function stop() {
   cancelAnimationFrame(raf)
+  sizeObserver?.disconnect()
+  sizeObserver = null
   USER_EVENTS.forEach((type) => window.removeEventListener(type, onUserInput))
   setRunning(false)
 }
