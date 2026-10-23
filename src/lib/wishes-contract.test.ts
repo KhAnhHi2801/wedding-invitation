@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
+import { weddingConfig } from "../config/wedding-config"
 import { GUESTS_MAX, NAME_MAX as RSVP_NAME_MAX, NOTE_MAX } from "./rsvp-validation"
 import { DEFAULT_INK } from "./wish-style"
 import { MESSAGE_MAX, MESSAGE_MIN, NAME_MAX, PROFANITY_WORDS } from "./wish-validation"
@@ -26,6 +27,11 @@ describe("hợp đồng website và wishes.gs", () => {
     expect(numberVar("RSVP_NAME_MAX")).toBe(RSVP_NAME_MAX)
     expect(numberVar("RSVP_NOTE_MAX")).toBe(NOTE_MAX)
     expect(numberVar("RSVP_GUESTS_MAX")).toBe(GUESTS_MAX)
+  })
+
+  it("điểm đón xe chung khớp nhau", () => {
+    const ids = [...script.matchAll(/^\s+'([a-z-]+)': '/gm)].map((m) => m[1])
+    expect(ids.sort()).toEqual(weddingConfig.rsvp.form.pickupOptions.map((option) => option.id).sort())
   })
 
   it("danh sách từ cấm khớp nhau", () => {

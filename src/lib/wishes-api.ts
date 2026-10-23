@@ -1,8 +1,8 @@
 /**
- * Client gọi Google Apps Script (xem docs/wishes-setup.md): ghi xác nhận tham dự (RSVP) và lời chúc, đọc lời chúc.
+ * Client gọi Google Apps Script (xem docs/wishes-setup.md): ghi xác nhận tham dự (RSVP) và lời chúc (cả hai gửi ngầm qua hàng đợi), đọc lời chúc.
  * Hợp đồng với `apps-script/wishes.gs`:
  *   POST text/plain (tránh preflight; Apps Script không hỗ trợ OPTIONS), body JSON
- *   RSVP: { kind: "rsvp", name, attending: "yes"|"no", guests, note, guest, website, token, elapsedMs }
+ *   RSVP: { kind: "rsvp", name, attending: "yes"|"no", guests, transport: "own"|"shared", pickup, note, guest, website, token, elapsedMs }
  *   trả { ok: true } hoặc { ok: false, error: "invalid"|"name_required"|"rate_limited"|"too_fast"|"server" }
  */
 
@@ -95,14 +95,16 @@ export interface RsvpPayload {
   name: string
   attending: "yes" | "no"
   guests: number
+  /** "" khi không đến */
+  transport: "own" | "shared" | ""
+  /** Id điểm đón; rỗng khi không phải đi xe chung của nhà gái */
+  pickup: string
   note: string
   /** Tên khách trong link mời (`?to=`), giúp chủ nhà biết ai gửi từ link nào */
   guest: string
   /** Ô bẫy bot: người thật luôn để trống */
   website: string
 }
-
-export const sendRsvp = (payload: RsvpPayload): Promise<void> => post({ ...payload, kind: "rsvp" })
 
 /* ------------------- Lời chúc: gửi ngầm có hàng đợi, đọc có phân trang ------------------- */
 
@@ -120,11 +122,13 @@ export interface PublicWish extends WishInput {
   id: string
 }
 
-interface PendingWish extends WishInput {
+interface QueueMeta {
   requestId: string
   /** Bản ghi lúc khách bấm gửi, để script không coi là điền quá nhanh khi gửi lại muộn */
   elapsedMs: number
 }
+
+type PendingWish = (WishInput | (RsvpPayload & { kind: "rsvp" })) & QueueMeta
 
 const PENDING_KEY = "wedding-pending-wishes"
 const RETRY_DELAYS_MS = [3_000, 10_000, 30_000, 90_000]
@@ -193,6 +197,13 @@ async function flushPending(): Promise<void> {
  */
 export function submitWish(input: WishInput): void {
   savePending([...pending(), { ...input, requestId: newId(), elapsedMs: Math.round(performance.now() - pageOpenedAt) }])
+  attempt = 0
+  void flushPending()
+}
+
+/** Xác nhận tham dự cũng gửi ngầm qua cùng hàng đợi: khách không phải chờ, mạng yếu thì tự gửi lại. */
+export function submitRsvp(payload: RsvpPayload): void {
+  savePending([...pending(), { ...payload, kind: "rsvp", requestId: newId(), elapsedMs: Math.round(performance.now() - pageOpenedAt) }])
   attempt = 0
   void flushPending()
 }

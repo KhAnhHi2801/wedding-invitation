@@ -24,6 +24,7 @@ import { prefersReducedMotion } from "./lib/device-tier"
 import { music } from "./lib/music"
 import { loadAllImagesAfterPageLoad } from "./lib/preload-images"
 import { lockScroll } from "./lib/scroll-lock"
+import { promptRsvpOnDwell } from "./lib/rsvp-prompt"
 
 export default function App() {
   const [opened, setOpened] = useState(false)
@@ -66,6 +67,13 @@ export default function App() {
   }
 
   const openRsvp = () => setRsvpOpen(true)
+
+  // Khách dừng ở phần xác nhận (sau khi đã xem ngày giờ, địa điểm) thì nhẹ nhàng mở form, mỗi lần tải trang tối đa một lần
+  useEffect(() => {
+    const section = document.getElementById("rsvp")
+    return opened && section ? promptRsvpOnDwell(section, openRsvp) : undefined
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opened])
 
   return (
     <ToastProvider>

@@ -67,26 +67,25 @@ export interface RsvpFormText {
   yes: string;
   no: string;
   guestsLabel: string;
+  transportLabel: string;
+  transportOwn: string;
+  transportShared: string;
+  pickupLabel: string;
+  /** Điểm đón xe chung của nhà gái; `id` khớp `PICKUP_POINTS` trong wishes.gs */
+  pickupOptions: { id: string; label: string }[];
   noteLabel: string;
   submit: string;
-  sending: string;
   close: string;
-  successTitle: string;
-  successYes: string;
-  successNo: string;
-  /** Lời mời gieo lời chúc ở màn thành công, kèm nút mở lớp phủ gieo hoa */
-  successWish: string;
-  wishButton: string;
+  /** Lời cảm ơn hiện dạng thông báo ngắn sau khi gửi (form đóng ngay, gửi chạy ngầm) */
+  thanksYes: string;
+  thanksNo: string;
   errors: {
     name: string;
     attending: string;
     guests: string;
+    transport: string;
+    pickup: string;
     note: string;
-    offline: string;
-    unavailable: string;
-    rateLimited: string;
-    tooFast: string;
-    generic: string;
   };
 }
 
@@ -262,7 +261,7 @@ export interface WeddingConfig {
     nav: { id: string; label: string }[];
   };
   /** `src` là file trong `public/` (không có "/" đầu). */
-    music: { src: string; autoplay: boolean; volume: number };
+  music: { src: string; autoplay: boolean; volume: number };
   /** Tự cuộn trang: `speed` px/giây, `delayMs` chờ sau khi mở thiệp */
   autoScroll: { speed: number; delayMs: number };
 }
@@ -451,30 +450,26 @@ export const weddingConfig: WeddingConfig = {
       yes: "Có, mình sẽ đến",
       no: "Rất tiếc, mình không đến được",
       guestsLabel: "Số người đi cùng (tính cả bạn)",
+      transportLabel: "Bạn sẽ di chuyển bằng gì?",
+      transportOwn: "Xe cá nhân",
+      transportShared: "Đi xe chung",
+      pickupLabel: "Bạn muốn xuất phát từ đâu?",
+      pickupOptions: [
+        { id: "dien-bien-phu", label: "Số 5 đường Điện Biên Phủ, phường Điện Biên, quận Ba Đình, Hà Nội" },
+        { id: "to-huu", label: "Số 58 Tố Hữu, phường Đại Mỗ, quận Nam Từ Liêm, Hà Nội" },
+      ],
       noteLabel: "Lời nhắn (không bắt buộc)",
       submit: "Gửi xác nhận",
-      sending: "Đang gửi…",
       close: "Đóng",
-      successTitle: "Cảm ơn bạn!",
-      successYes:
-        "Chúng mình đã nhận được xác nhận của bạn. Hẹn gặp bạn ở lễ cưới nhé!",
-      successNo:
-        "Chúng mình đã nhận được. Tiếc là không có bạn, mong sớm gặp lại!",
-      successWish:
-        "Còn một điều nữa: bạn gieo cho chúng mình một lời chúc nhé?",
-      wishButton: "Gieo lời chúc",
+      thanksYes: "Cảm ơn bạn nhiều nha! Hẹn gặp bạn trong ngày vui của tụi mình 💕",
+      thanksNo: "Tiếc quá, nhưng cảm ơn bạn đã báo cho tụi mình. Mong sớm được gặp bạn nhé 💌",
       errors: {
         name: "Bạn cho chúng mình biết tên nhé.",
         attending: "Bạn chọn giúp chúng mình có đến hay không nhé.",
         guests: "Số người từ 1 đến 10 thôi bạn nhé.",
+        transport: "Bạn chọn giúp chúng mình đi xe cá nhân hay xe chung nhé.",
+        pickup: "Bạn chọn giúp chúng mình điểm xuất phát nhé.",
         note: "Lời nhắn hơi dài, bạn rút gọn giúp chúng mình (tối đa 300 ký tự).",
-        offline: "Chưa gửi được. Bạn kiểm tra mạng rồi thử lại nhé.",
-        unavailable:
-          "Chức năng gửi xác nhận chưa sẵn sàng. Bạn vui lòng liên hệ trực tiếp cô dâu chú rể nhé.",
-        rateLimited:
-          "Bạn thử hơi nhiều lần, vui lòng đợi một chút rồi gửi lại.",
-        tooFast: "Bạn gửi hơi nhanh, đợi vài giây rồi gửi lại nhé.",
-        generic: "Có lỗi xảy ra, bạn thử lại sau nhé.",
       },
     },
   },
@@ -569,7 +564,7 @@ export const weddingConfig: WeddingConfig = {
     openEnvelope: "Mở thiệp",
     fabWish: "Gieo lời chúc",
     fabRsvp: "Xác nhận tham dự",
-    fabRsvpShort: "Tham dự",
+    fabRsvpShort: "Xác nhận tham dự",
     musicLabel: "Nhạc nền",
     navLabel: "Điều hướng nhanh",
     menuLabel: "Menu",

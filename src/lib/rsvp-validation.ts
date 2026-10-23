@@ -9,10 +9,14 @@ export interface RsvpValues {
   name: string
   attending: "yes" | "no" | ""
   guests: string
+  /** Chỉ hỏi khi đến: xe cá nhân hay xe chung */
+  transport: "own" | "shared" | ""
+  /** Id điểm đón (chỉ hỏi khi đi xe chung và thuộc nhà gái) */
+  pickup: string
   note: string
 }
 
-export type RsvpField = "name" | "attending" | "guests" | "note"
+export type RsvpField = "name" | "attending" | "guests" | "transport" | "pickup" | "note"
 export type RsvpErrors = Partial<Record<RsvpField, string>>
 
 /**
@@ -30,13 +34,15 @@ export const charCount = (text: string): number =>
   ).length
 
 /** Kiểm tra form xác nhận tham dự ở phía khách; script trên Google cũng kiểm lại độc lập. */
-export function validateRsvp(values: RsvpValues, errors: RsvpFormText["errors"]): RsvpErrors {
+export function validateRsvp(values: RsvpValues, errors: RsvpFormText["errors"], askPickup = false): RsvpErrors {
   const result: RsvpErrors = {}
   const name = values.name.trim()
   if (name.length === 0 || charCount(name) > NAME_MAX) result.name = errors.name
   if (values.attending === "") result.attending = errors.attending
   const guests = Number(values.guests)
   if (!Number.isInteger(guests) || guests < GUESTS_MIN || guests > GUESTS_MAX) result.guests = errors.guests
+  if (values.attending === "yes" && values.transport === "") result.transport = errors.transport
+  if (askPickup && values.attending === "yes" && values.transport === "shared" && values.pickup === "") result.pickup = errors.pickup
   if (charCount(values.note.trim()) > NOTE_MAX) result.note = errors.note
   return result
 }

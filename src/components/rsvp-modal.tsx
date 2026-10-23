@@ -1,10 +1,11 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from "react"
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { weddingConfig } from "../config/wedding-config"
-import { gardenOverlay } from "../lib/garden-overlay"
 import { getGuestName, getNamedGuest } from "../lib/guest"
+import { getWeddingEvent } from "../lib/wedding-event"
 import { lockScroll } from "../lib/scroll-lock"
 import { validateRsvp, GUESTS_MAX, NAME_MAX, NOTE_MAX, type RsvpErrors, type RsvpField, type RsvpValues } from "../lib/rsvp-validation"
-import { ApiError, sendRsvp } from "../lib/wishes-api"
+import { useToast } from "../lib/toast-context"
+import { submitRsvp } from "../lib/wishes-api"
 import { CloseIcon } from "./icons/ui-icons"
 import "./rsvp-modal.css"
 
@@ -13,24 +14,35 @@ interface RsvpModalProps {
   onClose: () => void
 }
 
-type Status = "idle" | "sending" | "done"
-
 /** Form mới; link có tên khách (?to=) thì điền sẵn ô tên, khách vẫn sửa được */
 const emptyValues = (): RsvpValues => ({
   name: getNamedGuest(weddingConfig.guestParam),
   attending: "",
   guests: "1",
+  transport: "",
+  pickup: "",
   note: "",
 })
 const GUEST_OPTIONS = Array.from({ length: GUESTS_MAX }, (_, i) => i + 1)
+
+/** Phần chỉ hiện theo lựa chọn trước đó: co giãn chiều cao mượt thay vì làm hộp thoại nhảy; ẩn thì không focus/đọc được */
+function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
+  return (
+    <div className="rsvp-modal__collapse" data-open={open} inert={!open}>
+      <div className="rsvp-modal__collapse-inner">{children}</div>
+    </div>
+  )
+}
 
 export function RsvpModal({ open, onClose }: RsvpModalProps) {
   const { rsvp, guestParam, hero } = weddingConfig
   const text = rsvp.form
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const closeRef = useRef<HTMLButtonElement>(null)
   // Chỉ coi là bấm ra ngoài khi cả nhấn xuống và nhả ra đều ở vùng nền (kéo bôi đen từ ô nhập ra ngoài không được đóng form)
   const pressedOnBackdrop = useRef(false)
+  // Chỉ nhà gái có điểm đón xe chung; nhà trai không hỏi
+  const askPickup = (getWeddingEvent().side ?? weddingConfig.defaultSide) === "bride"
+  const toast = useToast()
   const uid = useId()
   const id = (field: string) => `${uid}-${field}`
   const nameFieldId = id("name")
@@ -38,8 +50,6 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
   const [values, setValues] = useState<RsvpValues>(emptyValues)
   const [trap, setTrap] = useState("")
   const [errors, setErrors] = useState<RsvpErrors>({})
-  const [serverError, setServerError] = useState("")
-  const [status, setStatus] = useState<Status>("idle")
 
   // Mở/đóng bằng <dialog> gốc: tự khóa tiêu điểm trong hộp thoại, đóng bằng Escape, nền phía sau không bấm được
   useEffect(() => {
@@ -55,233 +65,225 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
 
   useEffect(() => (open ? lockScroll() : undefined), [open])
 
-  // Đóng sau khi đã gửi xong thì lần mở sau là một form mới
-  const handleClose = () => {
-    if (status === "done") {
-      setValues(emptyValues())
-      setStatus("idle")
-    }
-    onClose()
-  }
-
-  useEffect(() => {
-    if (status === "done") closeRef.current?.focus()
-  }, [status])
-
   const update = <K extends keyof RsvpValues>(key: K, value: RsvpValues[K]) => {
     setValues((current) => ({ ...current, [key]: value }))
     setErrors((current) => ({ ...current, [key]: undefined }))
   }
 
-  const messageFor = (error: unknown): string => {
-    if (!(error instanceof ApiError)) return text.errors.generic
-    switch (error.code) {
-      case "unavailable":
-        return text.errors.unavailable
-      case "offline":
-        return text.errors.offline
-      case "rate_limited":
-        return text.errors.rateLimited
-      case "too_fast":
-        return text.errors.tooFast
-      default:
-        return text.errors.generic
-    }
-  }
-
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (status === "sending") return
 
-    const found = validateRsvp(values, text.errors)
+    const found = validateRsvp(values, text.errors, askPickup)
     setErrors(found)
-    setServerError("")
-    const firstInvalid = (["name", "attending", "guests", "note"] as RsvpField[]).find((field) => found[field])
+    const firstInvalid = (["name", "attending", "guests", "transport", "pickup", "note"] as RsvpField[]).find((field) => found[field])
     if (firstInvalid) {
-      document.getElementById(id(firstInvalid === "attending" ? "attending-yes" : firstInvalid))?.focus()
+      document.getElementById(id(firstInvalid === "attending" ? "attending-yes" : firstInvalid === "transport" ? "transport-own" : firstInvalid === "pickup" ? "pickup-0" : firstInvalid))?.focus()
       return
     }
 
-    setStatus("sending")
-    try {
-      await sendRsvp({
-        name: values.name.trim(),
-        attending: values.attending === "no" ? "no" : "yes",
-        // Từ chối thì không ghi số người đi cùng
-        guests: values.attending === "no" ? 0 : Number(values.guests),
-        note: values.note.trim(),
-        guest: getGuestName(guestParam, hero.guestFallback),
-        website: trap,
-      })
-      setStatus("done")
-    } catch (error) {
-      setStatus("idle")
-      setServerError(messageFor(error))
-    }
+    // Gửi ngầm lên Sheet (có hàng đợi tự gửi lại): đóng form ngay, cảm ơn bằng thông báo ngắn, lần mở sau là form mới
+    const declined = values.attending === "no"
+    submitRsvp({
+      name: values.name.trim(),
+      attending: declined ? "no" : "yes",
+      // Từ chối thì không ghi số người đi cùng và phương tiện
+      guests: declined ? 0 : Number(values.guests),
+      transport: declined ? "" : values.transport,
+      pickup: !declined && askPickup && values.transport === "shared" ? values.pickup : "",
+      note: values.note.trim(),
+      guest: getGuestName(guestParam, hero.guestFallback),
+      website: trap,
+    })
+    toast(declined ? text.thanksNo : text.thanksYes)
+    setValues(emptyValues())
+    setTrap("")
+    onClose()
   }
-
-  const sending = status === "sending"
 
   return (
     <dialog
       ref={dialogRef}
       className="rsvp-modal"
       aria-labelledby={id("title")}
-      onClose={handleClose}
+      onClose={onClose}
       onPointerDown={(event) => {
         pressedOnBackdrop.current = event.target === event.currentTarget
       }}
       onClick={(event) => {
-        if (pressedOnBackdrop.current && event.target === event.currentTarget) handleClose()
+        if (pressedOnBackdrop.current && event.target === event.currentTarget) onClose()
         pressedOnBackdrop.current = false
       }}
     >
       <div className="rsvp-modal__panel">
-        <button ref={closeRef} type="button" className="rsvp-modal__close" onClick={handleClose} aria-label={text.close}>
+        <button type="button" className="rsvp-modal__close" onClick={onClose} aria-label={text.close}>
           <CloseIcon />
         </button>
 
-        {status === "done" ? (
-          <div className="rsvp-modal__done" role="status">
-            <h2 id={id("title")} className="rsvp-modal__title">
-              {text.successTitle}
-            </h2>
-            <p>{values.attending === "no" ? text.successNo : text.successYes}</p>
-            <p>{text.successWish}</p>
-            <button
-              type="button"
-              className="rsvp-modal__submit"
-              onClick={() => {
-                handleClose()
-                gardenOverlay.open()
-              }}
-            >
-              {text.wishButton}
-            </button>
-            <button type="button" className="rsvp-modal__later" onClick={handleClose}>
-              {text.close}
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={onSubmit} noValidate>
-            <h2 id={id("title")} className="rsvp-modal__title">
-              {text.title}
-            </h2>
+        <form onSubmit={onSubmit} noValidate>
+          <h2 id={id("title")} className="rsvp-modal__title">
+            {text.title}
+          </h2>
 
-            <div className="rsvp-modal__field">
-              <label htmlFor={id("name")}>{text.nameLabel}</label>
+          <div className="rsvp-modal__field">
+            <label htmlFor={id("name")}>{text.nameLabel}</label>
+            <input
+              id={id("name")}
+              type="text"
+              value={values.name}
+              maxLength={NAME_MAX * 2}
+              autoComplete="name"
+              required
+              aria-invalid={errors.name ? true : undefined}
+              aria-describedby={errors.name ? id("name-error") : undefined}
+              onChange={(event) => update("name", event.target.value)}
+            />
+            {errors.name && (
+              <p id={id("name-error")} className="rsvp-modal__error" role="alert">
+                {errors.name}
+              </p>
+            )}
+          </div>
+
+          <fieldset className="rsvp-modal__field rsvp-modal__choices" aria-describedby={errors.attending ? id("attending-error") : undefined}>
+            <legend>{text.attendingLabel}</legend>
+            <label className="rsvp-modal__choice">
               <input
-                id={id("name")}
-                type="text"
-                value={values.name}
-                maxLength={NAME_MAX * 2}
-                autoComplete="name"
-                required
-                aria-invalid={errors.name ? true : undefined}
-                aria-describedby={errors.name ? id("name-error") : undefined}
-                onChange={(event) => update("name", event.target.value)}
+                id={id("attending-yes")}
+                type="radio"
+                name={id("attending")}
+                checked={values.attending === "yes"}
+                onChange={() => update("attending", "yes")}
               />
-              {errors.name && (
-                <p id={id("name-error")} className="rsvp-modal__error" role="alert">
-                  {errors.name}
+              <span>{text.yes}</span>
+            </label>
+            <label className="rsvp-modal__choice">
+              <input
+                id={id("attending-no")}
+                type="radio"
+                name={id("attending")}
+                checked={values.attending === "no"}
+                onChange={() => update("attending", "no")}
+              />
+              <span>{text.no}</span>
+            </label>
+            {errors.attending && (
+              <p id={id("attending-error")} className="rsvp-modal__error" role="alert">
+                {errors.attending}
+              </p>
+            )}
+          </fieldset>
+
+          <Collapse open={values.attending !== "no"}>
+            <div className="rsvp-modal__field">
+              <label htmlFor={id("guests")}>{text.guestsLabel}</label>
+              <select
+                id={id("guests")}
+                value={values.guests}
+                aria-invalid={errors.guests ? true : undefined}
+                aria-describedby={errors.guests ? id("guests-error") : undefined}
+                onChange={(event) => update("guests", event.target.value)}
+              >
+                {GUEST_OPTIONS.map((count) => (
+                  <option key={count} value={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
+              {errors.guests && (
+                <p id={id("guests-error")} className="rsvp-modal__error" role="alert">
+                  {errors.guests}
                 </p>
               )}
             </div>
-
-            <fieldset className="rsvp-modal__field rsvp-modal__choices" aria-describedby={errors.attending ? id("attending-error") : undefined}>
-              <legend>{text.attendingLabel}</legend>
+            <fieldset className="rsvp-modal__field rsvp-modal__choices" aria-describedby={errors.transport ? id("transport-error") : undefined}>
+              <legend>{text.transportLabel}</legend>
               <label className="rsvp-modal__choice">
                 <input
-                  id={id("attending-yes")}
+                  id={id("transport-own")}
                   type="radio"
-                  name={id("attending")}
-                  checked={values.attending === "yes"}
-                  onChange={() => update("attending", "yes")}
+                  name={id("transport")}
+                  checked={values.transport === "own"}
+                  onChange={() => update("transport", "own")}
                 />
-                <span>{text.yes}</span>
+                <span>{text.transportOwn}</span>
               </label>
               <label className="rsvp-modal__choice">
                 <input
-                  id={id("attending-no")}
+                  id={id("transport-shared")}
                   type="radio"
-                  name={id("attending")}
-                  checked={values.attending === "no"}
-                  onChange={() => update("attending", "no")}
+                  name={id("transport")}
+                  checked={values.transport === "shared"}
+                  onChange={() => update("transport", "shared")}
                 />
-                <span>{text.no}</span>
+                <span>{text.transportShared}</span>
               </label>
-              {errors.attending && (
-                <p id={id("attending-error")} className="rsvp-modal__error" role="alert">
-                  {errors.attending}
+              {errors.transport && (
+                <p id={id("transport-error")} className="rsvp-modal__error" role="alert">
+                  {errors.transport}
                 </p>
               )}
             </fieldset>
+          </Collapse>
 
-            {values.attending !== "no" && (
-              <div className="rsvp-modal__field">
-                <label htmlFor={id("guests")}>{text.guestsLabel}</label>
-                <select
-                  id={id("guests")}
-                  value={values.guests}
-                  aria-invalid={errors.guests ? true : undefined}
-                  aria-describedby={errors.guests ? id("guests-error") : undefined}
-                  onChange={(event) => update("guests", event.target.value)}
-                >
-                  {GUEST_OPTIONS.map((count) => (
-                    <option key={count} value={count}>
-                      {count}
-                    </option>
-                  ))}
-                </select>
-                {errors.guests && (
-                  <p id={id("guests-error")} className="rsvp-modal__error" role="alert">
-                    {errors.guests}
+          {askPickup && (
+            <Collapse open={values.attending !== "no" && values.transport === "shared"}>
+              <fieldset className="rsvp-modal__field rsvp-modal__choices" aria-describedby={errors.pickup ? id("pickup-error") : undefined}>
+                <legend>{text.pickupLabel}</legend>
+                {text.pickupOptions.map((option, index) => (
+                  <label key={option.id} className="rsvp-modal__choice">
+                    <input
+                      id={id(`pickup-${index}`)}
+                      type="radio"
+                      name={id("pickup")}
+                      checked={values.pickup === option.id}
+                      onChange={() => update("pickup", option.id)}
+                    />
+                    <span>{option.label}</span>
+                  </label>
+                ))}
+                {errors.pickup && (
+                  <p id={id("pickup-error")} className="rsvp-modal__error" role="alert">
+                    {errors.pickup}
                   </p>
                 )}
-              </div>
-            )}
+              </fieldset>
+            </Collapse>
+          )}
 
-            <div className="rsvp-modal__field">
-              <label htmlFor={id("note")}>{text.noteLabel}</label>
-              <textarea
-                id={id("note")}
-                rows={3}
-                value={values.note}
-                maxLength={NOTE_MAX * 2}
-                aria-invalid={errors.note ? true : undefined}
-                aria-describedby={errors.note ? id("note-error") : undefined}
-                onChange={(event) => update("note", event.target.value)}
-              />
-              {errors.note && (
-                <p id={id("note-error")} className="rsvp-modal__error" role="alert">
-                  {errors.note}
-                </p>
-              )}
-            </div>
-
-            {/* Ô bẫy bot: người thật không thấy và không điền */}
-            <input
-              className="rsvp-modal__trap"
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              value={trap}
-              onChange={(event) => setTrap(event.target.value)}
+          <div className="rsvp-modal__field">
+            <label htmlFor={id("note")}>{text.noteLabel}</label>
+            <textarea
+              id={id("note")}
+              rows={3}
+              value={values.note}
+              maxLength={NOTE_MAX * 2}
+              aria-invalid={errors.note ? true : undefined}
+              aria-describedby={errors.note ? id("note-error") : undefined}
+              onChange={(event) => update("note", event.target.value)}
             />
-
-            {serverError && (
-              <p className="rsvp-modal__error rsvp-modal__error--form" role="alert">
-                {serverError}
+            {errors.note && (
+              <p id={id("note-error")} className="rsvp-modal__error" role="alert">
+                {errors.note}
               </p>
             )}
+          </div>
 
-            <button type="submit" className="rsvp-modal__submit" disabled={sending}>
-              {sending ? text.sending : text.submit}
-            </button>
-          </form>
-        )}
+          {/* Ô bẫy bot: người thật không thấy và không điền */}
+          <input
+            className="rsvp-modal__trap"
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            value={trap}
+            onChange={(event) => setTrap(event.target.value)}
+          />
+
+          <button type="submit" className="rsvp-modal__submit">
+            {text.submit}
+          </button>
+        </form>
       </div>
     </dialog>
   )

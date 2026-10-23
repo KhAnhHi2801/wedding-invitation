@@ -14,6 +14,72 @@
   background: rgba(0, 0, 0, 0.55);
 }
 
+/* Hiện/ẩn êm: nền mờ dần, hộp nổi lên nhẹ. allow-discrete để hiệu ứng đóng chạy trước khi <dialog> bị ẩn hẳn */
+.rsvp-modal,
+.rsvp-modal::backdrop {
+  opacity: 0;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out),
+    display var(--dur-base) allow-discrete,
+    overlay var(--dur-base) allow-discrete;
+}
+
+.rsvp-modal {
+  transform: translateY(0.75rem) scale(0.97);
+}
+
+.rsvp-modal[open],
+.rsvp-modal[open]::backdrop {
+  opacity: 1;
+}
+
+.rsvp-modal[open] {
+  transform: none;
+}
+
+@starting-style {
+  .rsvp-modal[open],
+  .rsvp-modal[open]::backdrop {
+    opacity: 0;
+  }
+
+  .rsvp-modal[open] {
+    transform: translateY(0.75rem) scale(0.97);
+  }
+}
+
+/* Chiều cao co giãn: hàng lưới 0fr -> 1fr, nội dung bên trong bị cắt theo */
+.rsvp-modal__collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+.rsvp-modal__collapse[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.rsvp-modal__collapse-inner {
+  min-height: 0;
+  overflow: hidden;
+  /* chừa chỗ cho viền focus/lỗi không bị cắt */
+  padding: 2px;
+  margin: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-modal,
+  .rsvp-modal::backdrop,
+  .rsvp-modal__collapse {
+    transition: none;
+  }
+}
+
 .rsvp-modal__panel {
   position: relative;
   padding: var(--space-8) var(--space-6) var(--space-6);
@@ -107,13 +173,6 @@
   color: var(--wine);
 }
 
-.rsvp-modal__error--form {
-  margin-bottom: var(--space-4);
-  padding: var(--space-3);
-  border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--rose) 35%, var(--paper));
-}
-
 .rsvp-modal__submit {
   display: inline-flex;
   align-items: center;
@@ -126,30 +185,6 @@
   color: var(--white);
   font-size: var(--fs-16);
   font-weight: 700;
-}
-
-.rsvp-modal__submit:disabled {
-  opacity: 0.6;
-  cursor: progress;
-}
-
-/* Nút phụ ở màn thành công: chữ rượu vang, không nền, vẫn đủ vùng bấm 44px */
-.rsvp-modal__later {
-  min-height: 2.75rem;
-  border: 0;
-  background: none;
-  color: var(--wine);
-  font-size: var(--fs-16);
-  font-weight: 700;
-}
-
-.rsvp-modal__done {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.rsvp-modal__done p {
-  margin: 0;
 }
 
 /* Ô bẫy bot: đưa ra khỏi màn hình thay vì display:none (bot vẫn thấy) */

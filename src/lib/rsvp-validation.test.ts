@@ -3,7 +3,7 @@ import { weddingConfig } from "../config/wedding-config"
 import { charCount, validateRsvp, type RsvpValues } from "./rsvp-validation"
 
 const errors = weddingConfig.rsvp.form.errors
-const valid: RsvpValues = { name: "Nguyễn Văn A", attending: "yes", guests: "2", note: "" }
+const valid: RsvpValues = { name: "Nguyễn Văn A", attending: "yes", guests: "2", transport: "shared", pickup: "", note: "" }
 
 describe("validateRsvp", () => {
   it("form hợp lệ không có lỗi", () => {
@@ -23,6 +23,18 @@ describe("validateRsvp", () => {
       expect(validateRsvp({ ...valid, guests }, errors).guests).toBe(errors.guests)
     }
     expect(validateRsvp({ ...valid, guests: "10" }, errors).guests).toBeUndefined()
+  })
+
+  it("đến thì bắt buộc chọn xe, không đến thì bỏ qua", () => {
+    expect(validateRsvp({ ...valid, transport: "" }, errors).transport).toBe(errors.transport)
+    expect(validateRsvp({ ...valid, attending: "no", transport: "" }, errors).transport).toBeUndefined()
+  })
+
+  it("nhà gái đi xe chung thì bắt buộc chọn điểm đón", () => {
+    expect(validateRsvp(valid, errors, true).pickup).toBe(errors.pickup)
+    expect(validateRsvp({ ...valid, pickup: "to-huu" }, errors, true).pickup).toBeUndefined()
+    expect(validateRsvp(valid, errors, false).pickup).toBeUndefined()
+    expect(validateRsvp({ ...valid, transport: "own" }, errors, true).pickup).toBeUndefined()
   })
 
   it("lời nhắn tối đa 300 ký tự, emoji tính là 1 ký tự", () => {
