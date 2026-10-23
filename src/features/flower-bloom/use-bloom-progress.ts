@@ -14,6 +14,21 @@ const MIN_MS = 4200
 const MAX_MS = 6400
 const DEFAULT_MS = 5200
 const LITE_MS = 2000
+/**
+ * Tiếng đi theo đúng giai đoạn đang thấy (cùng ngưỡng với stageFromProgress): hết nảy mầm thì mầm bật lên, thân vươn có các nốt
+ * cao dần, nụ hình thành có nhịp trầm, và hoa bắt đầu nở thì chuông rải theo suốt lúc cánh mở.
+ */
+const CUES = [
+  { at: 0.12, play: () => soundManager.playSproutSound() },
+  { at: 0.2, play: () => soundManager.playGrowthNote(0) },
+  { at: 0.28, play: () => soundManager.playGrowthNote(1) },
+  { at: 0.36, play: () => soundManager.playGrowthNote(2) },
+  { at: 0.44, play: () => soundManager.playGrowthNote(3) },
+  { at: 0.48, play: () => soundManager.playBudSound() },
+] as const
+const BLOOM_START = 0.62
+const BLOOM_END = 0.95
+
 /** Cập nhật hình tối đa ~30 lần/giây: mắt người gần như không phân biệt với 60 mà nhẹ hơn một nửa cho điện thoại. */
 const FRAME_GAP_MS = 33
 
@@ -74,7 +89,7 @@ export function useBloomProgress(onDone: () => void, durations?: StageDurations)
   const [progress, setProgress] = useState(0)
   const frame = useRef(0)
   const onDoneRef = useRef(onDone)
-  // Chuông nở chỉ vang một lần mỗi lần mọc (ở ~80%, hoặc lúc xong nếu bỏ qua animation)
+  // Chuông nở chỉ vang một lần mỗi lần mọc (lúc bắt đầu nở, hoặc lúc xong nếu bỏ qua animation)
   const chimed = useRef(false)
 
   useEffect(() => {
@@ -113,7 +128,10 @@ export function useBloomProgress(onDone: () => void, durations?: StageDurations)
     const duration = shouldReduceEffects() ? LITE_MS : bloomDurationMs(durations)
     const startedAt = performance.now()
     let lastPaint = 0
-    let sprouted = false
+    let nextCue = 0
+    // Thời gian thật (giây) của giai đoạn nở: chuông rải đúng khoảng này
+    const bloomShare = durations ? durations.bloom / (durations.seed + durations.germination + durations.growth + durations.bud + durations.bloom) : BLOOM_END - BLOOM_START
+    const bloomSpanSec = Math.min(2.5, Math.max(0.5, (duration * bloomShare) / 1000))
 
     const loop = (now: number) => {
       const value = progressFromTime((now - startedAt) / duration, durations)
@@ -124,13 +142,10 @@ export function useBloomProgress(onDone: () => void, durations?: StageDurations)
       if (now - lastPaint >= FRAME_GAP_MS) {
         lastPaint = now
         setProgress(value)
-        if (!sprouted && value > 0.2) {
-          sprouted = true
-          soundManager.playSproutSound()
-        }
-        if (!chimed.current && value > 0.8) {
+        while (nextCue < CUES.length && value >= CUES[nextCue].at) CUES[nextCue++].play()
+        if (!chimed.current && value >= BLOOM_START) {
           chimed.current = true
-          soundManager.playBloomChime()
+          soundManager.playBloomChime(bloomSpanSec)
         }
       }
       frame.current = requestAnimationFrame(loop)
