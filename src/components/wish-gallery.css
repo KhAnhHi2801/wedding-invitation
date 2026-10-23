@@ -15,10 +15,16 @@
 }
 
 .wish-gallery__title {
-  margin: 0;
-  font-family: var(--font-signature);
+  /* Họa tiết vòng tròn hồng và tia sáng như các tiêu đề script khác (About us, Save the date) */
+  --s: clamp(1.75rem, 9.3vw, 2.75rem);
+  --ox: -0.9;
+  --oy: 0.15;
+  width: fit-content;
+  margin: 0 auto;
+  /* HoaTay1 vẽ sẵn dấu tiếng Việt; Carlytte nét quá mảnh và chữ L lượn quá đà khi viết "Lời chúc" */
+  font-family: var(--font-hand);
+  /* Font chỉ có một độ đậm: để 400 để trình duyệt không tự làm đậm giả */
   font-weight: 400;
-  /* Cùng cỡ với tiêu đề script "About us" để các tiêu đề script của thiệp đồng bộ */
   font-size: var(--o-37);
   line-height: 1.2;
   color: var(--wine);

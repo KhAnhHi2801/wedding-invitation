@@ -505,7 +505,7 @@ export const weddingConfig: WeddingConfig = {
     },
   },
   wishGallery: {
-    label: "Lời chúc",
+    label: "Lưu bút ngày cưới",
     subtitle:
       "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu giữa những trang sổ của chúng mình.",
     empty: "Hãy là người đầu tiên ép một bông hoa vào cuốn sổ này.",

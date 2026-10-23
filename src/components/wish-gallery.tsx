@@ -82,7 +82,7 @@ export function WishGallery() {
   return (
     <section className="section wish-gallery" id="guestbook" ref={revealRef} aria-labelledby={titleId}>
       <DriftingPetals />
-      <h2 className="wish-gallery__title" id={titleId}>
+      <h2 className="wish-gallery__title ornament" id={titleId}>
         {text.label}
       </h2>
       <p className="wish-gallery__subtitle">{text.subtitle}</p>

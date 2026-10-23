@@ -93,6 +93,8 @@
 /* Sân khấu: chậu hoa. Khi viết lời chúc thì thu nhỏ để chừa chỗ cho bàn phím ảo */
 .gov__stage {
   flex: none;
+  /* Khung có chiều cao cố định nên làm container theo cả hai chiều: hoa tính vừa khít theo cả bề rộng lẫn chiều cao khung */
+  container-type: size;
   height: clamp(14rem, 47dvh, 34rem);
   transition: height 760ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -124,9 +126,11 @@
 }
 
 .gov__stage .bloom {
-  width: auto;
-  height: 100%;
-  max-width: 100%;
+  /* Giữ đúng tỉ lệ 5:7 của hình vẽ ở mọi khung. Trước đây cao 100% còn rộng bị chặn 100% nên ở màn cao hẹp hình bị lệch khỏi tâm */
+  width: min(100cqw, 100cqh * 5 / 7, 30rem);
+  height: auto;
+  max-width: none;
+  aspect-ratio: 5 / 7;
 }
 
 /* Hoa xem trước mờ đi trước khi hạt rơi vào chậu trống */
@@ -196,7 +200,8 @@
 /* Bước viết: đoạn trích của loài hoa nhỏ lại để ô tên và ô lời chúc không bị đẩy xuống thấp */
 .gov__panel[data-step="writing"] .gov__flower-message {
   margin-bottom: var(--space-3);
-  font-size: var(--fs-16);
+  /* Belinda Avenue nghiêng có chiều cao chữ lớn, nên nhỏ hơn chữ ô nhập một bậc để đoạn trích không át ô tên và lời chúc */
+  font-size: var(--fs-12);
   line-height: 1.45;
 }
 
