@@ -37,8 +37,16 @@
 
 .timeline__icon {
   justify-self: end;
-  width: clamp(2.25rem, 12.6vw, 3.75rem);
+  width: clamp(3.25rem, 17vw, 5rem);
+  /* Nền giấy là lớp để multiply trộn; hàng có hiệu ứng reveal nên không trộn được với nền trang */
+  background: var(--paper);
+}
+
+.timeline__icon img {
+  display: block;
+  width: 100%;
   height: auto;
+  mix-blend-mode: multiply;
 }
 
 /* Tim hồng đặc nằm đè lên trục, trục vẫn liền mạch phía sau */

@@ -1,18 +1,18 @@
-import type { ComponentType, SVGProps } from "react"
 import { getWeddingEvent } from "../lib/wedding-event"
 import type { TimelineItem } from "../config/wedding-config"
-import { CameraIcon, CarIcon, ChurchIcon, GiftBoxIcon, HeartIcon, RingsIcon, ToastIcon } from "./icons/shapes"
+import { HeartIcon } from "./icons/shapes"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { FloatingHearts } from "./floating-hearts"
 import "./timeline.css"
 
-const ICONS: Record<TimelineItem["icon"], ComponentType<SVGProps<SVGSVGElement>>> = {
-  car: CarIcon,
-  camera: CameraIcon,
-  toast: ToastIcon,
-  church: ChurchIcon,
-  gift: GiftBoxIcon,
-  rings: RingsIcon,
+/** Hoạt hình cho từng mốc (nền trắng, hòa vào nền giấy bằng multiply trong ô `.timeline__icon` ở timeline.css) */
+const GIFS: Record<TimelineItem["icon"], string> = {
+  car: "/gifs/wedding-car.gif",
+  camera: "/gifs/couple.gif",
+  toast: "/gifs/cocktails.gif",
+  church: "/gifs/church.gif",
+  gift: "/gifs/invitation-card.gif",
+  rings: "/gifs/couple.gif",
 }
 
 const REVEAL: readonly RevealRule[] = [
@@ -31,10 +31,11 @@ export function Timeline() {
           <span className="timeline__axis" aria-hidden="true" />
           <ol className="timeline__rows">
           {timeline.map((item) => {
-            const Icon = ICONS[item.icon]
             return (
               <li className="timeline__row" key={item.time}>
-                <Icon className="timeline__icon" />
+                <span className="timeline__icon">
+                  <img src={GIFS[item.icon]} alt="" width={504} height={504} loading="lazy" />
+                </span>
                 <HeartIcon className="timeline__heart" />
                 <p className="timeline__text">
                   <span className="timeline__time">{item.time}</span>
