@@ -38,7 +38,7 @@ export function Cover() {
   const { startsAtMs } = getEventParts(weddingConfig.countdownTo)
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
-    <section className="cover" ref={ref}>
+    <section className="cover" id="cover" ref={ref}>
       <Photo
         name={hero.coverPhoto}
         alt={`${couple.bride.name} ${couple.connector} ${couple.groom.name}`}

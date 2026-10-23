@@ -18,6 +18,7 @@ import { FLOWER_ENTRIES } from "../lib/flower-entries";
 import { bookFlight } from "../lib/book-flight";
 import { gardenOverlay } from "../lib/garden-overlay";
 import { getNamedGuest } from "../lib/guest";
+import { music } from "../lib/music";
 import { lockScroll } from "../lib/scroll-lock";
 import { DEFAULT_INK } from "../lib/wish-style";
 import {
@@ -111,6 +112,14 @@ export default function GardenOverlay({ open }: GardenOverlayProps) {
   useEffect(() => (open ? lockScroll() : undefined), [open]);
 
   useEffect(() => () => window.clearTimeout(sowTimer.current), []);
+
+  // Hạt nảy mầm và nở hoa có âm thanh riêng: hạ nhạc nền cho tới khi hoa nở xong (hoặc đóng giữa chừng)
+  const growing = open && (step === "sowing" || step === "growing" || step === "blooming");
+  useEffect(() => {
+    if (!growing) return;
+    music.duck();
+    return music.release;
+  }, [growing]);
 
   // Đổi bước thì đưa tiêu điểm vào thân hộp thoại để người dùng bàn phím và trình đọc màn hình theo kịp
   useEffect(() => {

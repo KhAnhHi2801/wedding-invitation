@@ -28,7 +28,7 @@ export function Ceremony() {
   const { ceremony, couple } = weddingConfig
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
-    <section className="section ceremony" ref={ref}>
+    <section className="section ceremony" id="ceremony" ref={ref}>
       <div className="container">
         <div className="ceremony__top">
           <h2 className="ceremony__title">

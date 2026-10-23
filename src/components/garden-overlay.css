@@ -95,7 +95,9 @@
   flex: none;
   /* Khung có chiều cao cố định nên làm container theo cả hai chiều: hoa tính vừa khít theo cả bề rộng lẫn chiều cao khung */
   container-type: size;
-  height: clamp(14rem, 47dvh, 34rem);
+  /* Bước chọn hoa: phần thân (tên hoa, danh sách, nút gieo) cần cỡ ~27rem cộng khoảng thở để không phải cuộn, chậu hoa lấy phần còn lại của hộp
+     (không dùng % của viewport nữa: màn rộng mà thấp thì chậu hoa nuốt hết chỗ và thân phải cuộn trong một khe nhỏ) */
+  height: clamp(11rem, calc(100% - 31rem), 34rem);
   transition: height 760ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 

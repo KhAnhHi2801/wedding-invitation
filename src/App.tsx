@@ -11,6 +11,7 @@ import { Gift } from "./components/gift"
 import { WishGallery } from "./components/wish-gallery"
 import { MapCard } from "./components/map-card"
 import { MarryMe } from "./components/marry-me"
+import { SiteNav } from "./components/site-nav"
 import { Rsvp } from "./components/rsvp"
 import { RsvpModal } from "./components/rsvp-modal"
 import { SaveTheDate } from "./components/save-the-date"
@@ -18,6 +19,8 @@ import { ThankYou } from "./components/thank-you"
 import { Timeline } from "./components/timeline"
 import { ToastProvider } from "./components/toast"
 import { weddingConfig } from "./config/wedding-config"
+import { autoScroll } from "./lib/auto-scroll"
+import { prefersReducedMotion } from "./lib/device-tier"
 import { music } from "./lib/music"
 import { lockScroll } from "./lib/scroll-lock"
 
@@ -34,6 +37,16 @@ export default function App() {
     if (!opened) return
     window.scrollTo({ top: 0, behavior: "instant" })
     mainRef.current?.focus({ preventScroll: true })
+  }, [opened])
+
+  // Mở xong thì chờ một nhịp rồi tự cuộn nhẹ xuống; ai bật giảm chuyển động thì không tự chạy (vẫn bật được bằng nút)
+  useEffect(() => {
+    if (!opened || prefersReducedMotion()) return
+    const cancel = autoScroll.startAfter(weddingConfig.autoScroll.delayMs)
+    return () => {
+      cancel()
+      autoScroll.stop()
+    }
   }, [opened])
 
   const handleOpenStart = () => {
@@ -55,7 +68,7 @@ export default function App() {
           <EventInfo />
           <MapCard />
         </div>
-        <div className="story">
+        <div className="story" id="story">
           <MarryMe />
           <About />
           <SaveTheDate />
@@ -69,7 +82,12 @@ export default function App() {
         <WishGallery />
         <ThankYou />
       </main>
-      {opened && <FloatingActions onOpenRsvp={openRsvp} />}
+      {opened && (
+        <>
+          <SiteNav />
+          <FloatingActions onOpenRsvp={openRsvp} />
+        </>
+      )}
       <RsvpModal open={rsvpOpen} onClose={() => setRsvpOpen(false)} />
       <GardenOverlayHost />
     </ToastProvider>

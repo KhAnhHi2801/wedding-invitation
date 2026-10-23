@@ -255,9 +255,15 @@ export interface WeddingConfig {
     fabGift: string;
     fabRsvp: string;
     musicLabel: string;
+    autoScrollLabel: string;
+    navLabel: string;
+    /** Thanh điều hướng cố định: `id` là id của section đích */
+    nav: { id: string; label: string }[];
   };
-  /** `src` là file trong `public/` (không có "/" đầu). File hiện tại là PLACEHOLDER tạm, thay bằng nhạc thật khi có. */
+  /** `src` là file trong `public/` (không có "/" đầu). */
   music: { src: string; autoplay: boolean; volume: number };
+  /** Tự cuộn trang: `speed` px/giây, `delayMs` chờ sau khi mở thiệp */
+  autoScroll: { speed: number; delayMs: number };
 }
 
 /*
@@ -564,6 +570,17 @@ export const weddingConfig: WeddingConfig = {
     fabGift: "Gửi quà mừng",
     fabRsvp: "Xác nhận tham dự",
     musicLabel: "Nhạc nền",
+    autoScrollLabel: "Tự cuộn trang",
+    navLabel: "Điều hướng nhanh",
+    nav: [
+      { id: "cover", label: "Trang chủ" },
+      { id: "ceremony", label: "Sự kiện" },
+      { id: "story", label: "Câu chuyện" },
+      { id: "timeline", label: "Hành trình" },
+      { id: "gallery", label: "Album" },
+      { id: "guestbook", label: "Lời chúc" },
+    ],
   },
-  music: { src: "audio/bg-music.wav", autoplay: false, volume: 0.35 },
+  music: { src: "musics/romantic.mp3", autoplay: true, volume: 0.35 },
+  autoScroll: { speed: 45, delayMs: 1500 },
 };

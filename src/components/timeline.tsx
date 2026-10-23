@@ -24,7 +24,7 @@ export function Timeline() {
   const { timeline } = getWeddingEvent()
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
-    <section className="section timeline" ref={ref}>
+    <section className="section timeline" id="timeline" ref={ref}>
       <FloatingHearts />
       <div className="container">
         <div className="timeline__list">

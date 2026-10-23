@@ -11,6 +11,11 @@ export type MusicState = "idle" | "playing" | "paused" | "unavailable"
 let audio: HTMLAudioElement | null = null
 let state: MusicState = "idle"
 let resumeAfterHidden = false
+// Đang hạ nhạc để nhường chỗ cho hiệu ứng khác (gieo hạt nảy mầm): nhạc vẫn chạy ngầm ở volume 0
+let ducked = false
+let fadeTimer = 0
+const FADE_MS = 400
+const FADE_STEP_MS = 40
 const listeners = new Set<() => void>()
 
 function setState(next: MusicState) {
@@ -19,12 +24,38 @@ function setState(next: MusicState) {
   listeners.forEach((listener) => listener())
 }
 
+const targetVolume = () => (ducked ? 0 : weddingConfig.music.volume)
+
+/**
+ * Đưa volume về mức đích từ từ trong FADE_MS rồi đặt đúng giá trị cuối; số bước cố định nên không bao giờ chạy mãi.
+ * Hạ nhạc thật sự dựa vào `muted` vì iOS Safari bỏ qua `volume` (fade chỉ có tác dụng ở nơi volume ghi được).
+ * Nhạc không dừng phát nên phát lại không cần thao tác chạm mới.
+ */
+function fadeToTarget() {
+  window.clearInterval(fadeTimer)
+  if (!audio) return
+  const element = audio
+  const goal = targetVolume()
+  // Tắt tiếng ngay khi duck; bật lại trước khi nhạc fade lên
+  if (ducked) element.muted = true
+  else element.muted = false
+  const from = element.volume
+  const steps = Math.round(FADE_MS / FADE_STEP_MS)
+  let tick = 0
+  fadeTimer = window.setInterval(() => {
+    tick += 1
+    element.volume = tick >= steps ? goal : from + ((goal - from) * tick) / steps
+    if (tick >= steps) window.clearInterval(fadeTimer)
+  }, FADE_STEP_MS)
+}
+
 function ensureAudio(): HTMLAudioElement {
   if (audio) return audio
   const element = new Audio(assetUrl(weddingConfig.music.src))
   element.loop = true
   element.preload = "none"
-  element.volume = weddingConfig.music.volume
+  element.volume = targetVolume()
+  element.muted = ducked
   // File nhạc thiếu hoặc hỏng: ẩn nút nhạc, không báo lỗi cho khách
   element.addEventListener("error", () => setState("unavailable"))
   // Hệ điều hành có thể tự dừng nhạc (cuộc gọi, Control Center): nút luôn phản ánh trạng thái thật
@@ -68,9 +99,24 @@ if (typeof document !== "undefined") {
   })
 }
 
+/** Hạ nhạc về 0 (nhạc vẫn chạy ngầm). Nút nhạc và trạng thái phát không đổi; khách tắt nhạc thì release không bật lại. */
+function duck() {
+  if (ducked) return
+  ducked = true
+  fadeToTarget()
+}
+
+function release() {
+  if (!ducked) return
+  ducked = false
+  fadeToTarget()
+}
+
 export const music = {
   play,
   pause,
+  duck,
+  release,
   toggle: () => (state === "playing" ? pause() : play()),
   subscribe(listener: () => void) {
     listeners.add(listener)

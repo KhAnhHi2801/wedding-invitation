@@ -61,3 +61,18 @@ export const ChevronRightIcon = (props: IconProps) => (
     <path {...line} d="M9.5 6l6 6-6 6" />
   </svg>
 )
+
+/** Mũi tên xuống: tự cuộn trang đang tắt */
+export const ScrollIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path {...line} d="M12 4v13M6.5 12L12 17.5 17.5 12" />
+    <path {...line} d="M7 21h10" />
+  </svg>
+)
+
+/** Tạm dừng: tự cuộn trang đang chạy */
+export const ScrollPauseIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path {...line} d="M9 5v14M15 5v14" />
+  </svg>
+)

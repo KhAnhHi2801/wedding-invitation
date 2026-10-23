@@ -55,11 +55,6 @@
   position: static;
 }
 
-.fab__music {
-  top: max(0.75rem, env(safe-area-inset-top));
-  right: max(0.75rem, env(safe-area-inset-right));
-}
-
 .fab__pill svg {
   position: absolute;
   right: 0.85rem;

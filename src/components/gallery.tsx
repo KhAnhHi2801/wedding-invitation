@@ -21,7 +21,7 @@ export function Gallery() {
   useParallax(ref, PARALLAX)
 
   return (
-    <section className="gallery" ref={ref}>
+    <section className="gallery" id="gallery" ref={ref}>
       <div className="gallery__stage">
         <Photo name={gallery.background} alt="" sizes="100vw" className="gallery__bg" />
         <div className="gallery__veil" aria-hidden="true" />
