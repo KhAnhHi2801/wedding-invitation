@@ -11,6 +11,11 @@ describe("getGuestName", () => {
     expect(getGuestName("to", "Quý Khách")).toBe("Anh Hoàng")
   })
 
+  it("dấu gạch dưới là khoảng trắng để link không đứt khi gửi qua chat", () => {
+    withQuery("?to=Anh_Ho%C3%A0ng__Minh")
+    expect(getGuestName("to", "Quý Khách")).toBe("Anh Hoàng Minh")
+  })
+
   it("không có query thì dùng tên mặc định", () => {
     withQuery("")
     expect(getGuestName("to", "Quý Khách")).toBe("Quý Khách")
