@@ -10,12 +10,12 @@
  *   status = "visible" hoặc để TRỐNG: hiện công khai; mọi giá trị khác (vd. "hidden"): không hiện.
  *   Kiểm duyệt = đổi status của dòng đó ngay trên Sheet. Đừng xóa hoặc sắp xếp lại dòng: phân trang dùng số dòng làm con trỏ.
  *
- * Tab "RSVP" (riêng tư, KHÔNG có API nào đọc ra): createdAt | name | attending | guests | note | guest | transport | pickup
+ * Tab "RSVP" (riêng tư, KHÔNG có API nào đọc ra): createdAt | name | attending | guests | note | guest | transport
  *   attending = "Có" hoặc "Không"; guests = số người (0 khi không đến); guest = tên trong link mời (?to=...);
- *   transport = "Xe cá nhân" | "Xe chung" (rỗng khi không đến); pickup = địa chỉ điểm đón (chỉ nhà gái đi xe chung, còn lại rỗng).
+ *   transport = "Xe cá nhân" | "Xe chung" (rỗng khi không đến).
  *
  * Hợp đồng với website (src/lib/wishes-api.ts): POST text/plain, body JSON.
- *   RSVP:  { kind:"rsvp", name, attending:"yes"|"no", guests, transport:"own"|"shared", pickup, note, guest, website, token, elapsedMs }
+ *   RSVP:  { kind:"rsvp", name, attending:"yes"|"no", guests, transport:"own"|"shared", note, guest, website, token, elapsedMs }
  *   Lời chúc: { name, message, flower, ink, website, token, elapsedMs, requestId }
  *   Trả { ok:true } hoặc { ok:false, error:"invalid"|"name_required"|"name_too_long"|"message_too_short"|"message_too_long"
  *                                          |"note_too_long"|"rate_limited"|"too_fast"|"server" }
@@ -44,7 +44,7 @@ var FLOWER_IDS = [
 ];
 var INK_KEYS = ['brown', 'navy', 'forest', 'wine', 'plum', 'teal', 'earth', 'rose', 'charcoal', 'olive']; // khớp src/lib/wish-style.ts (cùng thứ tự)
 var RSVP_SHEET = 'RSVP';
-var RSVP_HEADERS = ['createdAt', 'name', 'attending', 'guests', 'note', 'guest', 'transport', 'pickup'];
+var RSVP_HEADERS = ['createdAt', 'name', 'attending', 'guests', 'note', 'guest', 'transport'];
 
 var NAME_MAX = 40;
 var MESSAGE_MIN = 2;
@@ -53,11 +53,6 @@ var RSVP_NAME_MAX = 80; // khớp NAME_MAX của src/lib/rsvp-validation.ts
 var RSVP_NOTE_MAX = 300;
 var RSVP_GUEST_MAX = 80;
 var RSVP_GUESTS_MAX = 10;
-// Điểm đón xe chung của nhà gái. Khớp `pickupOptions` (id) trong src/config/wedding-config.ts.
-var PICKUP_POINTS = {
-  'dien-bien-phu': 'Số 5 đường Điện Biên Phủ, phường Điện Biên, quận Ba Đình, Hà Nội',
-  'to-huu': 'Số 58 Tố Hữu, phường Đại Mỗ, quận Nam Từ Liêm, Hà Nội',
-};
 var MIN_FILL_MS = 3000; // khách điền form nhanh hơn mức này (hoặc không gửi elapsedMs) bị coi là bot
 var RATE_LIMIT = 3; // số lời chúc tối đa mỗi mã trình duyệt...
 var RATE_WINDOW_S = 600; // ...trong khoảng thời gian này (giây)
@@ -289,13 +284,6 @@ function handleRsvp_(body, lock) {
     if (!transport) return json_({ ok: false, error: 'invalid' });
   }
 
-  // Nhà trai không có điểm đón nên để trống; có gửi thì phải là điểm đón hợp lệ
-  var pickup = '';
-  if (transport === 'Xe chung' && body.pickup) {
-    if (!Object.prototype.hasOwnProperty.call(PICKUP_POINTS, body.pickup)) return json_({ ok: false, error: 'invalid' });
-    pickup = PICKUP_POINTS[body.pickup];
-  }
-
   var note = clean_(body.note);
   if (length_(note) > RSVP_NOTE_MAX) return json_({ ok: false, error: 'note_too_long' });
   var guest = clean_(body.guest).slice(0, RSVP_GUEST_MAX);
@@ -328,7 +316,6 @@ function handleRsvp_(body, lock) {
     sanitizeCell_(note),
     sanitizeCell_(guest),
     transport,
-    sanitizeCell_(pickup),
   ]]);
   sheet.getRange(row, 4).setNumberFormat('0').setValue(guests);
 

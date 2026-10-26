@@ -1,7 +1,6 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { weddingConfig } from "../config/wedding-config"
 import { getGuestName, getNamedGuest } from "../lib/guest"
-import { getWeddingEvent } from "../lib/wedding-event"
 import { lockScroll } from "../lib/scroll-lock"
 import { validateRsvp, GUESTS_MAX, NAME_MAX, NOTE_MAX, type RsvpErrors, type RsvpField, type RsvpValues } from "../lib/rsvp-validation"
 import { useToast } from "../lib/toast-context"
@@ -20,7 +19,6 @@ const emptyValues = (): RsvpValues => ({
   attending: "",
   guests: "1",
   transport: "",
-  pickup: "",
   note: "",
 })
 const GUEST_OPTIONS = Array.from({ length: GUESTS_MAX }, (_, i) => i + 1)
@@ -40,8 +38,6 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   // Chỉ coi là bấm ra ngoài khi cả nhấn xuống và nhả ra đều ở vùng nền (kéo bôi đen từ ô nhập ra ngoài không được đóng form)
   const pressedOnBackdrop = useRef(false)
-  // Chỉ nhà gái có điểm đón xe chung; nhà trai không hỏi
-  const askPickup = (getWeddingEvent().side ?? weddingConfig.defaultSide) === "bride"
   const toast = useToast()
   const uid = useId()
   const id = (field: string) => `${uid}-${field}`
@@ -73,11 +69,11 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const found = validateRsvp(values, text.errors, askPickup)
+    const found = validateRsvp(values, text.errors)
     setErrors(found)
-    const firstInvalid = (["name", "attending", "guests", "transport", "pickup", "note"] as RsvpField[]).find((field) => found[field])
+    const firstInvalid = (["name", "attending", "guests", "transport", "note"] as RsvpField[]).find((field) => found[field])
     if (firstInvalid) {
-      document.getElementById(id(firstInvalid === "attending" ? "attending-yes" : firstInvalid === "transport" ? "transport-own" : firstInvalid === "pickup" ? "pickup-0" : firstInvalid))?.focus()
+      document.getElementById(id(firstInvalid === "attending" ? "attending-yes" : firstInvalid === "transport" ? "transport-own" : firstInvalid))?.focus()
       return
     }
 
@@ -89,7 +85,6 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
       // Từ chối thì không ghi số người đi cùng và phương tiện
       guests: declined ? 0 : Number(values.guests),
       transport: declined ? "" : values.transport,
-      pickup: !declined && askPickup && values.transport === "shared" ? values.pickup : "",
       note: values.note.trim(),
       guest: getGuestName(guestParam, hero.guestFallback),
       website: trap,
@@ -224,31 +219,6 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
               )}
             </fieldset>
           </Collapse>
-
-          {askPickup && (
-            <Collapse open={values.attending !== "no" && values.transport === "shared"}>
-              <fieldset className="rsvp-modal__field rsvp-modal__choices" aria-describedby={errors.pickup ? id("pickup-error") : undefined}>
-                <legend>{text.pickupLabel}</legend>
-                {text.pickupOptions.map((option, index) => (
-                  <label key={option.id} className="rsvp-modal__choice">
-                    <input
-                      id={id(`pickup-${index}`)}
-                      type="radio"
-                      name={id("pickup")}
-                      checked={values.pickup === option.id}
-                      onChange={() => update("pickup", option.id)}
-                    />
-                    <span>{option.label}</span>
-                  </label>
-                ))}
-                {errors.pickup && (
-                  <p id={id("pickup-error")} className="rsvp-modal__error" role="alert">
-                    {errors.pickup}
-                  </p>
-                )}
-              </fieldset>
-            </Collapse>
-          )}
 
           <div className="rsvp-modal__field">
             <label htmlFor={id("note")}>{text.noteLabel}</label>

@@ -205,19 +205,10 @@ describe("xác nhận tham dự (RSVP)", () => {
   it("đến: ghi 'Có', số người dạng số, tên khách theo link", () => {
     expect(post(rsvp({ guests: 3, note: "Ăn chay giúp mình" })).ok).toBe(true)
     const sheet = sheets.get("RSVP")
-    expect(sheet.rows[0]).toEqual(["createdAt", "name", "attending", "guests", "note", "guest", "transport", "pickup"])
+    expect(sheet.rows[0]).toEqual(["createdAt", "name", "attending", "guests", "note", "guest", "transport"])
     const row = sheet.rows[1]
-    expect(row.slice(1)).toEqual(["Minh", "Có", 3, "Ăn chay giúp mình", "Anh Nam", "Xe cá nhân", ""])
+    expect(row.slice(1)).toEqual(["Minh", "Có", 3, "Ăn chay giúp mình", "Anh Nam", "Xe cá nhân"])
     expect(sheet.formats.get("2:4")).toBe("0")
-  })
-
-  it("xe chung nhà gái: ghi địa chỉ điểm đón; nhà trai để trống; id lạ bị từ chối", () => {
-    expect(post(rsvp({ transport: "shared", pickup: "to-huu" })).ok).toBe(true)
-    expect(post(rsvp({ token: "r2", transport: "shared", pickup: "" })).ok).toBe(true)
-    const rows = sheets.get("RSVP").rows
-    expect(rows[1].slice(6)).toEqual(["Xe chung", "Số 58 Tố Hữu, phường Đại Mỗ, quận Nam Từ Liêm, Hà Nội"])
-    expect(rows[2].slice(6)).toEqual(["Xe chung", ""])
-    expect(post(rsvp({ token: "r3", transport: "shared", pickup: "toString" })).error).toBe("invalid")
   })
 
   it("không đến: ghi 'Không' và 0 người, bỏ qua số người gửi lên", () => {

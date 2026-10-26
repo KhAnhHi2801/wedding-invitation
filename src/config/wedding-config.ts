@@ -70,9 +70,6 @@ export interface RsvpFormText {
   transportLabel: string;
   transportOwn: string;
   transportShared: string;
-  pickupLabel: string;
-  /** Điểm đón xe chung của nhà gái; `id` khớp `PICKUP_POINTS` trong wishes.gs */
-  pickupOptions: { id: string; label: string }[];
   noteLabel: string;
   submit: string;
   close: string;
@@ -84,7 +81,6 @@ export interface RsvpFormText {
     attending: string;
     guests: string;
     transport: string;
-    pickup: string;
     note: string;
   };
 }
@@ -453,11 +449,6 @@ export const weddingConfig: WeddingConfig = {
       transportLabel: "Bạn sẽ di chuyển bằng gì?",
       transportOwn: "Xe cá nhân",
       transportShared: "Đi xe chung",
-      pickupLabel: "Bạn muốn xuất phát từ đâu?",
-      pickupOptions: [
-        { id: "dien-bien-phu", label: "Số 5 đường Điện Biên Phủ, phường Điện Biên, quận Ba Đình, Hà Nội" },
-        { id: "to-huu", label: "Số 58 Tố Hữu, phường Đại Mỗ, quận Nam Từ Liêm, Hà Nội" },
-      ],
       noteLabel: "Lời nhắn (không bắt buộc)",
       submit: "Gửi xác nhận",
       close: "Đóng",
@@ -468,7 +459,6 @@ export const weddingConfig: WeddingConfig = {
         attending: "Bạn chọn giúp chúng mình có đến hay không nhé.",
         guests: "Số người từ 1 đến 10 thôi bạn nhé.",
         transport: "Bạn chọn giúp chúng mình đi xe cá nhân hay xe chung nhé.",
-        pickup: "Bạn chọn giúp chúng mình điểm xuất phát nhé.",
         note: "Lời nhắn hơi dài, bạn rút gọn giúp chúng mình (tối đa 300 ký tự).",
       },
     },

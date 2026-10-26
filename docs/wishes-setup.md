@@ -3,7 +3,7 @@
 Lời chúc (kèm loài hoa khách chọn) và xác nhận tham dự (RSVP) lưu trong **một Google Sheet của bạn**:
 
 - Tab `Wishes`: `id | createdAt | name | message | status | flower | ink`. Hiển thị trong phần "Lời chúc" của trang.
-- Tab `RSVP`: `createdAt | name | attending | guests | note | guest | transport | pickup` (transport: `Xe cá nhân` / `Xe chung`; pickup: địa chỉ điểm đón, chỉ nhà gái đi xe chung; sheet có sẵn thì thêm tay tiêu đề `transport` vào G1 và `pickup` vào H1). Chỉ bạn xem được, website không có cách nào đọc tab này ra.
+- Tab `RSVP`: `createdAt | name | attending | guests | note | guest | transport` (transport: `Xe cá nhân` / `Xe chung`; sheet có sẵn thì thêm tay tiêu đề `transport` vào G1). Chỉ bạn xem được, website không có cách nào đọc tab này ra.
 
 Cả hai tab tự được tạo ở lần ghi đầu tiên. Một đoạn Apps Script (`apps-script/wishes.gs`) làm cổng ghi/đọc.
 Website chỉ biết URL của cổng này, không có quyền gì khác với Sheet.
@@ -55,7 +55,7 @@ curl -sL "$URL" -H "Content-Type: text/plain" \
 
 # Ghi một xác nhận tham dự (tab RSVP tự được tạo)
 curl -sL "$URL" -H "Content-Type: text/plain" \
-  -d '{"kind":"rsvp","name":"Thử nghiệm","attending":"yes","guests":2,"transport":"shared","pickup":"to-huu","note":"","guest":"","website":"","token":"curl-rsvp","elapsedMs":5000}'
+  -d '{"kind":"rsvp","name":"Thử nghiệm","attending":"yes","guests":2,"transport":"shared","note":"","guest":"","website":"","token":"curl-rsvp","elapsedMs":5000}'
 ```
 
 Dùng `-L` vì Apps Script chuyển hướng (302) sang địa chỉ trả kết quả. **Không thêm `-X POST`**: với `-d`, curl đã gửi POST và tự đổi sang GET khi theo chuyển hướng; ép `-X POST` làm lần theo chuyển hướng cũng là POST và trả về trang lỗi dù dữ liệu đã được ghi (dễ ghi trùng khi thử lại).

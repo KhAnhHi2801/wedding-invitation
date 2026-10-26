@@ -33,9 +33,8 @@
 .fab__pill {
   left: max(0.75rem, env(safe-area-inset-left));
   bottom: max(0.75rem, env(safe-area-inset-bottom));
-  /* Pill rộng ~60% bề rộng trang, chữ ở giữa và icon dồn sang phải như mẫu */
-  width: min(52vw, 14rem);
-  padding: 0 2.75rem;
+  /* Pill ôm vừa nội dung: màn hình hẹp thì không đè lên nút xác nhận tham dự bên phải */
+  padding: 0 1.1rem;
   border-radius: 999px;
   font-family: var(--font-ui);
   font-weight: 400;
@@ -64,7 +63,14 @@
   position: static;
 }
 
-.fab__pill svg {
-  position: absolute;
-  right: 0.85rem;
+.fab span {
+  white-space: nowrap;
+}
+
+/* Màn hình rất hẹp: bỏ biểu tượng ở hai nút, chỉ giữ chữ để hai nút đứng cạnh nhau không dính nhau */
+@media (max-width: 24rem) {
+  .fab__pill svg,
+  .fab__rsvp svg {
+    display: none;
+  }
 }

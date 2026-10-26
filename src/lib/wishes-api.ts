@@ -2,7 +2,7 @@
  * Client gọi Google Apps Script (xem docs/wishes-setup.md): ghi xác nhận tham dự (RSVP) và lời chúc (cả hai gửi ngầm qua hàng đợi), đọc lời chúc.
  * Hợp đồng với `apps-script/wishes.gs`:
  *   POST text/plain (tránh preflight; Apps Script không hỗ trợ OPTIONS), body JSON
- *   RSVP: { kind: "rsvp", name, attending: "yes"|"no", guests, transport: "own"|"shared", pickup, note, guest, website, token, elapsedMs }
+ *   RSVP: { kind: "rsvp", name, attending: "yes"|"no", guests, transport: "own"|"shared", note, guest, website, token, elapsedMs }
  *   trả { ok: true } hoặc { ok: false, error: "invalid"|"name_required"|"rate_limited"|"too_fast"|"server" }
  */
 
@@ -97,8 +97,6 @@ export interface RsvpPayload {
   guests: number
   /** "" khi không đến */
   transport: "own" | "shared" | ""
-  /** Id điểm đón; rỗng khi không phải đi xe chung của nhà gái */
-  pickup: string
   note: string
   /** Tên khách trong link mời (`?to=`), giúp chủ nhà biết ai gửi từ link nào */
   guest: string
