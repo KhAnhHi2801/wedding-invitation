@@ -4,11 +4,25 @@
  */
 [data-reveal] {
   opacity: 0;
-  /* 1.3s ease-out như trang mẫu: chậm và mượt, chuyển động dài 50px */
+  /* Mềm hơn bản mẫu: 1.5s, đường cong giảm tốc dài, chuyển động ngắn lại (32px) và tan dần từ hơi mờ ra rõ */
   transition:
-    opacity 1.3s ease-out var(--reveal-delay, 0ms),
-    transform 1.3s ease-out var(--reveal-delay, 0ms),
-    clip-path 1.3s ease-out var(--reveal-delay, 0ms);
+    opacity 1.5s var(--ease-out) var(--reveal-delay, 0ms),
+    transform 1.5s var(--ease-out) var(--reveal-delay, 0ms),
+    filter 1.5s var(--ease-out) var(--reveal-delay, 0ms),
+    clip-path 1.5s var(--ease-out) var(--reveal-delay, 0ms);
+}
+
+/* Làm mờ chỉ áp cho nhóm trượt/phóng; máy yếu bỏ vì filter tốn GPU */
+[data-reveal="fadeUp"],
+[data-reveal="slideLeft"],
+[data-reveal="slideRight"],
+[data-reveal="scaleIn"],
+[data-reveal="scaleUp"] {
+  filter: blur(6px);
+}
+
+.lite [data-reveal] {
+  filter: none;
 }
 
 /* Chỉ chuyển opacity để không tranh transform với parallax (GSAP) trên cùng phần tử */
@@ -17,15 +31,15 @@
 }
 
 [data-reveal="fadeUp"] {
-  transform: translate3d(0, 50px, 0);
+  transform: translate3d(0, 32px, 0);
 }
 
 [data-reveal="slideLeft"] {
-  transform: translate3d(-50px, 0, 0);
+  transform: translate3d(-32px, 0, 0);
 }
 
 [data-reveal="slideRight"] {
-  transform: translate3d(50px, 0, 0);
+  transform: translate3d(32px, 0, 0);
 }
 
 [data-reveal="scaleIn"] {
@@ -64,6 +78,7 @@
 [data-reveal].is-in {
   opacity: 1;
   transform: none;
+  filter: none;
   /* Vùng hiện nới ra ngoài khung phần tử: chữ hoa có dấu (Í, Ờ, Ể...) và chữ viết tay nhô lên trên dòng,
      inset(0) sẽ cắt mất dấu. Vẫn nội suy được từ các inset % của hiệu ứng quét. */
   clip-path: inset(-2rem -1rem);
@@ -73,6 +88,7 @@
   [data-reveal] {
     opacity: 1;
     transform: none;
+    filter: none;
     clip-path: none;
     transition: none;
   }

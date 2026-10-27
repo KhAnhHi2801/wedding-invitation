@@ -1,7 +1,7 @@
 /* Token thiết kế: màu, chữ, khoảng cách, chuyển động, lớp. Component chỉ dùng biến, không viết hex rời. */
 :root {
   /* Màu */
-  --paper: #fcfcfc;
+  --paper: #fdf9f6;
   --ink: #3b3232;
   --wine: #8b2f30;
   --wine-2: var(--wine);
@@ -16,6 +16,10 @@
   --gray-400: #999999;
   --gray-600: #666666;
   --mist: #ededed;
+  /* Tông mơ màng: vàng champagne cho đường viền, hồng kem cho ánh sáng nền */
+  --champagne: #c9a56b;
+  --glow: #fbe6e1;
+  --glow-warm: #fff1e2;
   --white: #ffffff;
   /* Chữ không dùng đen tuyền: gom về màu mực ấm của thiệp để toàn trang cùng tông */
   --black: var(--ink);

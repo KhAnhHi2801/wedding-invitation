@@ -24,6 +24,34 @@ body {
   overflow-x: clip;
 }
 
+/* Nền mơ màng toàn trang: vài vệt sáng hồng kem + hạt mịn, cố định nên không kéo giãn theo chiều dài trang. Nằm dưới mọi nội dung. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60vmax 45vmax at 8% 12%, color-mix(in srgb, var(--glow) 85%, transparent), transparent 70%),
+    radial-gradient(55vmax 40vmax at 95% 55%, color-mix(in srgb, var(--glow-warm) 90%, transparent), transparent 70%),
+    radial-gradient(50vmax 40vmax at 30% 100%, color-mix(in srgb, var(--glow) 70%, transparent), transparent 70%);
+}
+
+/* Hạt mịn rất nhẹ cho cảm giác giấy thiệp, chỉ trên máy mạnh */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.lite body::after {
+  display: none;
+}
+
 img,
 svg,
 video {

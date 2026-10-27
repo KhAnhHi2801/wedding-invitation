@@ -110,3 +110,131 @@
   letter-spacing: 1px;
   color: var(--black);
 }
+
+/* Khung ảnh kiểu ảnh in: viền kem, bóng mềm, nghiêng nhẹ xen kẽ. Dùng `rotate` riêng để không tranh transform của hiệu ứng hiện dần */
+.gallery__photo {
+  border: 0.45rem solid var(--paper);
+  border-radius: 0.2rem;
+  box-shadow:
+    0 0.6rem 1.4rem color-mix(in srgb, var(--wine) 22%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--champagne) 45%, transparent);
+  cursor: zoom-in;
+  transition: rotate 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
+}
+
+.gallery__photo:nth-child(1) {
+  rotate: -1.6deg;
+}
+
+.gallery__photo:nth-child(2) {
+  rotate: 1.2deg;
+}
+
+.gallery__photo:nth-child(3) {
+  rotate: -0.8deg;
+}
+
+@media (hover: hover) {
+  .gallery__photo:hover {
+    rotate: 0deg;
+    box-shadow:
+      0 0.9rem 2rem color-mix(in srgb, var(--wine) 28%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--champagne) 70%, transparent);
+  }
+}
+
+/* Dải sáng mảnh lướt chéo qua cả khối ảnh, thi thoảng một lần */
+.gallery__stack::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  clip-path: inset(0);
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  background-size: 250% 100%;
+  background-position: 150% 0;
+  animation: gallery-shine 7s ease-in-out 1.5s infinite;
+}
+
+@keyframes gallery-shine {
+  0% {
+    background-position: 150% 0;
+  }
+  35%,
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+.lite .gallery__stack::after {
+  display: none;
+}
+
+/* Xem ảnh lớn */
+.gallery__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--ink) 82%, transparent);
+  cursor: zoom-out;
+  animation: lightbox-in 0.35s var(--ease-out);
+}
+
+/* Khung ôm sát ảnh để nút đóng bám vào góc ảnh chứ không dính góc màn hình */
+.gallery__lightbox-frame {
+  position: relative;
+  display: grid;
+}
+
+.gallery__lightbox-img {
+  max-width: min(100vw - 2rem, 70rem);
+  max-height: calc(100dvh - 3rem);
+  width: auto;
+  height: auto;
+  border: 0.5rem solid var(--paper);
+  border-radius: 0.2rem;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.4);
+  animation: lightbox-zoom 0.5s var(--ease-out);
+}
+
+.gallery__lightbox-close {
+  position: absolute;
+  top: -0.9rem;
+  right: -0.9rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--wine);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__stack::after {
+    animation: none;
+    display: none;
+  }
+
+  .gallery__photo {
+    transition: none;
+  }
+}

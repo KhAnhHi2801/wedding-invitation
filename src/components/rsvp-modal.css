@@ -7,7 +7,13 @@
   border-radius: 1.25rem;
   background: var(--paper);
   color: var(--ink);
-  overflow: auto;
+  overflow: hidden;
+}
+
+/* Cột dọc: tiêu đề và nút gửi cố định, chỉ phần thân cuộn. display chỉ đặt khi mở để <dialog> đóng vẫn ẩn */
+.rsvp-modal[open] {
+  display: flex;
+  flex-direction: column;
 }
 
 .rsvp-modal::backdrop {
@@ -82,7 +88,37 @@
 
 .rsvp-modal__panel {
   position: relative;
-  padding: var(--space-8) var(--space-6) var(--space-6);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.rsvp-modal__form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.rsvp-modal__header {
+  flex: none;
+  padding: var(--space-8) var(--space-6) var(--space-4);
+}
+
+.rsvp-modal__body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-1) var(--space-6);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.rsvp-modal__footer {
+  flex: none;
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, var(--paper));
+  background: var(--paper);
 }
 
 .rsvp-modal__close {
@@ -105,7 +141,7 @@
 }
 
 .rsvp-modal__title {
-  margin: 0 0 var(--space-6);
+  margin: 0;
   padding-right: 2.5rem;
   font-family: var(--font-display);
   font-weight: 700;

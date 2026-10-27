@@ -19,6 +19,20 @@ interface EnvelopeIntroProps {
 
 const HEARTS = [0, 1, 2];
 
+/** Cánh hoa bung khi mở: màu, cỡ và góc cố định để mỗi lần mở đều đẹp như nhau */
+const PETALS = [
+  { tone: "var(--blush)", scale: 1, angle: -150 },
+  { tone: "var(--rose)", scale: 1.3, angle: -118 },
+  { tone: "var(--pink-soft)", scale: 0.8, angle: -92 },
+  { tone: "var(--blush)", scale: 1.1, angle: -64 },
+  { tone: "var(--rose)", scale: 0.9, angle: -35 },
+  { tone: "var(--pink-soft)", scale: 1.2, angle: -170 },
+  { tone: "var(--blush)", scale: 0.85, angle: -105 },
+  { tone: "var(--rose)", scale: 1, angle: -78 },
+  { tone: "var(--pink-soft)", scale: 1.15, angle: -20 },
+  { tone: "var(--blush)", scale: 0.9, angle: -135 },
+];
+
 export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
   const { hero, couple, guestParam } = weddingConfig;
   const guest = getNamedGuest(guestParam);
@@ -69,6 +83,36 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
       )
       .call(() => setState("fading"), [], 1.8)
       .call(finish, [], 2.6);
+
+    // Cánh hoa bung từ trong phong bì: bay ra theo góc, xoay và rơi nhẹ rồi mờ dần
+    const spread = Math.min(window.innerWidth * 0.45, 260);
+    q(".intro__petal")
+      .filter((node) => getComputedStyle(node).display !== "none")
+      .forEach((petal, i) => {
+        const rad = (PETALS[i].angle * Math.PI) / 180;
+        const dist = spread * (0.6 + (i % 4) * 0.22);
+        gsap
+          .timeline({ delay: 0.9 + i * 0.07 })
+          .fromTo(
+            petal,
+            { x: 0, y: 0, scale: 0.3, rotate: 0, autoAlpha: 0 },
+            {
+              x: Math.cos(rad) * dist,
+              y: Math.sin(rad) * dist,
+              scale: PETALS[i].scale,
+              rotate: (i % 2 ? 1 : -1) * (90 + i * 25),
+              autoAlpha: 0.95,
+              duration: 1.4,
+              ease: "power2.out",
+            },
+            0,
+          )
+          .to(
+            petal,
+            { y: `+=${60 + i * 8}`, autoAlpha: 0, duration: 1.6, ease: "sine.in" },
+            1.2,
+          );
+      });
 
     // Trái tim bay chậm lên rồi mờ dần, lắc nhẹ hai bên (4s, 5s, 7s như mẫu)
     const rise = Math.min(600, window.innerHeight * 0.7);
@@ -154,6 +198,11 @@ export function EnvelopeIntro({ onOpenStart, onOpened }: EnvelopeIntroProps) {
           <div className="intro__shadow" aria-hidden="true" />
           {HEARTS.map((id) => (
             <HeartIcon key={id} className="intro__heart" />
+          ))}
+          {PETALS.map((petal, i) => (
+            <svg key={i} className="intro__petal" viewBox="0 0 24 24" aria-hidden="true" style={{ color: petal.tone }}>
+              <path d="M12 2c4.500 3.800 7 8 7 12a7 7 0 0 1-14 0c0-4 2.500-8.200 7-12z" fill="currentColor" />
+            </svg>
           ))}
         </div>
       </section>

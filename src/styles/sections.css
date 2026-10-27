@@ -94,3 +94,38 @@ main.is-open {
   height: calc(var(--s) * 0.72);
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Cg fill='%23e0b9be'%3E%3Cpath d='M14 4Q14 16 26 16Q14 16 14 28Q14 16 2 16Q14 16 14 4Z'/%3E%3Cpath d='M32 0Q32 7 39 7Q32 7 32 14Q32 7 25 7Q32 7 32 0Z'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
 }
+
+/* Đường kẻ champagne mảnh ở đầu mỗi section, vẽ ra từ giữa theo thanh cuộn (trình duyệt hỗ trợ scroll timeline; còn lại hiện tĩnh) */
+:where(.section)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: min(10rem, 40%);
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+  opacity: 0.7;
+}
+
+@supports (animation-timeline: view()) {
+  :where(.section)::before {
+    animation: section-line linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 80%;
+  }
+}
+
+@keyframes section-line {
+  from {
+    scale: 0 1;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.section)::before {
+    animation: none;
+  }
+}

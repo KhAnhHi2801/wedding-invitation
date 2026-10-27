@@ -119,3 +119,70 @@
 .cover__line:last-child {
   margin-bottom: 0;
 }
+
+/* Ảnh bìa zoom rất chậm (Ken Burns), gốc zoom thấp để mặt hai bạn không bị cắt */
+.cover__photo {
+  transform-origin: 50% 70%;
+  will-change: transform;
+  animation: cover-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes cover-drift {
+  to {
+    transform: scale(1.07);
+  }
+}
+
+/* Vòng sáng mờ (bokeh) trôi chậm phía trên ảnh, hòa màu kiểu screen cho ánh sáng mơ màng */
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 45%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.9;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 236, 220, 0.42), transparent 3.6rem),
+    radial-gradient(circle at 78% 15%, rgba(255, 214, 220, 0.4), transparent 5.7rem),
+    radial-gradient(circle at 62% 38%, rgba(255, 244, 230, 0.3), transparent 2.6rem),
+    radial-gradient(circle at 90% 48%, rgba(255, 224, 214, 0.35), transparent 4.4rem),
+    radial-gradient(circle at 35% 55%, rgba(255, 240, 228, 0.28), transparent 6.8rem);
+  animation: bokeh-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes bokeh-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate3d(2.5%, -4%, 0);
+    opacity: 1;
+  }
+}
+
+/* Tên hai bạn tan dần từ mờ ra rõ khi thiệp mở (chỉ màn rộng có tên này) */
+main.is-open .cover__names {
+  animation: names-dream 2.4s ease-out 0.5s both;
+}
+
+@keyframes names-dream {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    letter-spacing: 0.12em;
+  }
+}
+
+.lite .cover__photo,
+.lite .cover::after {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover__photo,
+  .cover::after,
+  main.is-open .cover__names {
+    animation: none;
+  }
+}
