@@ -6,6 +6,13 @@
   padding-top: 2.85rem;
 }
 
+/* Điện thoại: ba phần cuối cách nhau 64px (32 + 32) cho cùng nhịp với các phần phía trên, thay vì 96px của khoảng đệm mặc định */
+@media (max-width: 47.99rem) {
+  .gift {
+    padding-bottom: 2rem;
+  }
+}
+
 .gift__column {
   width: min(100% - 2 * var(--gutter), 34rem);
   margin-inline: auto;

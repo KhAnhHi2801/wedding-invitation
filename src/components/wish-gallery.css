@@ -95,3 +95,10 @@
   outline: 2px solid var(--wine);
   outline-offset: 2px;
 }
+
+/* Điện thoại: khoảng cách với phần trước và sau là 32px mỗi bên, cùng nhịp với các phần khác */
+@media (max-width: 47.99rem) {
+  .wish-gallery {
+    padding-block: 2rem;
+  }
+}

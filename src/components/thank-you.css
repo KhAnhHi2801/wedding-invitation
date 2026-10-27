@@ -5,6 +5,12 @@
   text-align: center;
 }
 
+@media (max-width: 47.99rem) {
+  .thanks {
+    padding-top: 2rem;
+  }
+}
+
 .thanks__animation {
   display: block;
   width: min(34%, 12rem);
