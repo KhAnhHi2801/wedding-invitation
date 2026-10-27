@@ -223,6 +223,24 @@ export interface WeddingConfig {
   wishGallery: WishGalleryText;
   gift: {
     heading: string;
+    /** Kiểu trình bày: "duo" là hai chân dung gọn gàng, "box" là hai hộp mừng cưới */
+    style: "duo" | "box";
+    /** Dòng ngắn dưới tiêu đề */
+    intro: string;
+    /** Dòng hướng dẫn nhỏ dưới mã QR trong ngăn kéo */
+    qrHint: string;
+    /** Chữ trên thẻ hộp mừng (mở ngăn kéo) và nhãn đọc cho trình đọc màn hình */
+    open: string;
+    /** Dòng gợi ý dưới chân dung ở kiểu "duo" */
+    sendLabel: string;
+    boxLabel: string;
+    close: string;
+    /** Chữ trên nút sao chép: lúc thường và lúc vừa chép xong */
+    copyShort: string;
+    copiedShort: string;
+    /** Lời cảm ơn hiện sau khi khách sao chép số; `thanksNamed` dùng khi link có tên khách ({name}) */
+    thanks: string;
+    thanksNamed: string;
     /** Nhãn đọc cho nút sao chép số tài khoản (nút chỉ có biểu tượng) */
     copyLabel: string;
     copied: string;
@@ -452,8 +470,10 @@ export const weddingConfig: WeddingConfig = {
       noteLabel: "Lời nhắn (không bắt buộc)",
       submit: "Gửi xác nhận",
       close: "Đóng",
-      thanksYes: "Cảm ơn bạn nhiều nha! Hẹn gặp bạn trong ngày vui của tụi mình 💕",
-      thanksNo: "Tiếc quá, nhưng cảm ơn bạn đã báo cho tụi mình. Mong sớm được gặp bạn nhé 💌",
+      thanksYes:
+        "Cảm ơn bạn nhiều nha! Hẹn gặp bạn trong ngày vui của chúng mình 💕",
+      thanksNo:
+        "Tiếc quá, nhưng cảm ơn bạn đã báo cho chúng mình. Mong sớm được gặp bạn nhé 💌",
       errors: {
         name: "Bạn cho chúng mình biết tên nhé.",
         attending: "Bạn chọn giúp chúng mình có đến hay không nhé.",
@@ -500,9 +520,9 @@ export const weddingConfig: WeddingConfig = {
     label: "Lưu bút ngày cưới",
     subtitle:
       "Có những điều dịu dàng được gửi đi, rồi ở lại thật lâu giữa những trang sổ của chúng mình.",
-    empty: "Hãy là người đầu tiên ép một bông hoa vào cuốn sổ này.",
-    guide:
-      "Chọn một loài hoa, viết vài dòng, bông hoa của bạn sẽ được ép vào cuốn sổ này.",
+    empty: "Mong những lời chúc hôm nay sẽ nở hoa trong ký ức ngày mai.",
+    // Để trống thì không hiện dòng hướng dẫn: nút "Gieo lời chúc" và các bước chọn hoa, viết lời đã tự nói rõ việc cần làm
+    guide: "",
     more: "Đọc tiếp",
     mine: "Lời chúc của bạn",
     prev: "Trang trước",
@@ -515,7 +535,18 @@ export const weddingConfig: WeddingConfig = {
     anonymous: "Một người bạn",
   },
   gift: {
-    heading: "GỬI QUÀ MỪNG",
+    heading: "Gửi quà mừng",
+    style: "duo",
+    intro: "Ngày vui của chúng mình sẽ trọn vẹn hơn khi có bạn ở bên.",
+    qrHint: "Quét mã, hoặc sao chép số tài khoản.",
+    open: "Mở hộp mừng",
+    sendLabel: "Gửi chút yêu thương",
+    boxLabel: "Hộp mừng của",
+    close: "Đóng",
+    copyShort: "Sao chép",
+    copiedShort: "Đã chép",
+    thanks: "Cảm ơn bạn đã gửi lời mừng đến chúng mình.",
+    thanksNamed: "Cảm ơn {name} đã gửi lời mừng đến chúng mình.",
     copyLabel: "Sao chép số tài khoản",
     copied: "Đã sao chép số tài khoản",
     copyFailed: "Chưa sao chép được, bạn giữ vào số tài khoản để chép nhé",

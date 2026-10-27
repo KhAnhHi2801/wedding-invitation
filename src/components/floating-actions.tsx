@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
 import { gardenOverlay } from "../lib/garden-overlay"
 import { music, useMusicState } from "../lib/music"
+import { isRsvpHandled, onceScrolledPast } from "../lib/rsvp-prompt"
 import { ChairIcon } from "./icons/shapes"
 import { ChatIcon, MusicOffIcon, MusicOnIcon } from "./icons/ui-icons"
 import { WishTicker } from "./wish-ticker"
@@ -17,6 +19,12 @@ interface FloatingActionsProps {
 export function FloatingActions({ onOpenRsvp }: FloatingActionsProps) {
   const { ui } = weddingConfig
   const musicState = useMusicState()
+  // Qua phần ngày giờ, địa điểm thì nút xác nhận nhún nhẹ một lần để nhắc, không chặn màn hình
+  const [nudge, setNudge] = useState(false)
+  useEffect(() => {
+    const target = document.querySelector(".pair")
+    return target && !isRsvpHandled() ? onceScrolledPast(target, () => setNudge(true)) : undefined
+  }, [])
 
   return (
     <>
@@ -39,7 +47,13 @@ export function FloatingActions({ onOpenRsvp }: FloatingActionsProps) {
             {musicState === "playing" ? <MusicOnIcon /> : <MusicOffIcon />}
           </button>
         )}
-        <button type="button" className="fab fab__rsvp" aria-label={ui.fabRsvp} onClick={onOpenRsvp}>
+        <button
+          type="button"
+          className={nudge ? "fab fab__rsvp fab__rsvp--nudge" : "fab fab__rsvp"}
+          aria-label={ui.fabRsvp}
+          onClick={onOpenRsvp}
+          onAnimationEnd={() => setNudge(false)}
+        >
           <ChairIcon />
           <span>{ui.fabRsvpShort}</span>
         </button>

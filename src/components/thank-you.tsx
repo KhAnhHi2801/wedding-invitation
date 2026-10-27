@@ -16,7 +16,7 @@ export function ThankYou() {
   const guest = getGuestName(guestParam, thankYou.noteGuestFallback)
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
-    <section className="section thanks" ref={ref}>
+    <section className="section thanks" id="thanks" ref={ref}>
       {/* Người giảm chuyển động nhận ảnh tĩnh thay cho WebP động */}
       <picture className="thanks__animation">
         <source media="(prefers-reduced-motion: reduce)" srcSet={assetUrl(thankYou.still)} />

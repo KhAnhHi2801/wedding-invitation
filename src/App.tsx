@@ -12,7 +12,6 @@ import { WishGallery } from "./components/wish-gallery"
 import { MapCard } from "./components/map-card"
 import { MarryMe } from "./components/marry-me"
 import { SiteNav } from "./components/site-nav"
-import { Rsvp } from "./components/rsvp"
 import { RsvpModal } from "./components/rsvp-modal"
 import { SaveTheDate } from "./components/save-the-date"
 import { ThankYou } from "./components/thank-you"
@@ -24,7 +23,7 @@ import { prefersReducedMotion } from "./lib/device-tier"
 import { music } from "./lib/music"
 import { loadAllImagesAfterPageLoad } from "./lib/preload-images"
 import { lockScroll } from "./lib/scroll-lock"
-import { promptRsvpOnDwell } from "./lib/rsvp-prompt"
+import { markRsvpHandled, promptRsvpOnDwell } from "./lib/rsvp-prompt"
 
 export default function App() {
   const [opened, setOpened] = useState(false)
@@ -66,11 +65,15 @@ export default function App() {
     if (weddingConfig.music.autoplay) music.play()
   }
 
-  const openRsvp = () => setRsvpOpen(true)
+  // Mở lần nào (tự động hay bấm tay) cũng coi là khách đã được hỏi, các lần tải trang sau không tự mở nữa
+  const openRsvp = () => {
+    markRsvpHandled()
+    setRsvpOpen(true)
+  }
 
-  // Khách dừng ở phần xác nhận (sau khi đã xem ngày giờ, địa điểm) thì nhẹ nhàng mở form, mỗi lần tải trang tối đa một lần
+  // Khách đã xem hết và dừng ở lời cảm ơn cuối trang thì nhẹ nhàng mở form xác nhận, tối đa một lần
   useEffect(() => {
-    const section = document.getElementById("rsvp")
+    const section = document.getElementById("thanks")
     return opened && section ? promptRsvpOnDwell(section, openRsvp) : undefined
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opened])
@@ -95,7 +98,6 @@ export default function App() {
         <div className="finale">
           <Timeline />
           <Gallery />
-          <Rsvp onOpen={openRsvp} />
         </div>
         <Gift />
         <WishGallery />

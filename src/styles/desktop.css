@@ -234,14 +234,8 @@
   }
 
   .finale .timeline {
-    grid-column: 2 / 10;
+    grid-column: 2 / 13;
     grid-row: 1;
-  }
-
-  .finale .rsvp {
-    grid-column: 10 / 14;
-    grid-row: 1;
-    padding-top: 0;
   }
 
   .finale .gallery {
@@ -252,11 +246,6 @@
 
   .finale .timeline .container {
     width: 100%;
-  }
-
-  .finale .rsvp__arch {
-    width: 100%;
-    max-width: 22rem;
   }
 }
 
@@ -357,30 +346,6 @@
     right: max(var(--gutter), calc(50% - 41rem));
   }
 
-}
-
-@media (min-width: 56rem) {
-  /* Quà mừng: hai thẻ cạnh nhau, mỗi thẻ là một container riêng nên kích thước bên trong theo bề rộng thẻ */
-  .gift {
-    padding-block: var(--band) 0;
-  }
-
-  .gift__column {
-    width: min(100% - 2 * var(--gutter), 72rem);
-  }
-
-  .gift__list {
-    container-type: normal;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-8);
-    align-items: start;
-  }
-
-  .gift-card {
-    container-type: inline-size;
-    height: auto;
-    aspect-ratio: 100 / 30.2;
-  }
 }
 
 @media (min-width: 48rem) {

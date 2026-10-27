@@ -18,7 +18,7 @@
 [data-reveal="slideRight"],
 [data-reveal="scaleIn"],
 [data-reveal="scaleUp"] {
-  filter: blur(6px);
+  filter: none;
 }
 
 .lite [data-reveal] {

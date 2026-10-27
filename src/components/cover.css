@@ -63,7 +63,8 @@
   justify-items: center;
   padding: 0;
   background: var(--envelope);
-  border-radius: 0.4rem;
+  border-radius: 0.55rem;
+  box-shadow: var(--card-shadow);
   color: var(--white);
   font-family: var(--font-label);
   font-variant-numeric: tabular-nums;
@@ -92,6 +93,7 @@
   padding: 16vw var(--space-4) var(--space-4);
   background: color-mix(in srgb, var(--paper) 84%, transparent);
   backdrop-filter: blur(4px);
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
   color: var(--wine);
 }
 
@@ -133,9 +135,10 @@
   }
 }
 
-/* Vòng sáng mờ (bokeh) trôi chậm phía trên ảnh, hòa màu kiểu screen cho ánh sáng mơ màng */
+/* Vòng sáng mờ (bokeh) trôi chậm phía trên ảnh; đang tắt (display: none), bỏ dòng đó để bật lại */
 .cover::after {
   content: "";
+  display: none;
   position: absolute;
   inset: 0 0 45%;
   z-index: 1;

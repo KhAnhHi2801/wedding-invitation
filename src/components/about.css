@@ -64,7 +64,9 @@
   align-content: center;
   gap: 2.4cqw;
   padding: 4cqw 2cqw;
-  border: 1.5px solid var(--wine);
+  border: var(--card-line);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   background: color-mix(in srgb, var(--rose) 14%, var(--paper));
   text-align: center;
   font-family: var(--font-hand);

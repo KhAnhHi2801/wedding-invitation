@@ -98,7 +98,7 @@
   position: relative;
   grid-area: 1 / 1;
   min-height: 23rem;
-  border: 1px solid color-mix(in srgb, var(--wine) 14%, transparent);
+  border: var(--card-line);
   border-radius: 0.25rem 0.25rem 0.75rem 0.75rem;
   background:
     linear-gradient(90deg, transparent 2.9rem, color-mix(in srgb, var(--coral) 55%, transparent) 2.9rem 2.95rem, transparent 2.95rem),

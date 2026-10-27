@@ -97,7 +97,7 @@ export function WishGallery() {
       </div>
 
       <div className="wish-gallery__actions">
-        <p className="wish-gallery__guide">{text.guide}</p>
+        {text.guide && <p className="wish-gallery__guide">{text.guide}</p>}
         <button type="button" className="wish-gallery__button" onClick={gardenOverlay.open}>
           {garden.open}
         </button>

@@ -36,6 +36,9 @@
   width: min(84%, 30rem);
   padding: 4% 8%;
   background: color-mix(in srgb, var(--white) 55%, transparent);
+  border: var(--card-line);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
 }
 
 .gallery__photo {
@@ -143,9 +146,10 @@
   }
 }
 
-/* Dải sáng mảnh lướt chéo qua cả khối ảnh, thi thoảng một lần */
+/* Dải sáng mảnh lướt chéo qua cả khối ảnh; đang tắt (display: none), bỏ dòng đó để bật lại */
 .gallery__stack::after {
   content: "";
+  display: none;
   position: absolute;
   inset: 0;
   pointer-events: none;

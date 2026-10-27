@@ -12,209 +12,424 @@
 }
 
 .gift__heading {
-  margin: 0 0 clamp(2.5rem, 11vw, 4.5rem);
+  margin: 0;
   text-align: center;
-  font-family: var(--font-label);
-  font-weight: 500;
-  font-size: var(--o-20);
+  /* Cùng chữ ký, cỡ và màu với tiêu đề About us, Save the date, Lời chúc */
+  font-family: var(--font-signature);
+  font-weight: 400;
+  font-size: var(--o-37);
+  line-height: 1.2;
   color: var(--wine);
 }
 
 
 .gift__list {
-  container-type: inline-size;
   display: grid;
-  gap: 18.8cqw;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 4vw, 1.5rem);
 }
 
+/* Cả thẻ là một nút lớn (vùng bấm rộng, dễ trúng bằng ngón tay) */
 .gift-card {
-  position: relative;
-  height: 30.2cqw;
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-body);
+  text-align: center;
+  transition: translate var(--dur-base) var(--ease-out);
 }
 
-/* Ảnh tròn: ảnh mờ dần ở mép, vòng nét đứt màu hồng quanh ngoài */
+.gift-card:active {
+  translate: 0 1px;
+}
+
+@media (hover: hover) {
+  .gift-card:hover {
+    translate: 0 -3px;
+  }
+}
+
+.gift-card__art {
+  position: relative;
+  width: min(100%, 9.5rem);
+}
+
+/* Ảnh tròn viền hồng nét đứt ở góc dưới bên phải hộp */
 .gift-card__avatar {
   position: absolute;
-  top: 0;
-  left: 4.8cqw;
-  width: 30cqw;
+  right: -0.5rem;
+  bottom: -0.2rem;
+  width: 3.4rem;
   aspect-ratio: 1;
-}
-
-/* Thẻ thứ hai đối xứng đúng với thẻ đầu qua trục giữa (100 - 4.8 - 30 = 65.2) */
-.gift-card--flip .gift-card__avatar {
-  left: 65.2cqw;
+  padding: 0.18rem;
+  border: 2px dashed color-mix(in srgb, var(--rose) 90%, var(--wine));
+  border-radius: 50%;
+  background: var(--paper);
 }
 
 .gift-card__avatar img {
-  position: absolute;
-  inset: 4.5%;
-  width: 91%;
-  height: 91%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  -webkit-mask-image: radial-gradient(closest-side, #000 90%, transparent 100%);
-  mask-image: radial-gradient(closest-side, #000 90%, transparent 100%);
-}
-
-.gift-card__avatar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(
-    transparent 0 2deg,
-    var(--blush) 2deg 22deg,
-    transparent 22deg 34deg,
-    var(--blush) 34deg 48deg,
-    transparent 48deg 56deg,
-    var(--blush) 56deg 80deg,
-    transparent 80deg 90deg,
-    var(--blush) 90deg 100deg,
-    transparent 100deg 112deg,
-    var(--blush) 112deg 136deg,
-    transparent 136deg 146deg,
-    var(--blush) 146deg 160deg,
-    transparent 160deg 172deg,
-    var(--blush) 172deg 196deg,
-    transparent 196deg 206deg,
-    var(--blush) 206deg 214deg,
-    transparent 214deg 226deg,
-    var(--blush) 226deg 250deg,
-    transparent 250deg 262deg,
-    var(--blush) 262deg 282deg,
-    transparent 282deg 294deg,
-    var(--blush) 294deg 318deg,
-    transparent 318deg 330deg,
-    var(--blush) 330deg 344deg,
-    transparent 344deg
-  );
-  -webkit-mask-image: radial-gradient(farthest-side, transparent 91%, #000 92%);
-  mask-image: radial-gradient(farthest-side, transparent 91%, #000 92%);
-}
-
-.gift-card__pill {
-  position: absolute;
-  top: 0;
-  left: 35.1cqw;
-  width: 60.4cqw;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  background: var(--mist);
-  border-radius: 8cqw;
-  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.12);
-  font-family: var(--font-body);
-  font-weight: 500;
-  color: var(--black);
-}
-
-.gift-card--flip .gift-card__pill {
-  left: 4.5cqw;
-  flex-direction: row-reverse;
-}
-
-.gift-card__info {
-  flex: 1;
-  min-width: 0;
-  /* Nội dung căn giữa theo chiều dọc trong thẻ cao cố định: tên dài hay ngắn đều không dồn xuống mép dưới thẻ */
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1.5cqw 0.4cqw;
-  text-align: left;
-}
-
-.gift-card__info > * {
-  margin: 0;
-  font-weight: 500;
-}
-
-.gift-card__role,
-.gift-card__holder {
-  font-size: clamp(0.875rem, 3.9cqw, 1.1rem);
-  line-height: 4.8cqw;
-  overflow-wrap: anywhere;
-}
-
-/* Họ tên thật dài hơn tên mẫu và phần chữ chỉ rộng ~33cqw: cỡ chữ nhỏ hơn vai trò một chút để vừa một dòng,
-   tránh xuống hai dòng làm thẻ chật; chữ rất dài vẫn được phép xuống dòng */
-.gift-card__holder {
-  font-size: clamp(0.8125rem, 3.9cqw, 1.1rem);
-  line-height: 1.25;
-  text-wrap: balance;
 }
 
 .gift-card__role {
-  margin-bottom: 1.6cqw;
+  margin-top: 0.4rem;
+  font-size: clamp(0.6875rem, 3vw, 0.8125rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--wine) 75%, var(--paper));
 }
 
-.gift-card__bank {
-  margin-top: 1.4cqw;
-  font-size: clamp(0.75rem, 3.5cqw, 0.9rem);
-  line-height: 3.6cqw;
+.gift-card__holder {
+  /* Chừa sẵn chỗ cho hai dòng để hai thẻ thẳng hàng dù tên dài ngắn khác nhau */
+  display: grid;
+  align-content: center;
+  min-height: 2.5em;
+  font-size: clamp(0.9375rem, 4.2vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--wine);
+  text-wrap: balance;
 }
 
-.gift-card__number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 0.8cqw;
-  font-size: clamp(0.6875rem, 3.5cqw, 0.95rem);
-  line-height: 3.6cqw;
-  font-variant-numeric: lining-nums tabular-nums;
-  /* Số tài khoản luôn một dòng, không bị bẻ giữa dãy số */
-  white-space: nowrap;
+/* Chỉ một dòng gợi ý nhỏ gạch chân champagne, không viền */
+.gift-card__open {
+  margin-top: 0.3rem;
+  color: var(--wine);
+  font-size: clamp(0.75rem, 3.4vw, 0.875rem);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--champagne) 80%, transparent);
+  text-underline-offset: 0.3em;
 }
 
-/* Nút chỉ có biểu tượng; vùng bấm mở rộng ra ngoài bằng ::after nên không đổi bố cục */
-.gift-card__copy {
-  position: relative;
-  flex: none;
-  display: inline-grid;
-  place-items: center;
-  width: 1.5em;
-  height: 1.5em;
-  margin-left: 0.3em;
-  padding: 0;
+/* ===== Kiểu duo: hai chân dung ===== */
+.duo {
+  --avatar: clamp(4.5rem, 26vw, 6.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 4vw, 1.5rem);
+}
+
+.duo__person {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.25rem 0;
   border: 0;
   background: none;
-  color: var(--wine);
-  transition: opacity var(--dur-fast) var(--ease-out);
+  color: var(--ink);
+  font-family: var(--font-body);
+  text-align: center;
+  transition: translate var(--dur-base) var(--ease-out);
 }
 
-.gift-card__copy::after {
-  content: "";
-  position: absolute;
-  inset: -0.9rem;
+.duo__person:active {
+  translate: 0 1px;
 }
 
-.gift-card__copy:active {
-  opacity: 0.55;
+@media (hover: hover) {
+  .duo__person:hover {
+    translate: 0 -3px;
+  }
 }
 
-.gift-card__copy svg {
+.duo__avatar {
+  width: var(--avatar);
+  aspect-ratio: 1;
+  padding: 0.22rem;
+  border: 2px dashed color-mix(in srgb, var(--rose) 90%, var(--wine));
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.duo__avatar img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-.gift-card__qr {
-  flex: none;
-  width: 20.5cqw;
-  height: 20.5cqw;
-  margin: 3cqw 2.8cqw 0 0;
-  padding: 0.8cqw;
-  border-radius: 2.4cqw;
+.duo__role {
+  margin-top: 0.45rem;
+  font-size: clamp(0.6875rem, 3vw, 0.8125rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--wine) 75%, var(--paper));
+}
+
+.duo__holder {
+  min-height: 2.5em;
+  display: grid;
+  align-content: center;
+  font-size: clamp(0.9375rem, 4.2vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--wine);
+  text-wrap: balance;
+}
+
+.duo__open {
+  color: var(--wine);
+  font-size: clamp(0.75rem, 3.4vw, 0.875rem);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--champagne) 80%, transparent);
+  text-underline-offset: 0.3em;
+}
+
+/* Chân dung trong ngăn kéo */
+.gift-sheet__portrait {
+  width: 5.5rem;
+  aspect-ratio: 1;
+  padding: 0.22rem;
+  border: 2px dashed color-mix(in srgb, var(--rose) 90%, var(--wine));
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.gift-sheet__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* ===== Hộp mừng (SVG) và chuyển động phong bì ===== */
+.gbox {
+  position: relative;
+}
+
+.gbox svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Phong bì: tịnh tiến theo trục dọc; phần chui xuống dưới khe bị cắt bởi clipPath nên trông như vào trong hộp */
+.gbox__envelope {
+  transform: translateY(24px);
+  transition: transform 0.9s var(--ease-out);
+}
+
+.gbox[data-state="closed"] .gbox__envelope {
+  animation: gbox-peek 3.2s ease-in-out infinite;
+}
+
+.gbox[data-state="open"] .gbox__envelope {
+  transform: translateY(8px);
+}
+
+.gbox[data-state="drop"] .gbox__envelope {
+  transform: translateY(46px);
+  transition-duration: 0.8s;
+}
+
+@keyframes gbox-peek {
+  50% {
+    transform: translateY(19px);
+  }
+}
+
+.gbox__petals {
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.gbox__petal {
+  position: absolute;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin: -0.45rem 0 0 -0.45rem;
+  opacity: 0;
+}
+
+.gbox[data-state="drop"] .gbox__petal {
+  animation: gbox-petal 1.6s var(--ease-out) 0.55s both;
+}
+
+@keyframes gbox-petal {
+  from {
+    opacity: 0.95;
+    transform: translate(0, 0) scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--turn)) scale(1);
+  }
+}
+
+.lite .gbox__petal {
+  display: none;
+}
+
+/* ===== Ngăn kéo hộp mừng ===== */
+.gift-sheet {
+  width: min(100% - 1.5rem, 24rem);
+  max-width: none;
+  max-height: min(92dvh, 40rem);
+  margin: auto;
+  padding: 0;
+  border: var(--card-line);
+  border-radius: var(--card-radius);
+  background: color-mix(in srgb, var(--paper) 94%, var(--white));
+  box-shadow: var(--card-shadow);
+  color: var(--ink);
+  overflow: auto;
+}
+
+.gift-sheet::backdrop {
+  background: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gift-sheet[open] {
+    animation: gift-sheet-in 0.4s var(--ease-out);
+  }
+}
+
+@keyframes gift-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+.gift-sheet__panel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem 1.1rem;
+  text-align: center;
+}
+
+.gift-sheet__box {
+  width: 6rem;
+}
+
+/* Nút đóng nhỏ ở góc, vùng bấm đủ 44px */
+.gift-sheet__x {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  background: none;
+  color: color-mix(in srgb, var(--wine) 70%, var(--paper));
+}
+
+.gift-sheet__x svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.gift-sheet__holder {
+  margin: 0;
+  font-size: var(--o-20);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--wine);
+}
+
+.gift-sheet__bank {
+  margin: 0 0 0.25rem;
+  font-size: var(--fs-14);
+  color: var(--gray-600);
+}
+
+.gift-sheet__qr {
+  width: 9.5rem;
+  height: 9.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
   background: var(--white);
 }
 
-.gift-card--flip .gift-card__qr {
-  margin: 3cqw 0 0 2.8cqw;
-}
-
-.gift-card__qr img {
+.gift-sheet__qr img {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.gift-sheet__hint {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-12);
+  color: var(--gray-600);
+}
+
+.gift-sheet__number {
+  margin: 0.5rem 0 0;
+  font-size: var(--o-18);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.gift-sheet__copy {
+  min-height: 2.75rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--fs-16);
+  font-weight: 700;
+}
+
+.gift-sheet__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  margin-top: 0.5rem;
+  padding: 0 1.5rem;
+  border: 1px solid var(--wine);
+  background: var(--wine);
+  color: var(--white);
+  transition: background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+
+.gift-sheet__copy[data-done="true"] {
+  background: transparent;
+  color: var(--wine);
+}
+
+.gift-sheet__copy svg {
+  width: 1.2em;
+  height: 1.2em;
+  color: inherit;
+}
+
+.gift-sheet__thanks {
+  margin: 0;
+  max-width: 17rem;
+  font-size: var(--fs-14);
+  line-height: 1.5;
+  color: var(--wine);
+  text-wrap: balance;
+}
+
+/* Dòng dẫn nhập dưới tiêu đề: giọng thân mật, không nói gì về tiền */
+.gift__intro {
+  max-width: 22rem;
+  margin: 0.5rem auto clamp(2.5rem, 11vw, 4.5rem);
+  text-align: center;
+  font-size: var(--o-14);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--ink) 85%, var(--paper));
+  text-wrap: balance;
 }

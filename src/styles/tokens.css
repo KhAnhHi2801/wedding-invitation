@@ -20,6 +20,11 @@
   --champagne: #c9a56b;
   --glow: #fbe6e1;
   --glow-warm: #fff1e2;
+
+  /* Thẻ dùng chung: cùng góc bo, đường viền champagne mảnh và bóng hồng mềm trên mọi phần */
+  --card-radius: 0.9rem;
+  --card-line: 1px solid color-mix(in srgb, var(--champagne) 55%, transparent);
+  --card-shadow: 0 0.6rem 1.4rem color-mix(in srgb, var(--wine) 14%, transparent);
   --white: #ffffff;
   /* Chữ không dùng đen tuyền: gom về màu mực ấm của thiệp để toàn trang cùng tông */
   --black: var(--ink);

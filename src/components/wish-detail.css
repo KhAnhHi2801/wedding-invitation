@@ -5,8 +5,9 @@
   max-height: min(88dvh, 42rem);
   margin: auto;
   padding: 0;
-  border: 0;
-  border-radius: 1.25rem;
+  border: var(--card-line);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   background: color-mix(in srgb, var(--rose) 14%, var(--paper));
   color: var(--ink);
   overflow: hidden;

@@ -20,10 +20,10 @@
   gap: 0.6rem;
   max-width: 100%;
   padding: 0.4rem 1.1rem 0.4rem 0.4rem;
-  border: 1px solid color-mix(in srgb, var(--rose) 70%, var(--paper));
+  border: var(--card-line);
   border-radius: 1.5rem;
   background: color-mix(in srgb, var(--paper) 94%, transparent);
-  box-shadow: 0 0.25rem 0.75rem rgba(139, 47, 48, 0.14);
+  box-shadow: var(--card-shadow);
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: var(--fs-14);

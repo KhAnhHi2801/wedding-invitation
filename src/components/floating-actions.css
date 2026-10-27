@@ -53,14 +53,72 @@
 }
 
 .fab__rsvp {
-  padding: 0 1rem;
+  padding: 0 1.15rem;
+  min-height: 3rem;
   border-radius: 999px;
   font-family: var(--font-ui);
-  font-weight: 400;
+  font-weight: 600;
+  /* Nút chính của thiệp: đỏ rượu đặc, viền champagne và bóng ấm để nổi hẳn lên so với các nút phụ màu xám */
+  background: var(--wine);
+  box-shadow:
+    0 0 0 1.5px color-mix(in srgb, var(--champagne) 80%, transparent),
+    0 0.4rem 1rem color-mix(in srgb, var(--wine) 45%, transparent);
 }
 
 .fab__group .fab {
   position: static;
+}
+
+/* Vòng sáng loang ra từ nút mỗi vài giây để mắt tự tìm thấy; phần lớn thời gian đứng yên nên không gây rối */
+.fab__group .fab__rsvp {
+  position: relative;
+}
+
+.fab__rsvp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--wine);
+  opacity: 0;
+  pointer-events: none;
+  animation: fab-ring 4.5s ease-out 3s infinite;
+}
+
+@keyframes fab-ring {
+  0%,
+  65% {
+    opacity: 0;
+    scale: 1;
+  }
+  70% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.1 1.25;
+  }
+}
+
+.lite .fab__rsvp::after {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab__rsvp::after {
+    display: none;
+  }
+}
+
+/* Nhún nhẹ hai nhịp để nhắc, dùng `scale` riêng nên không tranh transform của hiệu ứng nhấn */
+.fab__rsvp--nudge {
+  animation: fab-nudge 0.9s var(--ease-out) 2;
+}
+
+@keyframes fab-nudge {
+  40% {
+    scale: 1.12;
+  }
 }
 
 .fab span {

@@ -18,6 +18,9 @@
   /* Khung trắng ~10px quanh bản đồ như mẫu */
   padding: clamp(0.4rem, 2.4vw, 0.75rem);
   background: var(--white);
+  border: var(--card-line);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 
