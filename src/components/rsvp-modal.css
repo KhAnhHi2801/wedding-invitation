@@ -20,38 +20,28 @@
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* Hiện/ẩn êm: nền mờ dần, hộp nổi lên nhẹ. allow-discrete để hiệu ứng đóng chạy trước khi <dialog> bị ẩn hẳn */
-.rsvp-modal,
-.rsvp-modal::backdrop {
-  opacity: 0;
-  transition:
-    opacity var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out),
-    display var(--dur-base) allow-discrete,
-    overlay var(--dur-base) allow-discrete;
-}
-
-.rsvp-modal {
-  transform: translateY(0.75rem) scale(0.97);
-}
-
-.rsvp-modal[open],
-.rsvp-modal[open]::backdrop {
-  opacity: 1;
-}
-
-.rsvp-modal[open] {
-  transform: none;
-}
-
-@starting-style {
-  .rsvp-modal[open],
-  .rsvp-modal[open]::backdrop {
-    opacity: 0;
+/* Hiện êm bằng animation chỉ có `from`: trạng thái mặc định của hộp luôn là hiển thị, nên trình duyệt di động không hỗ trợ
+   hoặc xử lý sai animation vẫn thấy hộp (cách nền opacity:0 + transition từng làm hộp kẹt vô hình, chỉ còn lớp nền tối) */
+@media (prefers-reduced-motion: no-preference) {
+  .rsvp-modal[open] {
+    animation: rsvp-modal-in var(--dur-base) var(--ease-out);
   }
 
-  .rsvp-modal[open] {
+  .rsvp-modal[open]::backdrop {
+    animation: rsvp-modal-fade var(--dur-base) var(--ease-out);
+  }
+}
+
+@keyframes rsvp-modal-in {
+  from {
+    opacity: 0;
     transform: translateY(0.75rem) scale(0.97);
+  }
+}
+
+@keyframes rsvp-modal-fade {
+  from {
+    opacity: 0;
   }
 }
 
@@ -79,8 +69,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rsvp-modal,
-  .rsvp-modal::backdrop,
   .rsvp-modal__collapse {
     transition: none;
   }
