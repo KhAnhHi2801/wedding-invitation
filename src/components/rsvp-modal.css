@@ -1,5 +1,6 @@
 .rsvp-modal {
   width: min(100% - 2rem, 30rem);
+  max-width: none;
   max-height: calc(100dvh - 2rem);
   margin: auto;
   padding: 0;
@@ -74,17 +75,19 @@
   }
 }
 
+/* Chiều cao theo nội dung (flex-basis auto), chỉ co lại khi vượt max-height của hộp. Không dùng `flex: 1` (basis 0%): trong
+   hộp có chiều cao auto, Safari iOS có thể co panel về 0px nên cả hộp bị cắt thành vô hình */
 .rsvp-modal__panel {
   position: relative;
   display: flex;
-  flex: 1;
+  flex: 0 1 auto;
   flex-direction: column;
   min-height: 0;
 }
 
 .rsvp-modal__form {
   display: flex;
-  flex: 1;
+  flex: 0 1 auto;
   flex-direction: column;
   min-height: 0;
 }
@@ -95,7 +98,7 @@
 }
 
 .rsvp-modal__body {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   padding: var(--space-1) var(--space-6);
   overflow-y: auto;
