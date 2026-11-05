@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
+import { gameLink } from "../lib/game-link"
 import { scrollToSection } from "../lib/scroll-to-section"
 import { CloseIcon, MenuIcon } from "./icons/ui-icons"
 import "./site-nav.css"
@@ -13,7 +14,7 @@ const givenName = (name: string) => name.split(" ").at(-1) ?? name
  * Nằm ngoài <main> để luôn bấm được; chỉ dựng sau khi thiệp đã mở.
  */
 export function SiteNav() {
-  const { ui, couple, game } = weddingConfig
+  const { ui, couple, game, guestParam } = weddingConfig
   const [current, setCurrent] = useState(ui.nav[0].id)
   const [menuOpen, setMenuOpen] = useState(false)
   const rootRef = useRef<HTMLElement>(null)
@@ -90,7 +91,7 @@ export function SiteNav() {
         ))}
         {/* Trang game là link ngoài nên mở tab mới: khách không mất thiệp đang xem */}
         <li>
-          <a className="sitenav__link sitenav__link--game" href={game.url} target="_blank" rel="noopener noreferrer">
+          <a className="sitenav__link sitenav__link--game" href={gameLink(game.url, guestParam)} target="_blank" rel="noopener noreferrer">
             {game.navLabel}
             <span className="sr-only"> (mở trong tab mới)</span>
           </a>
