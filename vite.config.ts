@@ -16,8 +16,24 @@ function weddingHtmlMeta(): Plugin {
   let base = '/'
   const { title, description, siteUrl, ogImage, themeColor } = weddingConfig.meta
   const siteBase = siteUrl.replace(/\/$/, '')
+  const imageUrl = `${siteBase}/${ogImage.replace(/^\//, '')}`
+  // Kích thước ảnh khai báo sẵn để Messenger/Zalo dựng card ngay, không phải tải ảnh về đo; khớp public/og.jpg (1200x630)
   const shareTags = siteBase
-    ? `<meta property="og:url" content="${escapeAttr(`${siteBase}/`)}" />\n    <meta property="og:image" content="${escapeAttr(`${siteBase}/${ogImage.replace(/^\//, '')}`)}" />`
+    ? [
+        `<meta property="og:url" content="${escapeAttr(`${siteBase}/`)}" />`,
+        `<meta property="og:site_name" content="${escapeAttr(title)}" />`,
+        `<meta property="og:locale" content="vi_VN" />`,
+        `<meta property="og:image" content="${escapeAttr(imageUrl)}" />`,
+        `<meta property="og:image:secure_url" content="${escapeAttr(imageUrl)}" />`,
+        `<meta property="og:image:type" content="image/jpeg" />`,
+        `<meta property="og:image:width" content="1200" />`,
+        `<meta property="og:image:height" content="630" />`,
+        `<meta property="og:image:alt" content="${escapeAttr(title)}" />`,
+        `<meta name="twitter:card" content="summary_large_image" />`,
+        `<meta name="twitter:title" content="${escapeAttr(title)}" />`,
+        `<meta name="twitter:description" content="${escapeAttr(description)}" />`,
+        `<meta name="twitter:image" content="${escapeAttr(imageUrl)}" />`,
+      ].join('\n    ')
     : ''
   const hero = (imageManifest as Record<string, { width: number; smallWidth: number }>)[weddingConfig.hero.photo]
   const heroKey = weddingConfig.hero.photo

@@ -336,7 +336,7 @@ export const weddingConfig: WeddingConfig = {
   meta: {
     title: `${bride.name} & ${groom.name}`,
     description: `Trân trọng kính mời bạn đến dự lễ thành hôn của ${bride.name} và ${groom.name}.`,
-    siteUrl: "",
+    siteUrl: "https://khanh-anya-wedding-invitation.vercel.app",
     ogImage: "og.jpg",
     themeColor: "#8B2F30",
   },
