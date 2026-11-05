@@ -9,7 +9,7 @@
 }
 
 /* Nội dung nằm trên lớp cánh hoa rơi */
-.wish-gallery > :not(.petals) {
+.wish-gallery > :not(.petals, dialog) {
   position: relative;
   z-index: 1;
 }

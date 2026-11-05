@@ -18,8 +18,6 @@ import { ThankYou } from "./components/thank-you"
 import { Timeline } from "./components/timeline"
 import { ToastProvider } from "./components/toast"
 import { weddingConfig } from "./config/wedding-config"
-import { autoScroll } from "./lib/auto-scroll"
-import { prefersReducedMotion } from "./lib/device-tier"
 import { music } from "./lib/music"
 import { loadAllImagesAfterPageLoad } from "./lib/preload-images"
 import { lockScroll } from "./lib/scroll-lock"
@@ -41,23 +39,6 @@ export default function App() {
     if (!opened) return
     window.scrollTo({ top: 0, behavior: "instant" })
     mainRef.current?.focus({ preventScroll: true })
-  }, [opened])
-
-  // Mở xong thì chờ một nhịp rồi tự cuộn nhẹ xuống; ai bật giảm chuyển động thì không tự chạy (vẫn bật được bằng nút)
-  useEffect(() => {
-    if (!opened || prefersReducedMotion()) return
-    // Chờ font tải xong: chữ đổi font giữa lúc đang cuộn sẽ làm trang dồn và giật
-    let cancel = () => {}
-    let active = true
-    const ready = document.fonts?.ready ?? Promise.resolve()
-    void ready.then(() => {
-      if (active) cancel = autoScroll.startAfter(weddingConfig.autoScroll.delayMs)
-    })
-    return () => {
-      active = false
-      cancel()
-      autoScroll.stop()
-    }
   }, [opened])
 
   const handleOpenStart = () => {

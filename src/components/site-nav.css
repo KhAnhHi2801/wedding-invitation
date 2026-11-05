@@ -10,7 +10,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  width: calc(100% - 1.5rem);
+  /* Cùng lề với nội dung (.container) để mép nav thẳng hàng với khối chính */
+  width: calc(100% - 2 * var(--gutter));
   max-width: 100%;
   height: var(--nav-pill-h);
   margin-inline: auto;
@@ -114,8 +115,8 @@
 
 @media (min-width: 62rem) {
   .sitenav {
-    width: fit-content;
-    max-width: calc(100% - 3rem);
+    /* Trải đúng bề rộng lưới trang như hero và các khối bên dưới */
+    width: min(100% - 2 * var(--gutter), var(--page));
     gap: 1.75rem;
     padding: 0 0.4rem 0 1.75rem;
   }

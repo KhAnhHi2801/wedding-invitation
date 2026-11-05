@@ -1,4 +1,3 @@
-import { autoScroll } from "./auto-scroll"
 
 /** Khách tới lời cảm ơn cuối trang và dừng lại bấy lâu thì mở form */
 const DWELL_MS = 2000
@@ -38,7 +37,6 @@ export function promptRsvpOnDwell(target: Element, open: () => void): () => void
       if (document.documentElement.classList.contains("is-locked")) return arm()
       done = true
       observer.disconnect()
-      autoScroll.stop()
       open()
     }, DWELL_MS)
   }

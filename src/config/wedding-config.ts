@@ -277,7 +277,6 @@ export interface WeddingConfig {
   /** `src` là file trong `public/` (không có "/" đầu). */
   music: { src: string; autoplay: boolean; volume: number };
   /** Tự cuộn trang: `speed` px/giây, `delayMs` chờ sau khi mở thiệp */
-  autoScroll: { speed: number; delayMs: number };
 }
 
 /*
@@ -592,13 +591,12 @@ export const weddingConfig: WeddingConfig = {
     nav: [
       { id: "cover", label: "Trang chủ" },
       { id: "ceremony", label: "Sự kiện" },
-      { id: "story", label: "Câu chuyện" },
-      { id: "timeline", label: "Hành trình" },
+      { id: "story", label: "Về chúng mình" },
+      { id: "timeline", label: "Lịch trình" },
       { id: "gallery", label: "Album" },
       { id: "gift", label: "Quà mừng" },
       { id: "guestbook", label: "Lời chúc" },
     ],
   },
   music: { src: "musics/romantic.mp3", autoplay: true, volume: 0.35 },
-  autoScroll: { speed: 45, delayMs: 1500 },
 };

@@ -1,5 +1,8 @@
 /* Chi tiết một lời chúc: hộp giữa màn hình, lời dài cuộn bên trong */
 .wd {
+  /* Tường minh để luật bố cục của section cha không ghi đè vị trí cố định của hộp thoại modal */
+  position: fixed;
+  inset: 0;
   width: min(100% - 2rem, 28rem);
   max-width: none;
   max-height: min(88dvh, 42rem);

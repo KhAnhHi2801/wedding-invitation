@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { weddingConfig } from "../config/wedding-config"
 import { scrollToSection } from "../lib/scroll-to-section"
-import { autoScroll } from "../lib/auto-scroll"
 import { CloseIcon, MenuIcon } from "./icons/ui-icons"
 import "./site-nav.css"
 
@@ -54,8 +53,6 @@ export function SiteNav() {
   }, [menuOpen])
 
   const go = (id: string) => {
-    // Khách chủ động nhảy mục: tự cuộn dừng hẳn như mọi thao tác khác
-    autoScroll.stop()
     setMenuOpen(false)
     scrollToSection(id)
   }
