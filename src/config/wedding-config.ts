@@ -248,6 +248,15 @@ export interface WeddingConfig {
     qrAlt: string;
     accounts: BankAccount[];
   };
+  /** Trò chơi cưới online ở trang riêng: mở tab mới từ thanh điều hướng và cuối thiệp */
+  game: {
+    url: string;
+    /** Nhãn ngắn trên thanh điều hướng */
+    navLabel: string;
+    /** Lời mời và nút ở cuối thiệp */
+    invite: string;
+    button: string;
+  };
   /** `animation`: WebP động, `still`: ảnh tĩnh cho người giảm chuyển động (tạo bởi `npm run images`) */
   thankYou: {
     text: string;
@@ -276,7 +285,6 @@ export interface WeddingConfig {
   };
   /** `src` là file trong `public/` (không có "/" đầu). */
   music: { src: string; autoplay: boolean; volume: number };
-  /** Tự cuộn trang: `speed` px/giây, `delayMs` chờ sau khi mở thiệp */
 }
 
 /*
@@ -576,6 +584,12 @@ export const weddingConfig: WeddingConfig = {
     animation: "bride-groom-dancing.webp",
     still: "bride-groom-dancing-still.webp",
     alt: "Cô dâu chú rể nhảy múa",
+  },
+  game: {
+    url: "https://wedding-online-sigma.vercel.app/",
+    navLabel: "Chơi game",
+    invite: "Còn một trò chơi nhỏ chúng mình chuẩn bị cho bạn.",
+    button: "Chơi cùng chúng mình",
   },
   ui: {
     countdownUnits: ["ngày", "giờ", "phút", "giây"],

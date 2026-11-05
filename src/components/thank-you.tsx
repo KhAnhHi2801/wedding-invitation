@@ -9,10 +9,11 @@ const REVEAL: readonly RevealRule[] = [
   { selector: ".thanks__animation", preset: "fadeIn" },
   { selector: ".thanks__text", preset: "write", delay: 300 },
   { selector: ".thanks__note", preset: "fadeUp", delay: 600 },
+  { selector: ".thanks__invite, .thanks__game", preset: "fadeUp", delay: 800 },
 ]
 
 export function ThankYou() {
-  const { thankYou, guestParam } = weddingConfig
+  const { thankYou, guestParam, game } = weddingConfig
   const guest = getGuestName(guestParam, thankYou.noteGuestFallback)
   const ref = useReveal<HTMLElement>(REVEAL)
   return (
@@ -24,6 +25,11 @@ export function ThankYou() {
       </picture>
       <p className="thanks__text">{thankYou.text}</p>
       <p className="thanks__note">{fillText(thankYou.note, { name: guest })}</p>
+      <p className="thanks__invite">{game.invite}</p>
+      <a className="thanks__game" href={game.url} target="_blank" rel="noopener noreferrer">
+        {game.button}
+        <span className="sr-only"> (mở trong tab mới)</span>
+      </a>
     </section>
   )
 }

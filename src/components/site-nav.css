@@ -113,6 +113,14 @@
   scroll-margin-top: var(--nav-h);
 }
 
+/* Mục game là link ngoài, khác các mục cuộn trong trang: viền đỏ rượu để phân biệt mà không tranh với mục đang xem */
+.sitenav__link--game {
+  border: 1px solid var(--wine);
+  color: var(--wine);
+  font-weight: 700;
+  text-decoration: none;
+}
+
 @media (min-width: 62rem) {
   .sitenav {
     /* Trải đúng bề rộng lưới trang như hero và các khối bên dưới */
