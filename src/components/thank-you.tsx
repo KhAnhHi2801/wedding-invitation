@@ -2,7 +2,8 @@ import { weddingConfig } from "../config/wedding-config"
 import { useReveal, type RevealRule } from "../hooks/use-reveal"
 import { assetUrl } from "../lib/asset-url"
 import { gameLink } from "../lib/game-link"
-import { getGuestName } from "../lib/guest"
+import { getGuestName, getNamedGuest } from "../lib/guest"
+import { trackGameClick } from "../lib/wishes-api"
 import { fillText } from "../lib/wish-list"
 import "./thank-you.css"
 
@@ -27,7 +28,13 @@ export function ThankYou() {
       <p className="thanks__text">{thankYou.text}</p>
       <p className="thanks__note">{fillText(thankYou.note, { name: guest })}</p>
       <p className="thanks__invite">{game.invite}</p>
-      <a className="thanks__game" href={gameLink(game.url, guestParam)} target="_blank" rel="noopener noreferrer">
+      <a
+        className="thanks__game"
+        href={gameLink(game.url, guestParam)}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => trackGameClick(getNamedGuest(guestParam), "thanks")}
+      >
         {game.button}
         <span className="sr-only"> (mở trong tab mới)</span>
       </a>

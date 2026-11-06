@@ -75,6 +75,8 @@ async function post(payload: Record<string, unknown>): Promise<void> {
         elapsedMs: Math.max(Number(payload.elapsedMs) || 0, Math.round(performance.now() - pageOpenedAt)),
       }),
       signal: controller.signal,
+      // Lượt bấm mở tab mới có thể đẩy trang này xuống nền (iOS): keepalive để yêu cầu không bị hủy giữa chừng
+      keepalive: true,
     })
     data = (await response.json()) as ApiResponse
   } catch {
@@ -204,6 +206,18 @@ export function submitRsvp(payload: RsvpPayload): void {
   savePending([...pending(), { ...payload, kind: "rsvp", requestId: newId(), elapsedMs: Math.round(performance.now() - pageOpenedAt) }])
   attempt = 0
   void flushPending()
+}
+
+export type GameClickSource = "nav" | "thanks"
+
+/**
+ * Ghi lại một lượt khách bấm sang trang game, kèm tên trong link mời (`?to=`, rỗng khi link không có tên) để chủ nhà
+ * biết ai đã chơi. Gửi ngầm một lần, không hàng đợi: lỗi hay mất mạng chỉ làm mất một dòng thống kê, tuyệt đối không
+ * được chặn hay làm hỏng việc mở trang game.
+ */
+export function trackGameClick(guest: string, source: GameClickSource): void {
+  if (!ENDPOINT) return
+  void post({ kind: "game", guest, source, website: "" }).catch(() => {})
 }
 
 if (typeof window !== "undefined" && ENDPOINT) {

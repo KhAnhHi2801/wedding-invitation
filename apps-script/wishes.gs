@@ -14,6 +14,10 @@
  *   attending = "Có" hoặc "Không"; guests = số người (0 khi không đến); guest = tên trong link mời (?to=...);
  *   transport = "Xe cá nhân" | "Xe chung" (rỗng khi không đến).
  *
+ * Tab "GameClicks" (riêng tư, KHÔNG có API nào đọc ra): createdAt | guest | source
+ *   Mỗi lần khách bấm nút sang trang game ghi một dòng. guest = tên trong link mời (?to=...), rỗng khi link không có tên;
+ *   source = "nav" (thanh điều hướng) | "thanks" (cuối thiệp).
+ *
  * Hợp đồng với website (src/lib/wishes-api.ts): POST text/plain, body JSON.
  *   RSVP:  { kind:"rsvp", name, attending:"yes"|"no", guests, transport:"own"|"shared", note, guest, website, token, elapsedMs }
  *   Lời chúc: { name, message, flower, ink, website, token, elapsedMs, requestId }
@@ -45,6 +49,12 @@ var FLOWER_IDS = [
 var INK_KEYS = ['brown', 'navy', 'forest', 'wine', 'plum', 'teal', 'earth', 'rose', 'charcoal', 'olive']; // khớp src/lib/wish-style.ts (cùng thứ tự)
 var RSVP_SHEET = 'RSVP';
 var RSVP_HEADERS = ['createdAt', 'name', 'attending', 'guests', 'note', 'guest', 'transport'];
+var GAME_SHEET = 'GameClicks';
+var GAME_HEADERS = ['createdAt', 'guest', 'source'];
+var GAME_SOURCES = ['nav', 'thanks'];
+var GAME_GUEST_MAX = 80;
+var GAME_RATE_LIMIT = 20; // số lượt bấm tối đa mỗi mã trình duyệt trong RATE_WINDOW_S
+var GAME_DAILY_CAP = 2000; // trần số lượt ghi mỗi ngày
 
 var NAME_MAX = 40;
 var MESSAGE_MIN = 2;
@@ -171,6 +181,17 @@ function getRsvpSheet_() {
   if (!sheet) {
     sheet = ss.insertSheet(RSVP_SHEET);
     sheet.appendRow(RSVP_HEADERS);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function getGameSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(GAME_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(GAME_SHEET);
+    sheet.appendRow(GAME_HEADERS);
     sheet.setFrozenRows(1);
   }
   return sheet;
@@ -324,6 +345,43 @@ function handleRsvp_(body, lock) {
   return json_({ ok: true });
 }
 
+/**
+ * Ghi một lượt khách bấm sang trang game. Mọi lượt bấm đều được giữ (một người bấm nhiều lần thấy nhiều dòng),
+ * không trả lại dữ liệu nào cho website.
+ */
+function handleGame_(body, lock) {
+  var token = String(body.token || '').slice(0, 64);
+  if (!token) return json_({ ok: false, error: 'invalid' });
+  var source = String(body.source || '');
+  if (GAME_SOURCES.indexOf(source) === -1) return json_({ ok: false, error: 'invalid' });
+  var guest = clean_(body.guest).slice(0, GAME_GUEST_MAX);
+
+  lock.waitLock(10000);
+  var cache = CacheService.getScriptCache();
+  var rateKey = 'game:' + token;
+  var used = parseInt(cache.get(rateKey), 10) || 0;
+  if (used >= GAME_RATE_LIMIT) return json_({ ok: false, error: 'rate_limited' });
+
+  var props = PropertiesService.getScriptProperties();
+  var dayKey = 'gameday:' + Utilities.formatDate(new Date(), TIME_ZONE, 'yyyy-MM-dd');
+  var today = parseInt(props.getProperty(dayKey), 10) || 0;
+  if (today >= GAME_DAILY_CAP) return json_({ ok: false, error: 'rate_limited' });
+
+  var sheet = getGameSheet_();
+  var row = sheet.getLastRow() + 1;
+  // Tên khách do người ngoài gõ vào link: định dạng thuần (@) + sanitizeCell_ chống công thức như tab RSVP
+  sheet.getRange(row, 1, 1, GAME_HEADERS.length).setNumberFormat('@');
+  sheet.getRange(row, 1, 1, GAME_HEADERS.length).setValues([[
+    Utilities.formatDate(new Date(), TIME_ZONE, 'yyyy-MM-dd HH:mm:ss'),
+    sanitizeCell_(guest),
+    source,
+  ]]);
+
+  safePut_(cache, rateKey, String(used + 1), RATE_WINDOW_S);
+  props.setProperty(dayKey, String(today + 1));
+  return json_({ ok: true });
+}
+
 function handleWish_(body, lock) {
   var v = validateWish_(body.name, body.message);
   if (!v.ok) return json_({ ok: false, error: v.error });
@@ -391,6 +449,7 @@ function doPost(e) {
     if (body.website) return json_({ ok: true, id: '', status: 'hidden' });
 
     if (body.kind === 'rsvp') return handleRsvp_(body, lock);
+    if (body.kind === 'game') return handleGame_(body, lock);
     return handleWish_(body, lock);
   } catch (err) {
     return json_({ ok: false, error: 'server' });

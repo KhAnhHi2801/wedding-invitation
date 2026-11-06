@@ -5,7 +5,9 @@ Lời chúc (kèm loài hoa khách chọn) và xác nhận tham dự (RSVP) lưu
 - Tab `Wishes`: `id | createdAt | name | message | status | flower | ink`. Hiển thị trong phần "Lời chúc" của trang.
 - Tab `RSVP`: `createdAt | name | attending | guests | note | guest | transport` (transport: `Xe cá nhân` / `Xe chung`; sheet có sẵn thì thêm tay tiêu đề `transport` vào G1). Chỉ bạn xem được, website không có cách nào đọc tab này ra.
 
-Cả hai tab tự được tạo ở lần ghi đầu tiên. Một đoạn Apps Script (`apps-script/wishes.gs`) làm cổng ghi/đọc.
+- Tab `GameClicks`: `createdAt | guest | source`. Mỗi lần khách bấm nút sang trang game ghi một dòng; `guest` là tên trong link mời (`?to=`, rỗng nếu link không có tên), `source` là `nav` (thanh điều hướng) hoặc `thanks` (cuối thiệp). Chỉ bạn xem được. Muốn biết ai đã chơi thì lọc cột `guest`.
+
+Các tab tự được tạo ở lần ghi đầu tiên. Một đoạn Apps Script (`apps-script/wishes.gs`) làm cổng ghi/đọc.
 Website chỉ biết URL của cổng này, không có quyền gì khác với Sheet.
 
 ## 1. Tạo Sheet và dán script
@@ -25,7 +27,7 @@ Website chỉ biết URL của cổng này, không có quyền gì khác với S
 
 ### Khi sửa `wishes.gs` về sau
 
-Dán lại bản mới rồi: **Deploy > Manage deployments > Edit (biểu tượng bút) > Version: New version > Deploy**.
+Dán lại bản mới (bản có `GameClicks` là bản mới hơn bản đã deploy trước đó, nên bắt buộc làm bước này thì lượt bấm game mới được ghi) rồi: **Deploy > Manage deployments > Edit (biểu tượng bút) > Version: New version > Deploy**.
 URL giữ nguyên. Chỉ bấm Save mà không tạo version mới thì web app vẫn chạy bản cũ.
 
 ## 3. Nối vào website

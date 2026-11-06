@@ -587,9 +587,9 @@ export const weddingConfig: WeddingConfig = {
   },
   game: {
     url: "https://wedding-online-sigma.vercel.app/",
-    navLabel: "Chơi game",
-    invite: "Còn một trò chơi nhỏ chúng mình chuẩn bị cho bạn.",
-    button: "Chơi cùng chúng mình",
+    navLabel: "Dự tiệc online",
+    invite: "Dù gần hay xa, chúng mình vẫn muốn có bạn trong ngày vui. Nên chúng mình dựng thêm một bữa tiệc ở đây, có sân khấu, có đèn, và một chỗ dành riêng cho bạn.",
+    button: "Vào dự tiệc ngay",
   },
   ui: {
     countdownUnits: ["ngày", "giờ", "phút", "giây"],

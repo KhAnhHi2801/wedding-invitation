@@ -108,3 +108,30 @@ describe("hàng đợi gửi lời chúc", () => {
     expect(JSON.parse(store.get("wedding-pending-wishes") ?? "[]")).toHaveLength(1)
   })
 })
+
+describe("ghi lượt bấm sang trang game", () => {
+  it("gửi kind game kèm tên khách, nguồn và token", async () => {
+    const { sent, fetchMock } = setup("https://example.test/exec", [{ ok: true }])
+    const { trackGameClick } = await import("./wishes-api")
+    trackGameClick("Chị Dung", "thanks")
+    await flushAll()
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(sent[0]).toMatchObject({ kind: "game", guest: "Chị Dung", source: "thanks", website: "" })
+    expect(sent[0].token).toBeTruthy()
+  })
+
+  it("không có endpoint thì không gửi gì", async () => {
+    const { fetchMock } = setup("", [{ ok: true }])
+    const { trackGameClick } = await import("./wishes-api")
+    trackGameClick("Anh Nam", "nav")
+    await flushAll()
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it("lỗi mạng hay máy chủ không ném lỗi ra ngoài", async () => {
+    setup("https://example.test/exec", ["offline"])
+    const { trackGameClick } = await import("./wishes-api")
+    expect(() => trackGameClick("Anh Nam", "nav")).not.toThrow()
+    await flushAll()
+  })
+})
