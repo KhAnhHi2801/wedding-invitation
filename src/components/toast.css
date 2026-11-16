@@ -6,9 +6,12 @@
   margin: 0;
   border: 0;
   overflow: visible;
+  /* [popover] mặc định width: fit-content; ở left: 50% sẽ chỉ còn nửa màn hình nên chữ bị bóp thành cột hẹp */
+  width: max-content;
   max-width: min(90vw, 26rem);
   padding: var(--space-3) var(--space-6);
-  border-radius: 999px;
+  border-radius: 1.25rem;
+  line-height: 1.5;
   background: var(--ink);
   color: var(--white);
   font-size: var(--fs-14);

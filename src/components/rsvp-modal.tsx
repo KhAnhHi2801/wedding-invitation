@@ -87,7 +87,7 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
     const found = validateRsvp(values, text.errors);
     setErrors(found);
     const firstInvalid = (
-      ["name", "attending", "guests", "transport", "note"] as RsvpField[]
+      ["name", "attending", "transport", "note", "guests"] as RsvpField[]
     ).find((field) => found[field]);
     if (firstInvalid) {
       document
@@ -218,33 +218,6 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
             </fieldset>
 
             <Collapse open={values.attending !== "no"}>
-              <div className="rsvp-modal__field">
-                <label htmlFor={id("guests")}>{text.guestsLabel}</label>
-                <select
-                  id={id("guests")}
-                  value={values.guests}
-                  aria-invalid={errors.guests ? true : undefined}
-                  aria-describedby={
-                    errors.guests ? id("guests-error") : undefined
-                  }
-                  onChange={(event) => update("guests", event.target.value)}
-                >
-                  {GUEST_OPTIONS.map((count) => (
-                    <option key={count} value={count}>
-                      {count}
-                    </option>
-                  ))}
-                </select>
-                {errors.guests && (
-                  <p
-                    id={id("guests-error")}
-                    className="rsvp-modal__error"
-                    role="alert"
-                  >
-                    {errors.guests}
-                  </p>
-                )}
-              </div>
               <fieldset
                 className="rsvp-modal__field rsvp-modal__choices"
                 aria-describedby={
@@ -305,6 +278,36 @@ export function RsvpModal({ open, onClose }: RsvpModalProps) {
                 </p>
               )}
             </div>
+
+            <Collapse open={values.attending !== "no"}>
+              <div className="rsvp-modal__field">
+                <label htmlFor={id("guests")}>{text.guestsLabel}</label>
+                <select
+                  id={id("guests")}
+                  value={values.guests}
+                  aria-invalid={errors.guests ? true : undefined}
+                  aria-describedby={
+                    errors.guests ? id("guests-error") : undefined
+                  }
+                  onChange={(event) => update("guests", event.target.value)}
+                >
+                  {GUEST_OPTIONS.map((count) => (
+                    <option key={count} value={count}>
+                      {count}
+                    </option>
+                  ))}
+                </select>
+                {errors.guests && (
+                  <p
+                    id={id("guests-error")}
+                    className="rsvp-modal__error"
+                    role="alert"
+                  >
+                    {errors.guests}
+                  </p>
+                )}
+              </div>
+            </Collapse>
 
             {/* Ô bẫy bot: người thật không thấy và không điền */}
             <input

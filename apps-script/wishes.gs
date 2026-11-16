@@ -542,6 +542,8 @@ function doPost(e) {
     if (body.kind === 'player') return handlePlayer_(body, lock);
     return handleWish_(body, lock);
   } catch (err) {
+    // Ghi lỗi thật vào Executions > (chọn lần chạy) để chẩn đoán: phản hồi cho khách vẫn chỉ là "server".
+    console.error('doPost', err && err.stack ? err.stack : String(err));
     return json_({ ok: false, error: 'server' });
   } finally {
     if (lock.hasLock()) lock.releaseLock();
