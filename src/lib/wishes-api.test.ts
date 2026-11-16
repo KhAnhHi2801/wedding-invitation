@@ -120,6 +120,29 @@ describe("ghi lượt bấm sang trang game", () => {
     expect(sent[0].token).toBeTruthy()
   })
 
+  it("ưu tiên sendBeacon, không gọi fetch khi beacon nhận", async () => {
+    const { fetchMock } = setup("https://example.test/exec", [{ ok: true }])
+    const beacon = vi.fn(() => true)
+    vi.stubGlobal("navigator", { sendBeacon: beacon })
+    const { trackGameClick } = await import("./wishes-api")
+    trackGameClick("Chị Dung", "nav")
+    await flushAll()
+    expect(beacon).toHaveBeenCalledTimes(1)
+    const [url, blob] = beacon.mock.calls[0] as unknown as [string, Blob]
+    expect(url).toBe("https://example.test/exec")
+    expect(JSON.parse(await blob.text())).toMatchObject({ kind: "game", guest: "Chị Dung", source: "nav" })
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it("beacon từ chối thì lùi về fetch", async () => {
+    const { fetchMock } = setup("https://example.test/exec", [{ ok: true }])
+    vi.stubGlobal("navigator", { sendBeacon: vi.fn(() => false) })
+    const { trackGameClick } = await import("./wishes-api")
+    trackGameClick("Anh Nam", "nav")
+    await flushAll()
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it("không có endpoint thì không gửi gì", async () => {
     const { fetchMock } = setup("", [{ ok: true }])
     const { trackGameClick } = await import("./wishes-api")

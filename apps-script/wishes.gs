@@ -10,16 +10,23 @@
  *   status = "visible" hoặc để TRỐNG: hiện công khai; mọi giá trị khác (vd. "hidden"): không hiện.
  *   Kiểm duyệt = đổi status của dòng đó ngay trên Sheet. Đừng xóa hoặc sắp xếp lại dòng: phân trang dùng số dòng làm con trỏ.
  *
- * Tab "RSVP" (riêng tư, KHÔNG có API nào đọc ra): createdAt | name | attending | guests | note | guest | transport
- *   attending = "Có" hoặc "Không"; guests = số người (0 khi không đến); guest = tên trong link mời (?to=...);
- *   transport = "Xe cá nhân" | "Xe chung" (rỗng khi không đến).
+ * RSVP: dùng CHUNG tab nhận phản hồi của Google Form ("Form Responses 1"), riêng tư, KHÔNG có API nào đọc ra.
+ *   A Timestamp | B Họ và tên | C Xác nhận tham dự | D Đăng ký xe đưa đón | E Ghi chú | F Số người đi cùng | G Phương tiện | H Tên trong link mời
+ *   A-F là cột của Form (Form tự ghi); website ghi đúng bố cục đó rồi thêm G-H bên phải (Form không đụng tới G-H).
+ *   C = "Có" hoặc "Không" (RSVP_YES / RSVP_NO: sửa cho trùng nhãn đáp án trong Form); D = câu trả lời đi xe (rỗng khi không đến);
+ *   F = số người (0 khi không đến); G = "Xe cá nhân" | "Xe chung" (rỗng khi không đến); H = tên trong link mời (?to=...).
  *
  * Tab "GameClicks" (riêng tư, KHÔNG có API nào đọc ra): createdAt | guest | source
  *   Mỗi lần khách bấm nút sang trang game ghi một dòng. guest = tên trong link mời (?to=...), rỗng khi link không có tên;
  *   source = "nav" (thanh điều hướng) | "thanks" (cuối thiệp).
  *
+ * Tab "Players" (riêng tư, KHÔNG có API nào đọc ra): createdAt | name | outfit | guest
+ *   Mỗi lần khách điền tên và bấm vào dự tiệc ở game (wedding-online) ghi một dòng. name = tên khách gõ ("Khách quý" khi để trống),
+ *   outfit = tên trang phục đã chọn, guest = tên trong link mời (?to=...), rỗng khi link không có tên.
+ *
  * Hợp đồng với website (src/lib/wishes-api.ts): POST text/plain, body JSON.
  *   RSVP:  { kind:"rsvp", name, attending:"yes"|"no", guests, transport:"own"|"shared", note, guest, website, token, elapsedMs }
+ *   Game:  { kind:"player", name, outfit, guest, website, token }  (không kiểm elapsedMs: khách vào tiệc lúc nào cũng được)
  *   Lời chúc: { name, message, flower, ink, website, token, elapsedMs, requestId }
  *   Trả { ok:true } hoặc { ok:false, error:"invalid"|"name_required"|"name_too_long"|"message_too_short"|"message_too_long"
  *                                          |"note_too_long"|"rate_limited"|"too_fast"|"server" }
@@ -47,14 +54,38 @@ var FLOWER_IDS = [
   'cosmos',
 ];
 var INK_KEYS = ['brown', 'navy', 'forest', 'wine', 'plum', 'teal', 'earth', 'rose', 'charcoal', 'olive']; // khớp src/lib/wish-style.ts (cùng thứ tự)
-var RSVP_SHEET = 'RSVP';
-var RSVP_HEADERS = ['createdAt', 'name', 'attending', 'guests', 'note', 'guest', 'transport'];
+// Tên tab phải đúng tên tab đang nhận phản hồi của Form (đổi tên tab trên Sheet thì sửa ở đây).
+var RSVP_SHEET = 'Form Responses 1';
+// A-F lấy từ tiêu đề Form (chỉ dùng khi tab chưa tồn tại); G-H do website thêm.
+var RSVP_HEADERS = [
+  'Timestamp',
+  'Họ và tên của bạn',
+  'Xác nhận tham dự',
+  'Bạn có muốn đăng ký xe đưa đón đến địa điểm tổ chức không?',
+  '💌 Ghi chú / Lời nhắn gửi',
+  'Số người đi cùng',
+  'Phương tiện',
+  'Tên trong link mời',
+];
+var RSVP_TIME_FORMAT = 'MM/dd/yyyy HH:mm:ss'; // giống dòng Form ghi, để lọc/sắp xếp lẫn lộn được
+// Nhãn ghi vào Sheet: nên trùng nhãn đáp án trong Form, kẻo dòng của Form và dòng của website lệch nhau khi đếm/lọc.
+var RSVP_YES = 'Có';
+var RSVP_NO = 'Không';
+var RSVP_SHUTTLE_SHARED_ANSWER = 'Có, mình muốn đi cùng xe chung';
+var RSVP_SHUTTLE_OWN_ANSWER = 'Không, mình sẽ tự di chuyển';
 var GAME_SHEET = 'GameClicks';
 var GAME_HEADERS = ['createdAt', 'guest', 'source'];
 var GAME_SOURCES = ['nav', 'thanks'];
 var GAME_GUEST_MAX = 80;
 var GAME_RATE_LIMIT = 20; // số lượt bấm tối đa mỗi mã trình duyệt trong RATE_WINDOW_S
 var GAME_DAILY_CAP = 2000; // trần số lượt ghi mỗi ngày
+
+var PLAYER_SHEET = 'Players';
+var PLAYER_HEADERS = ['createdAt', 'name', 'outfit', 'guest'];
+var PLAYER_NAME_MAX = 40; // game giới hạn 16 ký tự; dư để link/endpoint gõ tay không bị cắt oan
+var PLAYER_OUTFIT_MAX = 30;
+var PLAYER_RATE_LIMIT = 10; // số lần vào tiệc tối đa mỗi mã trình duyệt trong RATE_WINDOW_S (khách tải lại trang vẫn vào được)
+var PLAYER_DAILY_CAP = 2000; // trần số lượt ghi mỗi ngày
 
 var NAME_MAX = 40;
 var MESSAGE_MIN = 2;
@@ -182,6 +213,9 @@ function getRsvpSheet_() {
     sheet = ss.insertSheet(RSVP_SHEET);
     sheet.appendRow(RSVP_HEADERS);
     sheet.setFrozenRows(1);
+  } else if (sheet.getLastColumn() < RSVP_HEADERS.length) {
+    // Tab do Form tạo chỉ có cột A-F: chỉ bổ sung tiêu đề G-H, không đụng tiêu đề của Form
+    sheet.getRange(1, 7, 1, RSVP_HEADERS.length - 6).setValues([RSVP_HEADERS.slice(6)]);
   }
   return sheet;
 }
@@ -192,6 +226,17 @@ function getGameSheet_() {
   if (!sheet) {
     sheet = ss.insertSheet(GAME_SHEET);
     sheet.appendRow(GAME_HEADERS);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function getPlayerSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(PLAYER_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(PLAYER_SHEET);
+    sheet.appendRow(PLAYER_HEADERS);
     sheet.setFrozenRows(1);
   }
   return sheet;
@@ -288,11 +333,11 @@ function handleRsvp_(body, lock) {
   if (!name) return json_({ ok: false, error: 'name_required' });
   if (length_(name) > RSVP_NAME_MAX) return json_({ ok: false, error: 'invalid' });
 
-  var attending = body.attending === 'yes' ? 'Có' : body.attending === 'no' ? 'Không' : '';
+  var attending = body.attending === 'yes' ? RSVP_YES : body.attending === 'no' ? RSVP_NO : '';
   if (!attending) return json_({ ok: false, error: 'invalid' });
 
   var guests = 0;
-  if (attending === 'Có') {
+  if (attending === RSVP_YES) {
     guests = Number(body.guests);
     if (!isFinite(guests) || Math.floor(guests) !== guests || guests < 1 || guests > RSVP_GUESTS_MAX) {
       return json_({ ok: false, error: 'invalid' });
@@ -300,9 +345,11 @@ function handleRsvp_(body, lock) {
   }
 
   var transport = '';
-  if (attending === 'Có') {
+  var shuttleAnswer = '';
+  if (attending === RSVP_YES) {
     transport = body.transport === 'own' ? 'Xe cá nhân' : body.transport === 'shared' ? 'Xe chung' : '';
     if (!transport) return json_({ ok: false, error: 'invalid' });
+    shuttleAnswer = transport === 'Xe chung' ? RSVP_SHUTTLE_SHARED_ANSWER : RSVP_SHUTTLE_OWN_ANSWER;
   }
 
   var note = clean_(body.note);
@@ -326,19 +373,20 @@ function handleRsvp_(body, lock) {
 
   var sheet = getRsvpSheet_();
   var row = sheet.getLastRow() + 1;
-  // Cột văn bản: định dạng thuần (@) + sanitizeCell_ là hai lớp chống công thức. Cột số người ghi riêng dạng số
-  // để cộng tổng được.
-  sheet.getRange(row, 1, 1, RSVP_HEADERS.length).setNumberFormat('@');
-  sheet.getRange(row, 1, 1, RSVP_HEADERS.length).setValues([[
-    Utilities.formatDate(new Date(), TIME_ZONE, 'yyyy-MM-dd HH:mm:ss'),
+  // Cột A ghi ngày giờ thật (như dòng Form ghi). Cột văn bản (B-E, G, H): định dạng thuần (@) + sanitizeCell_ là hai lớp
+  // chống công thức. Cột F (số người) ghi riêng dạng số để cộng tổng được.
+  sheet.getRange(row, 1).setNumberFormat(RSVP_TIME_FORMAT).setValue(new Date());
+  sheet.getRange(row, 2, 1, 7).setNumberFormat('@');
+  sheet.getRange(row, 2, 1, 7).setValues([[
     sanitizeCell_(name),
     attending,
-    '',
+    shuttleAnswer,
     sanitizeCell_(note),
-    sanitizeCell_(guest),
+    '',
     transport,
+    sanitizeCell_(guest),
   ]]);
-  sheet.getRange(row, 4).setNumberFormat('0').setValue(guests);
+  sheet.getRange(row, 6).setNumberFormat('0').setValue(guests);
 
   safePut_(cache, rateKey, String(used + 1), RATE_WINDOW_S);
   props.setProperty(dayKey, String(today + 1));
@@ -375,6 +423,45 @@ function handleGame_(body, lock) {
     Utilities.formatDate(new Date(), TIME_ZONE, 'yyyy-MM-dd HH:mm:ss'),
     sanitizeCell_(guest),
     source,
+  ]]);
+
+  safePut_(cache, rateKey, String(used + 1), RATE_WINDOW_S);
+  props.setProperty(dayKey, String(today + 1));
+  return json_({ ok: true });
+}
+
+/**
+ * Ghi một lượt khách vào dự tiệc ở game. Mọi lượt đều được giữ (một người vào nhiều lần thấy nhiều dòng),
+ * không trả lại dữ liệu nào cho website. Tên để trống vẫn hợp lệ: game gọi là "Khách quý".
+ */
+function handlePlayer_(body, lock) {
+  var token = String(body.token || '').slice(0, 64);
+  if (!token) return json_({ ok: false, error: 'invalid' });
+  var name = clean_(body.name).slice(0, PLAYER_NAME_MAX);
+  if (!name) return json_({ ok: false, error: 'name_required' });
+  var outfit = clean_(body.outfit).slice(0, PLAYER_OUTFIT_MAX);
+  var guest = clean_(body.guest).slice(0, GAME_GUEST_MAX);
+
+  lock.waitLock(10000);
+  var cache = CacheService.getScriptCache();
+  var rateKey = 'player:' + token;
+  var used = parseInt(cache.get(rateKey), 10) || 0;
+  if (used >= PLAYER_RATE_LIMIT) return json_({ ok: false, error: 'rate_limited' });
+
+  var props = PropertiesService.getScriptProperties();
+  var dayKey = 'playerday:' + Utilities.formatDate(new Date(), TIME_ZONE, 'yyyy-MM-dd');
+  var today = parseInt(props.getProperty(dayKey), 10) || 0;
+  if (today >= PLAYER_DAILY_CAP) return json_({ ok: false, error: 'rate_limited' });
+
+  var sheet = getPlayerSheet_();
+  var row = sheet.getLastRow() + 1;
+  // Tên do người ngoài gõ: định dạng thuần (@) + sanitizeCell_ chống công thức như tab RSVP
+  sheet.getRange(row, 1, 1, PLAYER_HEADERS.length).setNumberFormat('@');
+  sheet.getRange(row, 1, 1, PLAYER_HEADERS.length).setValues([[
+    Utilities.formatDate(new Date(), TIME_ZONE, 'yyyy-MM-dd HH:mm:ss'),
+    sanitizeCell_(name),
+    sanitizeCell_(outfit),
+    sanitizeCell_(guest),
   ]]);
 
   safePut_(cache, rateKey, String(used + 1), RATE_WINDOW_S);
@@ -450,6 +537,7 @@ function doPost(e) {
 
     if (body.kind === 'rsvp') return handleRsvp_(body, lock);
     if (body.kind === 'game') return handleGame_(body, lock);
+    if (body.kind === 'player') return handlePlayer_(body, lock);
     return handleWish_(body, lock);
   } catch (err) {
     return json_({ ok: false, error: 'server' });

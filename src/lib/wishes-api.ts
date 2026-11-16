@@ -58,6 +58,15 @@ interface ApiResponse {
   error?: string
 }
 
+function requestBody(payload: Record<string, unknown>): string {
+  return JSON.stringify({
+    ...payload,
+    token: clientToken(),
+    // Lời chúc nằm chờ trong hàng đợi giữ mốc lúc khách bấm gửi; không bao giờ nhỏ hơn thời gian đã mở trang
+    elapsedMs: Math.max(Number(payload.elapsedMs) || 0, Math.round(performance.now() - pageOpenedAt)),
+  })
+}
+
 async function post(payload: Record<string, unknown>): Promise<void> {
   if (!ENDPOINT) throw new ApiError("unavailable")
 
@@ -68,12 +77,7 @@ async function post(payload: Record<string, unknown>): Promise<void> {
     const response = await fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        ...payload,
-        token: clientToken(),
-        // Lời chúc nằm chờ trong hàng đợi giữ mốc lúc khách bấm gửi; không bao giờ nhỏ hơn thời gian đã mở trang
-        elapsedMs: Math.max(Number(payload.elapsedMs) || 0, Math.round(performance.now() - pageOpenedAt)),
-      }),
+      body: requestBody(payload),
       signal: controller.signal,
       // Lượt bấm mở tab mới có thể đẩy trang này xuống nền (iOS): keepalive để yêu cầu không bị hủy giữa chừng
       keepalive: true,
@@ -217,7 +221,16 @@ export type GameClickSource = "nav" | "thanks"
  */
 export function trackGameClick(guest: string, source: GameClickSource): void {
   if (!ENDPOINT) return
-  void post({ kind: "game", guest, source, website: "" }).catch(() => {})
+  const payload = { kind: "game", guest, source, website: "" }
+  // sendBeacon do trình duyệt tự xếp hàng ở nền, không tranh băng thông với tab game vừa mở (fetch tới Apps Script
+  // mất vài giây và làm trễ tab mới trên điện thoại). Không dùng được thì lùi về fetch.
+  try {
+    const body = new Blob([requestBody(payload)], { type: "text/plain;charset=utf-8" })
+    if (typeof navigator.sendBeacon === "function" && navigator.sendBeacon(ENDPOINT, body)) return
+  } catch {
+    // rơi xuống fetch bên dưới
+  }
+  void post(payload).catch(() => {})
 }
 
 if (typeof window !== "undefined" && ENDPOINT) {

@@ -90,6 +90,8 @@ const get = (parameter = {}) => JSON.parse(script.doGet({ parameter }).text)
 const wish = (extra = {}) => ({ name: "Lan", message: "Chúc hai bạn hạnh phúc", flower: "peony", ink: "wine", website: "", token: "t1", elapsedMs: 5000, requestId: randomUUID(), ...extra })
 const rsvp = (extra = {}) => ({ kind: "rsvp", name: "Minh", attending: "yes", guests: 2, transport: "own", note: "", guest: "Anh Nam", website: "", token: "r1", elapsedMs: 5000, ...extra })
 
+const player = (extra = {}) => ({ kind: "player", name: "Lan", outfit: "Áo dài đỏ", guest: "Anh Nam", website: "", token: "p1", ...extra })
+
 beforeEach(() => {
   ;({ script, sheets } = load())
 })
@@ -201,19 +203,54 @@ describe("ghi lời chúc", () => {
   })
 })
 
+const RSVP_TAB = "Form Responses 1" // tab dùng chung với Google Form
+
 describe("xác nhận tham dự (RSVP)", () => {
-  it("đến: ghi 'Có', số người dạng số, tên khách theo link", () => {
+  it("đến: ghi theo bố cục của Form (A-F) kèm G-H, số người dạng số, ngày giờ thật", () => {
     expect(post(rsvp({ guests: 3, note: "Ăn chay giúp mình" })).ok).toBe(true)
-    const sheet = sheets.get("RSVP")
-    expect(sheet.rows[0]).toEqual(["createdAt", "name", "attending", "guests", "note", "guest", "transport"])
+    const sheet = sheets.get(RSVP_TAB)
+    expect(sheet.rows[0]).toEqual([
+      "Timestamp",
+      "Họ và tên của bạn",
+      "Xác nhận tham dự",
+      "Bạn có muốn đăng ký xe đưa đón đến địa điểm tổ chức không?",
+      "💌 Ghi chú / Lời nhắn gửi",
+      "Số người đi cùng",
+      "Phương tiện",
+      "Tên trong link mời",
+    ])
     const row = sheet.rows[1]
-    expect(row.slice(1)).toEqual(["Minh", "Có", 3, "Ăn chay giúp mình", "Anh Nam", "Xe cá nhân"])
-    expect(sheet.formats.get("2:4")).toBe("0")
+    expect(row[0]).toBeInstanceOf(Date)
+    expect(row.slice(1)).toEqual(["Minh", "Có", "Không, mình sẽ tự di chuyển", "Ăn chay giúp mình", 3, "Xe cá nhân", "Anh Nam"])
+    expect(sheet.formats.get("2:6")).toBe("0")
+    expect(sheet.formats.get("2:2")).toBe("@")
   })
 
-  it("không đến: ghi 'Không' và 0 người, bỏ qua số người gửi lên", () => {
-    expect(post(rsvp({ attending: "no", guests: 5 })).ok).toBe(true)
-    expect(sheets.get("RSVP").rows[1].slice(2, 4)).toEqual(["Không", 0])
+  it("đi xe chung: câu trả lời cột D khớp đáp án của Form", () => {
+    post(rsvp({ transport: "shared" }))
+    const row = sheets.get(RSVP_TAB).rows[1]
+    expect(row[3]).toBe("Có, mình muốn đi cùng xe chung")
+    expect(row[6]).toBe("Xe chung")
+  })
+
+  it("không đến: ghi 'Không', cột xe để trống và 0 người, bỏ qua số người gửi lên", () => {
+    expect(post(rsvp({ attending: "no", guests: 5, transport: "" })).ok).toBe(true)
+    const row = sheets.get(RSVP_TAB).rows[1]
+    expect(row[2]).toBe("Không")
+    expect(row[3]).toBe("")
+    expect(row[5]).toBe(0)
+    expect(row[6]).toBe("")
+  })
+
+  it("tab do Form tạo sẵn (A-F): chỉ bổ sung tiêu đề G-H, giữ nguyên tiêu đề của Form và dòng đã có", () => {
+    const formSheet = makeSheet(RSVP_TAB)
+    formSheet.appendRow(["Timestamp", "Họ và tên của bạn", "Xác nhận tham dự", "Câu hỏi xe", "Ghi chú", "Số người đi cùng"])
+    formSheet.appendRow(["11/16/2026 10:42:49", "Khánh", "Có, mình sẽ đến", "Có, mình muốn đi cùng xe chung", "Hiii", 2])
+    sheets.set(RSVP_TAB, formSheet)
+    expect(post(rsvp()).ok).toBe(true)
+    expect(formSheet.rows[0]).toEqual(["Timestamp", "Họ và tên của bạn", "Xác nhận tham dự", "Câu hỏi xe", "Ghi chú", "Số người đi cùng", "Phương tiện", "Tên trong link mời"])
+    expect(formSheet.rows[1][1]).toBe("Khánh")
+    expect(formSheet.rows[2][1]).toBe("Minh")
   })
 
   it("từ chối giá trị sai", () => {
@@ -226,18 +263,18 @@ describe("xác nhận tham dự (RSVP)", () => {
     expect(post(rsvp({ name: " " })).error).toBe("name_required")
     expect(post(rsvp({ name: "a".repeat(81) })).error).toBe("invalid")
     expect(post(rsvp({ note: "a".repeat(301) })).error).toBe("note_too_long")
-    expect(sheets.get("RSVP")).toBeUndefined()
+    expect(sheets.get(RSVP_TAB)).toBeUndefined()
   })
 
   it("điền quá nhanh bị từ chối; ô bẫy bot giả vờ thành công", () => {
     expect(post(rsvp({ elapsedMs: 500 })).error).toBe("too_fast")
     expect(post(rsvp({ website: "x" })).ok).toBe(true)
-    expect(sheets.get("RSVP")).toBeUndefined()
+    expect(sheets.get(RSVP_TAB)).toBeUndefined()
   })
 
   it("chống công thức ở tên và lời nhắn", () => {
     post(rsvp({ name: "=HYPERLINK(1)", note: "@evil" }))
-    const row = sheets.get("RSVP").rows[1]
+    const row = sheets.get(RSVP_TAB).rows[1]
     expect(row[1]).toBe(" =HYPERLINK(1)")
     expect(row[4]).toBe(" @evil")
   })
@@ -245,11 +282,39 @@ describe("xác nhận tham dự (RSVP)", () => {
   it("giới hạn 5 lần mỗi mã trình duyệt (khách được gửi lại để đổi câu trả lời)", () => {
     for (let i = 0; i < 5; i++) expect(post(rsvp({ token: "same" })).ok).toBe(true)
     expect(post(rsvp({ token: "same" })).error).toBe("rate_limited")
-    expect(sheets.get("RSVP").rows).toHaveLength(6)
+    expect(sheets.get(RSVP_TAB).rows).toHaveLength(6)
   })
 
   it("không có API nào đọc RSVP ra: GET chỉ trả lời chúc", () => {
     post(rsvp({ name: "BiMat" }))
     expect(JSON.stringify(get())).not.toContain("BiMat")
+  })
+})
+
+describe("người chơi vào dự tiệc (game)", () => {
+  it("ghi tên, trang phục, tên theo link vào tab Players; không cần elapsedMs", () => {
+    expect(post(player())).toEqual({ ok: true })
+    const rows = sheets.get("Players").rows
+    expect(rows[0]).toEqual(["createdAt", "name", "outfit", "guest"])
+    expect(rows[1].slice(1)).toEqual(["Lan", "Áo dài đỏ", "Anh Nam"])
+  })
+
+  it("thiếu tên hoặc thiếu token bị từ chối, không ghi dòng nào", () => {
+    expect(post(player({ name: "  " }))).toEqual({ ok: false, error: "name_required" })
+    expect(post(player({ token: "" }))).toEqual({ ok: false, error: "invalid" })
+    expect(sheets.get("Players")?.rows.length ?? 1).toBe(1)
+  })
+
+  it("chống công thức; ô bẫy bot giả vờ thành công nhưng không ghi", () => {
+    post(player({ name: "=HYPERLINK(1)", outfit: "+x", guest: "@y" }))
+    expect(sheets.get("Players").rows[1].slice(1)).toEqual([" =HYPERLINK(1)", " +x", " @y"])
+    expect(post(player({ website: "spam", token: "p2" })).ok).toBe(true)
+    expect(sheets.get("Players").rows).toHaveLength(2)
+  })
+
+  it("giới hạn 10 lượt mỗi mã trình duyệt; không đọc được ra từ GET", () => {
+    for (let i = 0; i < 10; i++) expect(post(player()).ok).toBe(true)
+    expect(post(player())).toEqual({ ok: false, error: "rate_limited" })
+    expect(get().items).toEqual([])
   })
 })

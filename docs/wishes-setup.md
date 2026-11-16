@@ -3,8 +3,9 @@
 Lời chúc (kèm loài hoa khách chọn) và xác nhận tham dự (RSVP) lưu trong **một Google Sheet của bạn**:
 
 - Tab `Wishes`: `id | createdAt | name | message | status | flower | ink`. Hiển thị trong phần "Lời chúc" của trang.
-- Tab `RSVP`: `createdAt | name | attending | guests | note | guest | transport` (transport: `Xe cá nhân` / `Xe chung`; sheet có sẵn thì thêm tay tiêu đề `transport` vào G1). Chỉ bạn xem được, website không có cách nào đọc tab này ra.
+- Tab `Form Responses 1` (tab nhận phản hồi của Google Form, **dùng chung** cho Form và website): `Timestamp | Họ và tên của bạn | Xác nhận tham dự | Bạn có muốn đăng ký xe đưa đón... | Ghi chú | Số người đi cùng | Phương tiện | Tên trong link mời`. Form tự ghi cột A-F; website ghi đúng bố cục đó và thêm G (`Xe cá nhân` / `Xe chung`) và H (tên trong link `?to=`). Tiêu đề G-H được script tự bổ sung ở lần ghi đầu. Đổi tên tab thì sửa `RSVP_SHEET` trong `wishes.gs`; nhãn "Có"/"Không" ở cột C và hai câu trả lời đi xe ở cột D khai báo bằng `RSVP_*` trong `wishes.gs`, nên trùng nhãn đáp án trong Form. Chỉ bạn xem được, website không có cách nào đọc tab này ra.
 
+- Tab `Players`: `createdAt | name | outfit | guest`. Mỗi lần khách điền tên và bấm vào dự tiệc ở game (`wedding-online`) ghi một dòng; `name` là tên khách gõ (`Khách quý` nếu để trống), `outfit` là trang phục đã chọn, `guest` là tên trong link mời (`?to=`). Chỉ bạn xem được. Cần deploy lại script (New version) thì game mới ghi được.
 - Tab `GameClicks`: `createdAt | guest | source`. Mỗi lần khách bấm nút sang trang game ghi một dòng; `guest` là tên trong link mời (`?to=`, rỗng nếu link không có tên), `source` là `nav` (thanh điều hướng) hoặc `thanks` (cuối thiệp). Chỉ bạn xem được. Muốn biết ai đã chơi thì lọc cột `guest`.
 
 Các tab tự được tạo ở lần ghi đầu tiên. Một đoạn Apps Script (`apps-script/wishes.gs`) làm cổng ghi/đọc.
@@ -55,7 +56,7 @@ curl -sL "$URL?limit=5"
 curl -sL "$URL" -H "Content-Type: text/plain" \
   -d '{"name":"Thử nghiệm","message":"Chúc hai bạn hạnh phúc","flower":"peony","ink":"wine","token":"curl-test","elapsedMs":5000,"website":"","requestId":"curl-1"}'
 
-# Ghi một xác nhận tham dự (tab RSVP tự được tạo)
+# Ghi một xác nhận tham dự (vào tab Form Responses 1)
 curl -sL "$URL" -H "Content-Type: text/plain" \
   -d '{"kind":"rsvp","name":"Thử nghiệm","attending":"yes","guests":2,"transport":"shared","note":"","guest":"","website":"","token":"curl-rsvp","elapsedMs":5000}'
 ```
@@ -68,7 +69,7 @@ Gửi thử một lời chúc có `"name":"=SUM(1,1)"`. Trong Sheet, ô tên ph�
 
 ### Sau đó thử bằng website
 
-Mở website với `?to=Tên khách`, mở thiệp, bấm nút xác nhận tham dự và gửi: một dòng mới phải xuất hiện ở tab `RSVP`.
+Mở website với `?to=Tên khách`, mở thiệp, bấm nút xác nhận tham dự và gửi: một dòng mới phải xuất hiện ở tab `Form Responses 1`.
 Xóa các dòng thử nghiệm trong Sheet trước khi gửi thiệp thật (xóa dòng ở tab `Wishes` an toàn khi **chưa có lời chúc thật**; sau đó đừng xóa hay sắp xếp lại dòng nữa, xem phần kiểm duyệt).
 
 ## Kiểm duyệt
