@@ -221,7 +221,7 @@ describe("xác nhận tham dự (RSVP)", () => {
     ])
     const row = sheet.rows[1]
     expect(row[0]).toBeInstanceOf(Date)
-    expect(row.slice(1)).toEqual(["Minh", "Có", "Không, mình sẽ tự di chuyển", "Ăn chay giúp mình", 3, "Xe cá nhân", "Anh Nam"])
+    expect(row.slice(1)).toEqual(["Minh", "Có, mình sẽ đến chung vui cùng hai bạn \u2764\uFE0F", "Không, mình sẽ tự di chuyển", "Ăn chay giúp mình", 3, "Xe cá nhân", "Anh Nam"])
     expect(sheet.formats.get("2:6")).toBe("0")
     expect(sheet.formats.get("2:2")).toBe("@")
   })
@@ -233,11 +233,11 @@ describe("xác nhận tham dự (RSVP)", () => {
     expect(row[6]).toBe("Xe chung")
   })
 
-  it("không đến: ghi 'Không', cột xe để trống và 0 người, bỏ qua số người gửi lên", () => {
+  it("không đến: ghi đáp án 'Rất tiếc' của Form, cột D là đáp án 'không tham gia được', 0 người, bỏ qua số người gửi lên", () => {
     expect(post(rsvp({ attending: "no", guests: 5, transport: "" })).ok).toBe(true)
     const row = sheets.get(RSVP_TAB).rows[1]
-    expect(row[2]).toBe("Không")
-    expect(row[3]).toBe("")
+    expect(row[2]).toBe("Rất tiếc, mình không thể tham dự \uD83D\uDE14")
+    expect(row[3]).toBe("Mình bận nên không tham gia được ruii, chúc hạnh phúc hai bạn nhaa")
     expect(row[5]).toBe(0)
     expect(row[6]).toBe("")
   })

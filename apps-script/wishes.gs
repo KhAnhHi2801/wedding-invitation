@@ -13,7 +13,7 @@
  * RSVP: dùng CHUNG tab nhận phản hồi của Google Form ("Form Responses 1"), riêng tư, KHÔNG có API nào đọc ra.
  *   A Timestamp | B Họ và tên | C Xác nhận tham dự | D Đăng ký xe đưa đón | E Ghi chú | F Số người đi cùng | G Phương tiện | H Tên trong link mời
  *   A-F là cột của Form (Form tự ghi); website ghi đúng bố cục đó rồi thêm G-H bên phải (Form không đụng tới G-H).
- *   C = "Có" hoặc "Không" (RSVP_YES / RSVP_NO: sửa cho trùng nhãn đáp án trong Form); D = câu trả lời đi xe (rỗng khi không đến);
+ *   C = nhãn đáp án của Form (RSVP_YES / RSVP_NO, phải trùng từng ký tự vì cột là dropdown); D = câu trả lời đi xe (đáp án "không tham gia được" khi không đến);
  *   F = số người (0 khi không đến); G = "Xe cá nhân" | "Xe chung" (rỗng khi không đến); H = tên trong link mời (?to=...).
  *
  * Tab "GameClicks" (riêng tư, KHÔNG có API nào đọc ra): createdAt | guest | source
@@ -69,10 +69,11 @@ var RSVP_HEADERS = [
 ];
 var RSVP_TIME_FORMAT = 'MM/dd/yyyy HH:mm:ss'; // giống dòng Form ghi, để lọc/sắp xếp lẫn lộn được
 // Nhãn ghi vào Sheet: nên trùng nhãn đáp án trong Form, kẻo dòng của Form và dòng của website lệch nhau khi đếm/lọc.
-var RSVP_YES = 'Có';
-var RSVP_NO = 'Không';
+var RSVP_YES = 'Có, mình sẽ đến chung vui cùng hai bạn \u2764\uFE0F';
+var RSVP_NO = 'Rất tiếc, mình không thể tham dự \uD83D\uDE14';
 var RSVP_SHUTTLE_SHARED_ANSWER = 'Có, mình muốn đi cùng xe chung';
 var RSVP_SHUTTLE_OWN_ANSWER = 'Không, mình sẽ tự di chuyển';
+var RSVP_SHUTTLE_DECLINED_ANSWER = 'Mình bận nên không tham gia được ruii, chúc hạnh phúc hai bạn nhaa'; // câu D bắt buộc trong Form: khách không đến chọn đáp án này
 var GAME_SHEET = 'GameClicks';
 var GAME_HEADERS = ['createdAt', 'guest', 'source'];
 var GAME_SOURCES = ['nav', 'thanks'];
@@ -345,7 +346,7 @@ function handleRsvp_(body, lock) {
   }
 
   var transport = '';
-  var shuttleAnswer = '';
+  var shuttleAnswer = RSVP_SHUTTLE_DECLINED_ANSWER;
   if (attending === RSVP_YES) {
     transport = body.transport === 'own' ? 'Xe cá nhân' : body.transport === 'shared' ? 'Xe chung' : '';
     if (!transport) return json_({ ok: false, error: 'invalid' });
@@ -373,20 +374,21 @@ function handleRsvp_(body, lock) {
 
   var sheet = getRsvpSheet_();
   var row = sheet.getLastRow() + 1;
-  // Cột A ghi ngày giờ thật (như dòng Form ghi). Cột văn bản (B-E, G, H): định dạng thuần (@) + sanitizeCell_ là hai lớp
-  // chống công thức. Cột F (số người) ghi riêng dạng số để cộng tổng được.
-  sheet.getRange(row, 1).setNumberFormat(RSVP_TIME_FORMAT).setValue(new Date());
+  // Cột văn bản (B-E, G, H): định dạng thuần (@) + sanitizeCell_ là hai lớp chống công thức. Cột F (số người) dạng số
+  // để cộng tổng được. B-H ghi trong MỘT lệnh, cột A (ngày giờ thật) ghi SAU CÙNG: nếu B-H bị Sheet từ chối
+  // (vd. dropdown của Table), không để lại dòng chỉ có ngày.
   sheet.getRange(row, 2, 1, 7).setNumberFormat('@');
+  sheet.getRange(row, 6).setNumberFormat('0');
   sheet.getRange(row, 2, 1, 7).setValues([[
     sanitizeCell_(name),
     attending,
     shuttleAnswer,
     sanitizeCell_(note),
-    '',
+    guests,
     transport,
     sanitizeCell_(guest),
   ]]);
-  sheet.getRange(row, 6).setNumberFormat('0').setValue(guests);
+  sheet.getRange(row, 1).setNumberFormat(RSVP_TIME_FORMAT).setValue(new Date());
 
   safePut_(cache, rateKey, String(used + 1), RATE_WINDOW_S);
   props.setProperty(dayKey, String(today + 1));
