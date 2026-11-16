@@ -12,7 +12,7 @@
  *
  * RSVP: dùng CHUNG tab nhận phản hồi của Google Form ("Form Responses 1"), riêng tư, KHÔNG có API nào đọc ra.
  *   A Timestamp | B Họ và tên | C Xác nhận tham dự | D Đăng ký xe đưa đón | E Ghi chú | F Số người đi cùng | G Phương tiện | H Tên trong link mời
- *   A-F là cột của Form (Form tự ghi); website ghi đúng bố cục đó rồi thêm G-H bên phải (Form không đụng tới G-H).
+ *   A-F là cột của Form (Form tự ghi); website ghi đúng bố cục đó rồi thêm G-H bên phải (Form không đụng tới G-H). Script KHÔNG sửa dòng tiêu đề của tab có sẵn: tự thêm tiêu đề G-H trên Sheet.
  *   C = nhãn đáp án của Form (RSVP_YES / RSVP_NO, phải trùng từng ký tự vì cột là dropdown); D = câu trả lời đi xe (đáp án "không tham gia được" khi không đến);
  *   F = số người (0 khi không đến); G = "Xe cá nhân" | "Xe chung" (rỗng khi không đến); H = tên trong link mời (?to=...).
  *
@@ -67,7 +67,6 @@ var RSVP_HEADERS = [
   'Phương tiện',
   'Tên trong link mời',
 ];
-var RSVP_TIME_FORMAT = 'MM/dd/yyyy HH:mm:ss'; // giống dòng Form ghi, để lọc/sắp xếp lẫn lộn được
 // Nhãn ghi vào Sheet: nên trùng nhãn đáp án trong Form, kẻo dòng của Form và dòng của website lệch nhau khi đếm/lọc.
 var RSVP_YES = 'Có, mình sẽ đến chung vui cùng hai bạn \u2764\uFE0F';
 var RSVP_NO = 'Rất tiếc, mình không thể tham dự \uD83D\uDE14';
@@ -214,10 +213,8 @@ function getRsvpSheet_() {
     sheet = ss.insertSheet(RSVP_SHEET);
     sheet.appendRow(RSVP_HEADERS);
     sheet.setFrozenRows(1);
-  } else if (sheet.getLastColumn() < RSVP_HEADERS.length) {
-    // Tab do Form tạo chỉ có cột A-F: chỉ bổ sung tiêu đề G-H, không đụng tiêu đề của Form
-    sheet.getRange(1, 7, 1, RSVP_HEADERS.length - 6).setValues([RSVP_HEADERS.slice(6)]);
   }
+  // Tab đã có (do Form tạo): không đụng tới dòng tiêu đề (G-H do bạn tự thêm trên Sheet).
   return sheet;
 }
 
@@ -374,11 +371,9 @@ function handleRsvp_(body, lock) {
 
   var sheet = getRsvpSheet_();
   var row = sheet.getLastRow() + 1;
-  // Cột văn bản (B-E, G, H): định dạng thuần (@) + sanitizeCell_ là hai lớp chống công thức. Cột F (số người) dạng số
-  // để cộng tổng được. B-H ghi trong MỘT lệnh, cột A (ngày giờ thật) ghi SAU CÙNG: nếu B-H bị Sheet từ chối
-  // (vd. dropdown của Table), không để lại dòng chỉ có ngày.
-  sheet.getRange(row, 2, 1, 7).setNumberFormat('@');
-  sheet.getRange(row, 6).setNumberFormat('0');
+  // KHÔNG gọi setNumberFormat ở đây: trên tab có Table (Form_Responses), đặt định dạng cho nhiều cột một lúc bị Sheets từ chối
+  // ("Please make a selection within a single column..."). Chống công thức chỉ còn sanitizeCell_ (thêm dấu cách trước = + - @).
+  // B-H ghi trong MỘT lệnh, cột A (ngày giờ thật) ghi SAU CÙNG: nếu B-H bị từ chối thì không để lại dòng chỉ có ngày.
   sheet.getRange(row, 2, 1, 7).setValues([[
     sanitizeCell_(name),
     attending,
@@ -388,7 +383,12 @@ function handleRsvp_(body, lock) {
     transport,
     sanitizeCell_(guest),
   ]]);
-  sheet.getRange(row, 1).setNumberFormat(RSVP_TIME_FORMAT).setValue(new Date());
+  sheet.getRange(row, 1).setValue(new Date());
+  // Sheets có thể lặng lẽ bỏ giá trị (Table): đọc lại, không khớp thì báo lỗi thay vì báo thành công giả.
+  if (String(sheet.getRange(row, 2).getValue()).trim() !== name.trim()) {
+    console.error('doPost: ghi RSVP không lưu được ở hàng ' + row);
+    return json_({ ok: false, error: 'server' });
+  }
 
   safePut_(cache, rateKey, String(used + 1), RATE_WINDOW_S);
   props.setProperty(dayKey, String(today + 1));
@@ -544,8 +544,89 @@ function doPost(e) {
   } catch (err) {
     // Ghi lỗi thật vào Executions > (chọn lần chạy) để chẩn đoán: phản hồi cho khách vẫn chỉ là "server".
     console.error('doPost', err && err.stack ? err.stack : String(err));
+    Logger.log('doPost lỗi: ' + (err && err.stack ? err.stack : String(err)));
     return json_({ ok: false, error: 'server' });
   } finally {
     if (lock.hasLock()) lock.releaseLock();
   }
+}
+
+/**
+ * CHẨN ĐOÁN (chạy tay trong trình soạn thảo Apps Script: chọn debugRsvp > Run, rồi xem "Execution log").
+ * Gửi một RSVP thử qua đúng đường doPost và in kết quả/lỗi thật. Thành công sẽ ghi một dòng tên "DEBUG" vào Sheet: xóa tay sau khi xem.
+ */
+function debugRsvp() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RSVP_SHEET);
+  function step(label, fn) {
+    try {
+      Logger.log(label + ': ' + JSON.stringify(fn()));
+    } catch (err) {
+      Logger.log(label + ' LỖI: ' + err);
+    }
+  }
+  step('trước getLastRow', function () { return sheet.getLastRow(); });
+  var payload = {
+    kind: 'rsvp', name: 'DEBUG', attending: 'yes', guests: 1, transport: 'own',
+    note: '', guest: '', website: '', token: 'debug-' + Date.now(), elapsedMs: 99999,
+  };
+  var out = doPost({ postData: { contents: JSON.stringify(payload) } });
+  Logger.log('doPost trả về: ' + out.getContent());
+  step('sau getLastRow', function () { return sheet.getLastRow(); });
+  step('sau getLastColumn', function () { return sheet.getLastColumn(); });
+  step('sau getMaxRows', function () { return sheet.getMaxRows(); });
+  step('mọi dòng có dữ liệu trong A1:H' + sheet.getMaxRows() + ' (số dòng: nội dung)', function () {
+    var rows = sheet.getRange(1, 1, sheet.getMaxRows(), 8).getValues();
+    var found = [];
+    rows.forEach(function (r, i) {
+      if (r.join('') !== '') found.push((i + 1) + ': ' + JSON.stringify(r));
+    });
+    return found;
+  });
+  step('bảng (Table) và vùng bảo vệ', function () {
+    return { protections: sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).length + sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET).length };
+  });
+}
+
+/**
+ * CHẨN ĐOÁN 2 (chạy tay): thử vài cách ghi vào tab RSVP và đọc lại xem cách nào thật sự lưu được, rồi tự dọn các ô thử.
+ * Ghi tạm vào hàng 6 (cột B-H) và một dòng appendRow; chạy xong không để lại gì (nếu còn thấy chữ "T-" thì xóa tay).
+ */
+function debugWrite() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RSVP_SHEET);
+  var touched = [];
+  function readB(row) {
+    return sheet.getRange(row, 2).getValue();
+  }
+  function attempt(label, fn, row) {
+    try {
+      fn();
+      SpreadsheetApp.flush();
+      Logger.log(label + ': ghi xong, đọc lại B' + row + ' = ' + JSON.stringify(readB(row)));
+    } catch (err) {
+      Logger.log(label + ' LỖI: ' + err);
+    }
+    touched.push(row);
+  }
+  attempt('a) setValue 1 ô', function () { sheet.getRange(6, 2).setValue('T-a'); }, 6);
+  attempt('b) setValues B-H không định dạng', function () {
+    sheet.getRange(7, 2, 1, 7).setValues([['T-b', 'x', 'x', 'x', 1, 'x', 'x']]);
+  }, 7);
+  attempt('c) setNumberFormat(@) rồi setValues B-H', function () {
+    sheet.getRange(8, 2, 1, 7).setNumberFormat('@');
+    sheet.getRange(8, 2, 1, 7).setValues([['T-c', 'x', 'x', 'x', 1, 'x', 'x']]);
+  }, 8);
+  attempt('d) ghi cột A bằng Date', function () {
+    sheet.getRange(9, 1).setValue(new Date());
+    sheet.getRange(9, 2).setValue('T-d');
+  }, 9);
+  var found = [];
+  try {
+    var col = sheet.getRange(1, 2, sheet.getMaxRows(), 1).getValues();
+    col.forEach(function (r, i) { if (String(r[0]).indexOf('T-') === 0) found.push(i + 1); });
+  } catch (err) {
+    Logger.log('quét cột B LỖI: ' + err);
+  }
+  Logger.log('các hàng có chữ T-: ' + JSON.stringify(found));
+  found.forEach(function (row) { sheet.getRange(row, 1, 1, 8).clearContent(); });
+  Logger.log('đã dọn các hàng: ' + JSON.stringify(found));
 }

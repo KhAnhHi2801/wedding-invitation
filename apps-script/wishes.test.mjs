@@ -35,6 +35,7 @@ function makeSheet(name) {
           })
           return range
         },
+        getValue: () => rows[row - 1]?.[col - 1] ?? "",
         setValue(value) {
           rows[row - 1] = rows[row - 1] ?? []
           rows[row - 1][col - 1] = value
@@ -56,6 +57,8 @@ function load() {
   const cache = new Map()
   const props = new Map()
   const globals = {
+    Logger: { log() {} },
+    console: { error() {} },
     SpreadsheetApp: {
       getActiveSpreadsheet: () => ({
         getSheetByName: (n) => sheets.get(n) ?? null,
@@ -222,8 +225,8 @@ describe("xác nhận tham dự (RSVP)", () => {
     const row = sheet.rows[1]
     expect(row[0]).toBeInstanceOf(Date)
     expect(row.slice(1)).toEqual(["Minh", "Có, mình sẽ đến chung vui cùng hai bạn \u2764\uFE0F", "Không, mình sẽ tự di chuyển", "Ăn chay giúp mình", 3, "Xe cá nhân", "Anh Nam"])
-    expect(sheet.formats.get("2:6")).toBe("0")
-    expect(sheet.formats.get("2:2")).toBe("@")
+    // Không đặt định dạng ô: tab có Table từ chối setNumberFormat nhiều cột
+    expect(sheet.formats.size).toBe(0)
   })
 
   it("đi xe chung: câu trả lời cột D khớp đáp án của Form", () => {
@@ -242,13 +245,13 @@ describe("xác nhận tham dự (RSVP)", () => {
     expect(row[6]).toBe("")
   })
 
-  it("tab do Form tạo sẵn (A-F): chỉ bổ sung tiêu đề G-H, giữ nguyên tiêu đề của Form và dòng đã có", () => {
+  it("tab có sẵn: không sửa dòng tiêu đề, giữ nguyên dòng đã có và ghi dòng mới ngay dưới", () => {
     const formSheet = makeSheet(RSVP_TAB)
     formSheet.appendRow(["Timestamp", "Họ và tên của bạn", "Xác nhận tham dự", "Câu hỏi xe", "Ghi chú", "Số người đi cùng"])
     formSheet.appendRow(["11/16/2026 10:42:49", "Khánh", "Có, mình sẽ đến", "Có, mình muốn đi cùng xe chung", "Hiii", 2])
     sheets.set(RSVP_TAB, formSheet)
     expect(post(rsvp()).ok).toBe(true)
-    expect(formSheet.rows[0]).toEqual(["Timestamp", "Họ và tên của bạn", "Xác nhận tham dự", "Câu hỏi xe", "Ghi chú", "Số người đi cùng", "Phương tiện", "Tên trong link mời"])
+    expect(formSheet.rows[0]).toEqual(["Timestamp", "Họ và tên của bạn", "Xác nhận tham dự", "Câu hỏi xe", "Ghi chú", "Số người đi cùng"])
     expect(formSheet.rows[1][1]).toBe("Khánh")
     expect(formSheet.rows[2][1]).toBe("Minh")
   })
