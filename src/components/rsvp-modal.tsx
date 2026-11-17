@@ -36,7 +36,7 @@ const emptyValues = (): RsvpValues => ({
   transport: "",
   note: "",
 });
-const GUEST_OPTIONS = Array.from({ length: GUESTS_MAX }, (_, i) => i + 1);
+const GUEST_OPTIONS = Array.from({ length: GUESTS_MAX }, (_, i) => i);
 
 /** Phần chỉ hiện theo lựa chọn trước đó: co giãn chiều cao mượt thay vì làm hộp thoại nhảy; ẩn thì không focus/đọc được */
 function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
